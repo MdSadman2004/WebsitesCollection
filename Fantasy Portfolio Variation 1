@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crystals of Fate - Epic Fantasy Novel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --midnight-blue: #0a0e17;
+            --obsidian-black: #05070d;
+            --parchment: #f5f1e6;
+            --sapphire: #0e5e9e;
+            --emerald: #1a936f;
+            --amethyst: #7e4ecc;
+            --gold: #c8a971;
+            
+            --glow-sapphire: 0 0 15px rgba(14, 94, 158, 0.7);
+            --glow-emerald: 0 0 15px rgba(26, 147, 111, 0.7);
+            --glow-amethyst: 0 0 15px rgba(126, 78, 204, 0.7);
+            --glow-gold: 0 0 20px rgba(200, 169, 113, 0.5);
+            
+            --transition-fast: all 0.3s ease;
+            --transition-medium: all 0.5s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--obsidian-black);
+            color: var(--parchment);
+            line-height: 1.7;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 15% 25%, rgba(14, 94, 158, 0.15) 0%, transparent 25%),
+                radial-gradient(circle at 85% 75%, rgba(126, 78, 204, 0.15) 0%, transparent 25%);
+        }
+        
+        body.menu-open {
+            overflow: hidden;
+        }
+
+        h1, h2, h3, h4, h5 {
+            font-family: 'Cinzel', serif;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Navigation */
+        .main-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 1.5rem 0;
+            z-index: 1000;
+            transition: var(--transition-fast);
+        }
+
+        .main-header.scrolled {
+            background: rgba(5, 7, 13, 0.85);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            padding: 1rem 0;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Cinzel', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--parchment);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            text-shadow: var(--glow-gold);
+        }
+
+        .logo-icon {
+            display: inline-block;
+            margin-right: 0.75rem;
+            color: var(--amethyst);
+            text-shadow: var(--glow-amethyst);
+            transition: var(--transition-fast);
+        }
+
+        .logo:hover .logo-icon {
+            transform: rotate(360deg);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-left: 2.5rem;
+        }
+
+        .nav-link {
+            color: var(--parchment);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            padding: 0.5rem 0;
+            position: relative;
+            transition: var(--transition-fast);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: linear-gradient(90deg, var(--sapphire), var(--amethyst));
+            transition: var(--transition-fast);
+        }
+
+        .nav-link:hover {
+            color: #fff;
+            text-shadow: var(--glow-sapphire);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            z-index: 1001;
+            width: 25px;
+            height: 20px;
+            position: relative;
+        }
+        
+        .hamburger span {
+            display: block;
+            position: absolute;
+            height: 2px;
+            width: 100%;
+            background: var(--parchment);
+            border-radius: 2px;
+            opacity: 1;
+            left: 0;
+            transform: rotate(0deg);
+            transition: .25s ease-in-out;
+        }
+
+        .hamburger span:nth-child(1) { top: 0px; }
+        .hamburger span:nth-child(2) { top: 9px; }
+        .hamburger span:nth-child(3) { top: 18px; }
+        
+        .hamburger.active span:nth-child(1) {
+            top: 9px;
+            transform: rotate(135deg);
+        }
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+            left: -60px;
+        }
+        .hamburger.active span:nth-child(3) {
+            top: 9px;
+            transform: rotate(-135deg);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            background: url('https://placehold.co/1920x1080/05070d/f5f1e6?text=Mystical+Landscape') no-repeat center center/cover;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(10, 14, 23, 0.7) 0%, rgba(5, 7, 13, 0.95) 75%);
+            z-index: 1;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            padding: 2rem;
+            z-index: 2;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            margin-bottom: 1rem;
+            text-shadow: var(--glow-gold);
+            background: linear-gradient(135deg, var(--parchment), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-tagline {
+            font-size: clamp(1.2rem, 4vw, 1.5rem);
+            margin-bottom: 2.5rem;
+            font-weight: 300;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: transparent;
+            color: var(--parchment);
+            border: 1px solid var(--gold);
+            border-radius: 4px;
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition-fast);
+            z-index: 1;
+        }
+        
+        .cta-button:hover {
+            color: #fff;
+            background: var(--amethyst);
+            border-color: var(--amethyst);
+            box-shadow: var(--glow-amethyst);
+            transform: translateY(-3px);
+        }
+
+        /* Section Styling */
+        section {
+            padding: 6rem 0;
+            position: relative;
+        }
+        
+        .section-content {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .section-content.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.8rem;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--sapphire), var(--amethyst));
+        }
+
+        /* World Section */
+        .world-section {
+            background-color: var(--midnight-blue);
+        }
+
+        .world-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            align-items: center;
+        }
+        
+        .world-text p {
+            margin-bottom: 1.5rem;
+        }
+
+        .world-image-container {
+            height: 450px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            position: relative;
+        }
+        
+        .world-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition-medium);
+        }
+        
+        .world-image-container:hover img {
+            transform: scale(1.05);
+        }
+        
+        .world-image-container::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(135deg, rgba(14, 94, 158, 0.2), rgba(126, 78, 204, 0.2));
+            z-index: 1;
+        }
+
+        /* Crystals Section */
+        .crystals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+        }
+
+        .crystal-card {
+            background: rgba(10, 14, 23, 0.7);
+            border-radius: 8px;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            transition: var(--transition-fast);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid transparent;
+            border-image-slice: 1;
+        }
+
+        .crystal-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--glow-amethyst);
+            border-image-source: linear-gradient(to right, var(--sapphire), var(--amethyst));
+        }
+        
+        .crystal-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+            transition: var(--transition-fast);
+        }
+        
+        .crystal-card:hover .crystal-icon {
+            transform: scale(1.1) rotate(15deg);
+        }
+        
+        .crystal-vision .crystal-icon { color: var(--sapphire); text-shadow: var(--glow-sapphire); }
+        .crystal-strength .crystal-icon { color: var(--emerald); text-shadow: var(--glow-emerald); }
+        .crystal-harmony .crystal-icon { color: var(--amethyst); text-shadow: var(--glow-amethyst); }
+        
+        .crystal-name {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--parchment);
+        }
+
+        /* Footer */
+        .main-footer {
+            background-color: var(--obsidian-black);
+            padding: 4rem 0 2rem;
+            border-top: 1px solid rgba(245, 241, 230, 0.1);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-logo {
+            font-family: 'Cinzel', serif;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            display: block;
+            color: var(--parchment);
+            text-decoration: none;
+        }
+        
+        .footer-links h4 {
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+            color: var(--gold);
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links a {
+            color: var(--parchment);
+            text-decoration: none;
+            transition: var(--transition-fast);
+            opacity: 0.8;
+        }
+
+        .footer-links a:hover {
+            color: var(--gold);
+            opacity: 1;
+            padding-left: 5px;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(245, 241, 230, 0.1);
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        
+        /* Keyframe Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-menu {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                height: 100vh;
+                width: 70%;
+                background: var(--obsidian-black);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                transition: var(--transition-medium);
+                z-index: 1000;
+            }
+            
+            .nav-menu.active {
+                right: 0;
+            }
+            
+            .nav-item {
+                margin: 1.5rem 0;
+            }
+            
+            .hamburger {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <header class="main-header" id="navbar">
+        <div class="container nav-container">
+            <a href="#" class="logo"><span class="logo-icon">✦</span>Crystals of Fate</a>
+            <nav>
+                <ul class="nav-menu" id="nav-menu">
+                    <li class="nav-item"><a href="#world" class="nav-link">World</a></li>
+                    <li class="nav-item"><a href="#crystals" class="nav-link">Crystals</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Lore</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Author</a></li>
+                </ul>
+            </nav>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h1 class="hero-title">Crystals of Fate</h1>
+                <p class="hero-tagline">A world bound by faith, fractured by magic.</p>
+                <a href="#world" class="cta-button">Enter the Realm</a>
+            </div>
+        </section>
+
+        <!-- World Section -->
+        <section id="world" class="world-section">
+            <div class="container section-content">
+                <h2 class="section-title">The World of Atheria</h2>
+                <div class="world-content">
+                    <div class="world-text">
+                        <p>In the ancient world of Atheria, the balance of power is maintained by seven mystical crystals, each representing a fundamental force of the universe. For millennia, these crystals have guided the fate of civilizations, bestowing incredible powers upon those deemed worthy.</p>
+                        <p>But now, a creeping shadow falls across the land. The harmony is breaking. The crystals are fading, and with them, the stability of the entire realm. As darkness threatens to consume Atheria, unlikely heroes must embark on a perilous journey to restore balance before the world fractures beyond repair.</p>
+                    </div>
+                    <div class="world-image-container">
+                         <img src="https://placehold.co/600x450/0a0e17/7e4ecc?text=Atheria" alt="A mystical floating island in the world of Atheria">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Crystals Section -->
+        <section id="crystals" class="crystals-section">
+            <div class="container section-content">
+                <h2 class="section-title">The Crystals of Power</h2>
+                <div class="crystals-grid">
+                    <div class="crystal-card crystal-vision">
+                        <div class="crystal-icon">👁️</div>
+                        <h3 class="crystal-name">Crystal of Vision</h3>
+                        <p>Grants foresight and cosmic clarity, revealing truths hidden from mortal eyes.</p>
+                    </div>
+                    <div class="crystal-card crystal-strength">
+                        <div class="crystal-icon">💪</div>
+                        <h3 class="crystal-name">Crystal of Strength</h3>
+                        <p>Bestows immense physical power and resilience, demanding great discipline from its wielder.</p>
+                    </div>
+                    <div class="crystal-card crystal-harmony">
+                        <div class="crystal-icon">✨</div>
+                        <h3 class="crystal-name">Crystal of Harmony</h3>
+                        <p>Maintains the delicate balance between opposing forces, sensitive to the slightest discord.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-about">
+                    <a href="#" class="footer-logo">Crystals of Fate</a>
+                    <p>An epic fantasy novel exploring the fragile balance between faith, power, and destiny.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Explore</h4>
+                    <ul>
+                        <li><a href="#world">The World</a></li>
+                        <li><a href="#">Characters</a></li>
+                        <li><a href="#">Lore</a></li>
+                        <li><a href="#">Gallery</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Connect</h4>
+                    <ul>
+                        <li><a href="#">Newsletter</a></li>
+                        <li><a href="#">Events</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">Community</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 Crystals of Fate. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const navbar = document.getElementById('navbar');
+            const hamburger = document.getElementById('hamburger');
+            const navMenu = document.getElementById('nav-menu');
+            const navLinks = navMenu.querySelectorAll('.nav-link');
+
+            // --- Navigation Scroll Effect ---
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+
+            // --- Mobile Menu Toggle ---
+            hamburger.addEventListener('click', () => {
+                hamburger.classList.toggle('active');
+                navMenu.classList.toggle('active');
+                document.body.classList.toggle('menu-open');
+            });
+            
+            // --- Close menu when a link is clicked ---
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (navMenu.classList.contains('active')) {
+                        hamburger.classList.remove('active');
+                        navMenu.classList.remove('active');
+                        document.body.classList.remove('menu-open');
+                    }
+                });
+            });
+
+            // --- Scroll Animation on Sections ---
+            const sections = document.querySelectorAll('.section-content');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+        });
+    </script>
+</body>
+</html>
