@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Threads of Destiny | Official Website</title>
+    <meta name="description" content="Enter the official digital portal into the world of Threads of Destiny, an epic fantasy saga. Explore the lore, characters, and mysteries of a universe bound by faith and fractured by magic.">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts: Cormorant Garamond for headings, Inter for body -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Custom Styles and Animations -->
+    <style>
+        /* Define fonts and base styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0a1a; /* Deep cosmic blue */
+            color: #e0e0e0;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, .font-serif {
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        /* Hero Section Text Glow Effect */
+        .text-glow {
+            text-shadow: 0 0 8px rgba(173, 216, 230, 0.5), 0 0 20px rgba(253, 184, 19, 0.2), 0 0 40px rgba(119, 136, 153, 0.3);
+        }
+
+        /* Button Pulse Animation */
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 0 15px 0px rgba(135, 206, 250, 0.4);
+                transform: scale(1);
+            }
+            50% {
+                box-shadow: 0 0 25px 5px rgba(135, 206, 250, 0.2), 0 0 35px 12px rgba(253, 184, 19, 0.2);
+                transform: scale(1.02);
+            }
+        }
+        .btn-pulse:hover {
+            animation: pulse 2.5s infinite;
+        }
+
+        /* Navigation Bar Scroll Effect */
+        .nav-scrolled {
+            background: linear-gradient(135deg, rgba(10, 10, 26, 0.3), rgba(20, 20, 40, 0.5));
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(173, 216, 230, 0.1);
+        }
+        
+        /* Crystal Shard Divider */
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(173, 216, 230, 0.4), rgba(253, 184, 19, 0.4), transparent);
+            margin: 4rem auto;
+            width: 80%;
+            max-width: 400px;
+        }
+
+        /* Crystal Pulse Animation */
+        @keyframes crystal-pulse {
+            0%, 100% { filter: drop-shadow(0 0 10px rgba(138, 43, 226, 0.5)); }
+            50% { filter: drop-shadow(0 0 20px rgba(138, 43, 226, 0.8)); }
+        }
+        .crystal-icon {
+            animation: crystal-pulse 4s infinite ease-in-out;
+            transition: transform 0.3s ease;
+        }
+        .crystal-icon:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        /* Fade-in animation for scroll-driven content */
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Custom scrollbar for a more thematic feel */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0a1a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(135, 206, 250, 0.2);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(135, 206, 250, 0.4);
+        }
+    </style>
+</head>
+<body class="bg-[#0a0a1a] text-gray-200 antialiased">
+
+    <!-- Header & Navigation -->
+    <header id="main-header" class="fixed w-full top-0 z-50 transition-all duration-300">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-serif font-bold text-glow">Threads of Destiny</a>
+            <div class="hidden md:flex space-x-8 items-center">
+                <a href="#world" class="hover:text-[#87CEFA] transition duration-300">World</a>
+                <a href="#lore" class="hover:text-[#87CEFA] transition duration-300">Lore</a>
+                <a href="#characters" class="hover:text-[#87CEFA] transition duration-300">Characters</a>
+                <a href="#crystals" class="hover:text-[#87CEFA] transition duration-300">The Crystals</a>
+                <a href="#author" class="hover:text-[#87CEFA] transition duration-300">Author</a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden focus:outline-none">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </nav>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-black bg-opacity-80 backdrop-blur-md">
+            <a href="#world" class="block py-2 px-4 text-sm hover:bg-gray-800">World</a>
+            <a href="#lore" class="block py-2 px-4 text-sm hover:bg-gray-800">Lore</a>
+            <a href="#characters" class="block py-2 px-4 text-sm hover:bg-gray-800">Characters</a>
+            <a href="#crystals" class="block py-2 px-4 text-sm hover:bg-gray-800">The Crystals</a>
+            <a href="#author" class="block py-2 px-4 text-sm hover:bg-gray-800">Author</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="hero" class="h-screen w-full flex items-center justify-center text-center relative overflow-hidden bg-black">
+             <div class="absolute inset-0 bg-cover bg-center bg-no-repeat" style="background-image: url('https://placehold.co/1920x1080/0a0a1a/e0e0e0?text=Cosmic+Mist'); opacity: 0.3;"></div>
+             <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a1a] via-transparent to-transparent"></div>
+            <div class="relative z-10 px-4">
+                <h1 class="text-6xl md:text-8xl lg:text-9xl font-extrabold font-serif text-glow leading-tight tracking-wider">Threads of Destiny</h1>
+                <p class="text-xl md:text-2xl mt-4 max-w-3xl mx-auto text-gray-300">A world bound by faith, fractured by magic.</p>
+                <a href="#world" class="mt-12 inline-block px-8 py-4 bg-transparent border-2 border-[#87CEFA] text-[#87CEFA] rounded-full text-lg font-semibold tracking-wider uppercase transition-all duration-300 btn-pulse">
+                    Enter the Realm
+                </a>
+            </div>
+        </section>
+
+        <!-- World Section -->
+        <section id="world" class="py-20 lg:py-32">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16 fade-in-section">
+                    <h2 class="text-4xl md:text-5xl font-serif text-glow">The World of Aerthos</h2>
+                    <p class="mt-4 text-lg text-gray-400 max-w-2xl mx-auto">Discover a realm shaped by celestial titans and ancient magic.</p>
+                </div>
+                
+                <!-- Scroll-driven story block 1 -->
+                <div class="flex flex-col md:flex-row items-center gap-12 my-20 fade-in-section">
+                    <div class="md:w-1/2">
+                        <h3 class="text-3xl font-serif text-[#FDB813] mb-4">The Sundered Kingdom</h3>
+                        <p class="text-gray-300 leading-relaxed">Once a unified continent under a single banner, Aerthos is now a mosaic of warring kingdoms and shadowed lands. Centuries ago, the Great Cataclysm shattered not only the land but the very fabric of destiny, scattering the Crystals of Fate across the realms. Each region now holds a key to the past and a potential to reshape the future.</p>
+                    </div>
+                    <div class="md:w-1/2">
+                        <img src="https://placehold.co/600x400/1a1a2e/87CEFA?text=Shattered+Map" alt="Map of the Sundered Kingdom" class="rounded-lg shadow-2xl w-full h-auto object-cover" loading="lazy">
+                    </div>
+                </div>
+
+                <!-- Scroll-driven story block 2 -->
+                <div class="flex flex-col md:flex-row-reverse items-center gap-12 my-20 fade-in-section">
+                    <div class="md:w-1/2">
+                        <h3 class="text-3xl font-serif text-[#FDB813] mb-4">Cities of Crystal and Shadow</h3>
+                        <p class="text-gray-300 leading-relaxed">From the crystalline spires of Lumina, a city powered by captured starlight, to the mist-shrouded alleys of Umbragard, where secrets are currency, the cities of Aerthos are characters in their own right. They are hubs of culture, conflict, and forbidden knowledge, each with a unique connection to the mystical forces that govern the world.</p>
+                    </div>
+                    <div class="md:w-1/2">
+                        <img src="https://placehold.co/600x400/1a1a2e/87CEFA?text=City+of+Lumina" alt="City of Lumina" class="rounded-lg shadow-2xl w-full h-auto object-cover" loading="lazy">
+                    </div>
+                </div>
+
+            </div>
+            <div class="divider"></div>
+        </section>
+
+        <!-- Lore Section -->
+        <section id="lore" class="py-20 lg:py-32 bg-[#0d0d1f]">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16 fade-in-section">
+                    <h2 class="text-4xl md:text-5xl font-serif text-glow">The Codex of Ages</h2>
+                    <p class="mt-4 text-lg text-gray-400 max-w-2xl mx-auto">Uncover the deep history, powerful magic, and divine mysteries of the realm.</p>
+                </div>
+
+                <div id="lore-accordion" class="max-w-4xl mx-auto fade-in-section">
+                    <!-- Lore Item 1 -->
+                    <div class="lore-item border-b border-gray-700">
+                        <button class="lore-toggle w-full flex justify-between items-center text-left py-6 px-4">
+                            <span class="text-2xl font-serif flex items-center gap-4">
+                                <!-- SVG Icon -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#87CEFA]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
+                                Cosmology
+                            </span>
+                            <span class="transform transition-transform duration-300 text-2xl">&plus;</span>
+                        </button>
+                        <div class="lore-content max-h-0 overflow-hidden transition-all duration-500 ease-in-out px-4">
+                            <p class="py-4 text-gray-300 leading-relaxed">The universe was born from the silent song of the twin Titans, Ordo and Chaos. From their harmony and discord, the celestial bodies were formed, and at the center of all, Aerthos was spun into existence. The stars are not mere lights, but the fading echoes of this creation myth, and seers can read their paths to glimpse the threads of fate.</p>
+                        </div>
+                    </div>
+                    <!-- Lore Item 2 -->
+                    <div class="lore-item border-b border-gray-700">
+                        <button class="lore-toggle w-full flex justify-between items-center text-left py-6 px-4">
+                            <span class="text-2xl font-serif flex items-center gap-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#87CEFA]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 011-1h1a2 2 0 100-4H7a1 1 0 01-1-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" /></svg>
+                                The Nature of Magic
+                            </span>
+                            <span class="transform transition-transform duration-300 text-2xl">&plus;</span>
+                        </button>
+                        <div class="lore-content max-h-0 overflow-hidden transition-all duration-500 ease-in-out px-4">
+                            <p class="py-4 text-gray-300 leading-relaxed">Magic in Aerthos is the art of weaving the unseen energies that flow from the world's core. It is a dangerous and volatile force, shaped by will and emotion. The purest form of this energy is crystallized within the Crystals of Fate, making them objects of immense power and desire. Uncontrolled magic manifests as chaotic storms that can warp reality itself.</p>
+                        </div>
+                    </div>
+                    <!-- Lore Item 3 -->
+                    <div class="lore-item border-b border-gray-700">
+                        <button class="lore-toggle w-full flex justify-between items-center text-left py-6 px-4">
+                             <span class="text-2xl font-serif flex items-center gap-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#87CEFA]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M15 21v-1a6 6 0 00-5.197-5.975M15 21V10a4 4 0 00-8 0v11h8z" /></svg>
+                                Races and Faiths
+                            </span>
+                             <span class="transform transition-transform duration-300 text-2xl">&plus;</span>
+                        </button>
+                        <div class="lore-content max-h-0 overflow-hidden transition-all duration-500 ease-in-out px-4">
+                            <p class="py-4 text-gray-300 leading-relaxed">From the long-lived, stone-skinned Goliaths of the mountains to the ethereal, forest-dwelling Sylvans, the peoples of Aerthos are diverse. Each race holds a different belief system, worshipping aspects of the Titans, nature spirits, or ancestral heroes. These faiths often clash, leading to holy wars and crusades in the name of divine truth.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+             <div class="divider"></div>
+        </section>
+
+        <!-- Characters Section -->
+        <section id="characters" class="py-20 lg:py-32">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16 fade-in-section">
+                    <h2 class="text-4xl md:text-5xl font-serif text-glow">Key Figures</h2>
+                    <p class="mt-4 text-lg text-gray-400 max-w-2xl mx-auto">Meet the heroes, villains, and those in between who shape the destiny of Aerthos.</p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 fade-in-section">
+                    <!-- Character Card 1 -->
+                    <div class="group relative overflow-hidden rounded-lg cursor-pointer">
+                        <img src="https://placehold.co/500x700/1a1a2e/e0e0e0?text=Kaelen" alt="Character Portrait of Kaelen" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" loading="lazy">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent"></div>
+                        <div class="absolute inset-0 p-6 flex flex-col justify-end">
+                             <h3 class="text-3xl font-serif text-white">Kaelen</h3>
+                             <p class="text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300 mt-2">The last scion of a fallen house, haunted by visions of a broken future.</p>
+                        </div>
+                    </div>
+                    <!-- Character Card 2 -->
+                    <div class="group relative overflow-hidden rounded-lg cursor-pointer">
+                        <img src="https://placehold.co/500x700/2e1a1a/e0e0e0?text=Lyra" alt="Character Portrait of Lyra" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" loading="lazy">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent"></div>
+                        <div class="absolute inset-0 p-6 flex flex-col justify-end">
+                             <h3 class="text-3xl font-serif text-white">Lyra</h3>
+                             <p class="text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300 mt-2">A powerful mage who seeks to control magic itself, believing it is the key to salvation.</p>
+                        </div>
+                    </div>
+                    <!-- Character Card 3 -->
+                    <div class="group relative overflow-hidden rounded-lg cursor-pointer">
+                        <img src="https://placehold.co/500x700/1a2e1a/e0e0e0?text=Malakor" alt="Character Portrait of Malakor" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" loading="lazy">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent"></div>
+                        <div class="absolute inset-0 p-6 flex flex-col justify-end">
+                             <h3 class="text-3xl font-serif text-white">Malakor</h3>
+                             <p class="text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300 mt-2">A charismatic high priest who believes the Crystals are divine tools to enforce order.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+             <div class="divider"></div>
+        </section>
+
+        <!-- The Crystals Section -->
+        <section id="crystals" class="py-20 lg:py-32 bg-[#0d0d1f] text-center">
+             <div class="container mx-auto px-6">
+                <div class="mb-16 fade-in-section">
+                    <h2 class="text-4xl md:text-5xl font-serif text-glow">The Crystals of Destiny</h2>
+                    <p class="mt-4 text-lg text-gray-400 max-w-2xl mx-auto">Fragments of creation, each holds the power to bend destiny.</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-16 items-center fade-in-section">
+                    <!-- Crystal 1 -->
+                    <div class="crystal-container text-center">
+                        <svg class="crystal-icon w-32 h-32 mx-auto" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="--crystal-color: #4169E1;">
+                            <defs>
+                                <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:var(--crystal-color); stop-opacity:0.8" />
+                                    <stop offset="100%" style="stop-color:var(--crystal-color); stop-opacity:0.4" />
+                                </linearGradient>
+                            </defs>
+                            <path d="M50 0 L100 50 L50 100 L0 50 Z M50 15 L85 50 L50 85 L15 50 Z" fill="url(#grad1)" stroke="lightblue" stroke-width="1"/>
+                        </svg>
+                        <h3 class="text-2xl font-serif mt-6 text-white">Heart of the Stalwart</h3>
+                        <p class="text-gray-400 mt-2">Grants unbreakable will and resilience against despair.</p>
+                    </div>
+                    <!-- Crystal 2 -->
+                    <div class="crystal-container text-center">
+                        <svg class="crystal-icon w-32 h-32 mx-auto" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="--crystal-color: #FDB813;">
+                            <defs>
+                                <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:var(--crystal-color); stop-opacity:0.8" />
+                                    <stop offset="100%" style="stop-color:var(--crystal-color); stop-opacity:0.4" />
+                                </linearGradient>
+                            </defs>
+                            <path d="M50 5 L65 35 L95 40 L75 65 L80 95 L50 80 L20 95 L25 65 L5 40 L35 35 Z" fill="url(#grad2)" stroke="#FFD700" stroke-width="1"/>
+                        </svg>
+                        <h3 class="text-2xl font-serif mt-6 text-white">Eye of the Seer</h3>
+                        <p class="text-gray-400 mt-2">Reveals glimpses of possible futures and hidden truths.</p>
+                    </div>
+                    <!-- Crystal 3 -->
+                    <div class="crystal-container text-center">
+                        <svg class="crystal-icon w-32 h-32 mx-auto" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="--crystal-color: #8A2BE2;">
+                            <defs>
+                                <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:var(--crystal-color); stop-opacity:0.8" />
+                                    <stop offset="100%" style="stop-color:var(--crystal-color); stop-opacity:0.4" />
+                                </linearGradient>
+                            </defs>
+                            <path d="M20 10 L80 10 L100 50 L80 90 L20 90 L0 50 Z M25 20 L75 20 L90 50 L75 80 L25 80 L10 50 Z" fill="url(#grad3)" stroke="violet" stroke-width="1"/>
+                        </svg>
+                        <h3 class="text-2xl font-serif mt-6 text-white">Whisper of Chaos</h3>
+                        <p class="text-gray-400 mt-2">Amplifies magic and introduces unpredictability into reality.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Author Section -->
+        <section id="author" class="py-20 lg:py-32">
+             <div class="container mx-auto px-6 fade-in-section">
+                <div class="flex flex-col md:flex-row items-center gap-12 bg-[#101022] p-8 md:p-12 rounded-lg shadow-2xl">
+                    <div class="md:w-1/3">
+                        <img src="https://placehold.co/400x400/1a1a2e/e0e0e0?text=Author" alt="Author Portrait" class="rounded-full w-48 h-48 md:w-full md:h-auto object-cover mx-auto shadow-lg border-4 border-gray-700">
+                    </div>
+                    <div class="md:w-2/3 text-center md:text-left">
+                        <h2 class="text-4xl font-serif text-glow">A Word from the Author</h2>
+                        <p class="mt-6 text-gray-300 leading-relaxed">"Threads of Destiny was born from a fascination with the choices we make and the unseen forces that guide them. I wanted to create a world that felt both vast and ancient, yet deeply personal to the characters navigating its fractured landscape. This story is an exploration of faith, the seductive power of destiny, and the courage it takes to forge your own path when the cosmos itself seems to have a plan for you. Thank you for stepping into this world with me."</p>
+                        <p class="mt-4 text-xl font-serif text-[#87CEFA]">- Jane Doe</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-black py-8">
+        <div class="container mx-auto px-6 text-center text-gray-500">
+            <p>&copy; 2025 Jane Doe. All Rights Reserved.</p>
+            <p class="text-sm mt-2">Website designed as a digital portal into the mythos of Threads of Destiny.</p>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top Button -->
+    <button id="scrollToTopBtn" class="hidden fixed bottom-5 right-5 bg-white/10 backdrop-blur-md p-3 rounded-full text-white hover:bg-white/20 transition-all duration-300">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/></svg>
+    </button>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- Navigation Scroll Effect ---
+            const header = document.getElementById('main-header');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    header.classList.add('nav-scrolled');
+                } else {
+                    header.classList.remove('nav-scrolled');
+                }
+            });
+
+            // --- Mobile Menu Toggle ---
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // Close mobile menu on link click
+            const mobileLinks = mobileMenu.querySelectorAll('a');
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                     mobileMenu.classList.add('hidden');
+                });
+            });
+
+            // --- Lore Accordion ---
+            const loreToggles = document.querySelectorAll('.lore-toggle');
+            loreToggles.forEach(toggle => {
+                toggle.addEventListener('click', () => {
+                    const content = toggle.nextElementSibling;
+                    const icon = toggle.querySelector('span:last-child');
+                    
+                    // Close all other items
+                    document.querySelectorAll('.lore-content').forEach(item => {
+                        if (item !== content) {
+                            item.style.maxHeight = null;
+                            item.previousElementSibling.querySelector('span:last-child').textContent = '+';
+                            item.previousElementSibling.querySelector('span:last-child').classList.remove('rotate-45');
+                        }
+                    });
+
+                    // Toggle current item
+                    if (content.style.maxHeight) {
+                        content.style.maxHeight = null;
+                        icon.textContent = '+';
+                        icon.classList.remove('rotate-45');
+                    } else {
+                        content.style.maxHeight = content.scrollHeight + 'px';
+                        icon.textContent = '+'; // Keep it simple, just rotate
+                        icon.classList.add('rotate-45');
+                    }
+                });
+            });
+
+            // --- Scroll-driven Fade-in Animations ---
+            const fadeinSections = document.querySelectorAll('.fade-in-section');
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            fadeinSections.forEach(section => {
+                observer.observe(section);
+            });
+
+            // --- Scroll to Top Button ---
+            const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+            window.addEventListener('scroll', () => {
+              if (window.scrollY > 300) {
+                scrollToTopBtn.classList.remove('hidden');
+              } else {
+                scrollToTopBtn.classList.add('hidden');
+              }
+            });
+
+            scrollToTopBtn.addEventListener('click', () => {
+              window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+              });
+            });
+        });
+    </script>
+</body>
+</html>
+
