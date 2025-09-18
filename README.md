@@ -1,2 +1,2 @@
 # WebsitesCollection
-A collection of websites i created using promt engineering
+A collection of websites i created using prompt engineering
