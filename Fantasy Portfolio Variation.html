@@ -3,27 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crystals of Fate - Epic Fantasy Novel</title>
+    <title>Crystals of Fate - An Epic Fantasy World</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         :root {
-            --midnight-blue: #0a0e17;
             --obsidian-black: #05070d;
+            --midnight-blue: #0a0e17;
             --parchment: #f5f1e6;
             --sapphire: #0e5e9e;
             --emerald: #1a936f;
             --amethyst: #7e4ecc;
             --gold: #c8a971;
             
-            --glow-sapphire: 0 0 15px rgba(14, 94, 158, 0.7);
-            --glow-emerald: 0 0 15px rgba(26, 147, 111, 0.7);
-            --glow-amethyst: 0 0 15px rgba(126, 78, 204, 0.7);
-            --glow-gold: 0 0 20px rgba(200, 169, 113, 0.5);
+            --glow-sapphire: 0 0 15px rgba(14, 94, 158, 0.8);
+            --glow-emerald: 0 0 15px rgba(26, 147, 111, 0.8);
+            --glow-amethyst: 0 0 20px rgba(126, 78, 204, 0.8);
+            --glow-gold: 0 0 25px rgba(200, 169, 113, 0.6);
             
-            --transition-fast: all 0.3s ease;
-            --transition-medium: all 0.5s ease;
+            --transition-fast: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --transition-medium: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
         * {
@@ -42,9 +42,22 @@
             color: var(--parchment);
             line-height: 1.7;
             overflow-x: hidden;
-            background-image: 
-                radial-gradient(circle at 15% 25%, rgba(14, 94, 158, 0.15) 0%, transparent 25%),
-                radial-gradient(circle at 85% 75%, rgba(126, 78, 204, 0.15) 0%, transparent 25%);
+            cursor: none; /* Hide default cursor */
+            position: relative;
+        }
+
+        /* Dynamic Aurora Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(126, 78, 204, 0.15), transparent 40%),
+                        radial-gradient(400px circle at 15% 25%, rgba(14, 94, 158, 0.15), transparent 35%);
+            z-index: -1;
+            transition: background 0.2s linear;
         }
         
         body.menu-open {
@@ -63,6 +76,35 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 1rem;
+        }
+
+        /* Custom Cursor */
+        .cursor {
+            width: 20px;
+            height: 20px;
+            border: 1px solid var(--gold);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s, height 0.2s, border-color 0.2s, background-color 0.2s;
+        }
+        .cursor-dot {
+             width: 4px;
+             height: 4px;
+             background-color: var(--gold);
+             border-radius: 50%;
+             position: fixed;
+             pointer-events: none;
+             z-index: 9999;
+             transform: translate(-50%, -50%);
+        }
+        .cursor.hovered {
+            width: 40px;
+            height: 40px;
+            background-color: rgba(200, 169, 113, 0.1);
+            border-color: var(--amethyst);
         }
 
         /* Navigation */
@@ -98,29 +140,24 @@
             display: flex;
             align-items: center;
             text-shadow: var(--glow-gold);
+            transition: var(--transition-fast);
         }
-
+        .logo:hover {
+            text-shadow: 0 0 15px rgba(200, 169, 113, 0.9);
+        }
         .logo-icon {
             display: inline-block;
             margin-right: 0.75rem;
             color: var(--amethyst);
             text-shadow: var(--glow-amethyst);
-            transition: var(--transition-fast);
+            transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
-
         .logo:hover .logo-icon {
-            transform: rotate(360deg);
+            transform: rotate(360deg) scale(1.1);
         }
 
-        .nav-menu {
-            display: flex;
-            list-style: none;
-        }
-
-        .nav-item {
-            margin-left: 2.5rem;
-        }
-
+        .nav-menu { display: flex; list-style: none; }
+        .nav-item { margin-left: 2.5rem; }
         .nav-link {
             color: var(--parchment);
             text-decoration: none;
@@ -132,7 +169,6 @@
             position: relative;
             transition: var(--transition-fast);
         }
-
         .nav-link::after {
             content: '';
             position: absolute;
@@ -143,55 +179,18 @@
             background: linear-gradient(90deg, var(--sapphire), var(--amethyst));
             transition: var(--transition-fast);
         }
-
-        .nav-link:hover {
-            color: #fff;
-            text-shadow: var(--glow-sapphire);
-        }
-
-        .nav-link:hover::after {
-            width: 100%;
-        }
+        .nav-link:hover { color: #fff; text-shadow: var(--glow-sapphire); }
+        .nav-link:hover::after { width: 100%; }
 
         /* Hamburger Menu */
-        .hamburger {
-            display: none;
-            cursor: pointer;
-            z-index: 1001;
-            width: 25px;
-            height: 20px;
-            position: relative;
-        }
-        
-        .hamburger span {
-            display: block;
-            position: absolute;
-            height: 2px;
-            width: 100%;
-            background: var(--parchment);
-            border-radius: 2px;
-            opacity: 1;
-            left: 0;
-            transform: rotate(0deg);
-            transition: .25s ease-in-out;
-        }
-
+        .hamburger { display: none; cursor: pointer; z-index: 1001; width: 25px; height: 20px; position: relative; }
+        .hamburger span { display: block; position: absolute; height: 2px; width: 100%; background: var(--parchment); border-radius: 2px; opacity: 1; left: 0; transform: rotate(0deg); transition: .25s ease-in-out; }
         .hamburger span:nth-child(1) { top: 0px; }
         .hamburger span:nth-child(2) { top: 9px; }
         .hamburger span:nth-child(3) { top: 18px; }
-        
-        .hamburger.active span:nth-child(1) {
-            top: 9px;
-            transform: rotate(135deg);
-        }
-        .hamburger.active span:nth-child(2) {
-            opacity: 0;
-            left: -60px;
-        }
-        .hamburger.active span:nth-child(3) {
-            top: 9px;
-            transform: rotate(-135deg);
-        }
+        .hamburger.active span:nth-child(1) { top: 9px; transform: rotate(135deg); }
+        .hamburger.active span:nth-child(2) { opacity: 0; left: -60px; }
+        .hamburger.active span:nth-child(3) { top: 9px; transform: rotate(-135deg); }
 
         /* Hero Section */
         .hero {
@@ -203,26 +202,22 @@
             position: relative;
             overflow: hidden;
             background: url('https://placehold.co/1920x1080/05070d/f5f1e6?text=Mystical+Landscape') no-repeat center center/cover;
+            perspective: 1000px;
         }
-
         .hero::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             background: radial-gradient(circle, rgba(10, 14, 23, 0.7) 0%, rgba(5, 7, 13, 0.95) 75%);
             z-index: 1;
         }
-
         .hero-content {
             max-width: 800px;
             padding: 2rem;
             z-index: 2;
             animation: fadeIn 2s ease-in-out;
+            transition: transform 0.1s linear;
         }
-
         .hero-title {
             font-size: clamp(2.5rem, 8vw, 4.5rem);
             margin-bottom: 1rem;
@@ -232,13 +227,7 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-
-        .hero-tagline {
-            font-size: clamp(1.2rem, 4vw, 1.5rem);
-            margin-bottom: 2.5rem;
-            font-weight: 300;
-            opacity: 0.9;
-        }
+        .hero-tagline { font-size: clamp(1.2rem, 4vw, 1.5rem); margin-bottom: 2.5rem; font-weight: 300; opacity: 0.9; }
 
         .cta-button {
             display: inline-block;
@@ -257,262 +246,141 @@
             transition: var(--transition-fast);
             z-index: 1;
         }
-        
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: var(--amethyst);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.4s, height 0.4s;
+            z-index: -1;
+        }
         .cta-button:hover {
             color: #fff;
-            background: var(--amethyst);
             border-color: var(--amethyst);
             box-shadow: var(--glow-amethyst);
-            transform: translateY(-3px);
+            transform: translateY(-5px);
+        }
+        .cta-button:hover::before {
+            width: 250%;
+            height: 250%;
         }
 
         /* Section Styling */
-        section {
-            padding: 6rem 0;
-            position: relative;
-        }
-        
-        .section-content {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-        }
-        .section-content.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .section-title {
-            text-align: center;
-            font-size: 2.8rem;
-            margin-bottom: 4rem;
-            position: relative;
-        }
-
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 70px;
-            height: 2px;
-            background: linear-gradient(90deg, var(--sapphire), var(--amethyst));
-        }
+        section { padding: 6rem 0; position: relative; }
+        .section-content { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
+        .section-content.visible { opacity: 1; transform: translateY(0); }
+        .section-title { text-align: center; font-size: 2.8rem; margin-bottom: 4rem; position: relative; }
+        .section-title::after { content: ''; position: absolute; bottom: -15px; left: 50%; transform: translateX(-50%); width: 70px; height: 2px; background: linear-gradient(90deg, var(--sapphire), var(--amethyst)); }
 
         /* World Section */
-        .world-section {
-            background-color: var(--midnight-blue);
-        }
-
-        .world-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 3rem;
-            align-items: center;
-        }
-        
-        .world-text p {
-            margin-bottom: 1.5rem;
-        }
-
-        .world-image-container {
-            height: 450px;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-            position: relative;
-        }
-        
-        .world-image-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: var(--transition-medium);
-        }
-        
-        .world-image-container:hover img {
-            transform: scale(1.05);
-        }
-        
-        .world-image-container::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: linear-gradient(135deg, rgba(14, 94, 158, 0.2), rgba(126, 78, 204, 0.2));
-            z-index: 1;
-        }
+        .world-section { background-color: var(--midnight-blue); }
+        .world-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 3rem; align-items: center; }
+        .world-text p { margin-bottom: 1.5rem; }
+        .world-image-container { height: 450px; border-radius: 8px; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); position: relative; }
+        .world-image-container img { width: 100%; height: 100%; object-fit: cover; transition: var(--transition-medium); }
+        .world-image-container:hover img { transform: scale(1.05); }
+        .world-image-container::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(14, 94, 158, 0.2), rgba(126, 78, 204, 0.2)); z-index: 1; opacity: 0.7; transition: var(--transition-fast); }
+        .world-image-container:hover::before { opacity: 1; }
 
         /* Crystals Section */
-        .crystals-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2.5rem;
-            margin-top: 3rem;
-        }
+        .crystals-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2.5rem; margin-top: 3rem; perspective: 1200px;}
 
         .crystal-card {
             background: rgba(10, 14, 23, 0.7);
             border-radius: 8px;
             padding: 2.5rem 2rem;
             text-align: center;
-            transition: var(--transition-fast);
+            transition: all 0.2s linear;
             position: relative;
             overflow: hidden;
-            border: 1px solid transparent;
-            border-image-slice: 1;
+            border: 1px solid rgba(245, 241, 230, 0.1);
         }
-
-        .crystal-card:hover {
-            transform: translateY(-10px);
-            box-shadow: var(--glow-amethyst);
-            border-image-source: linear-gradient(to right, var(--sapphire), var(--amethyst));
+        .crystal-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 0, rgba(255,255,255,0.1), transparent 50%);
+            opacity: 0;
+            transition: opacity var(--transition-medium);
         }
-        
+        .crystal-card:hover::before {
+            opacity: 1;
+        }
         .crystal-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            display: inline-block;
+            font-size: 3rem; margin-bottom: 1rem; display: inline-block;
             transition: var(--transition-fast);
+            fill: currentColor;
+            width: 60px;
+            height: 60px;
         }
-        
-        .crystal-card:hover .crystal-icon {
-            transform: scale(1.1) rotate(15deg);
-        }
-        
-        .crystal-vision .crystal-icon { color: var(--sapphire); text-shadow: var(--glow-sapphire); }
-        .crystal-strength .crystal-icon { color: var(--emerald); text-shadow: var(--glow-emerald); }
-        .crystal-harmony .crystal-icon { color: var(--amethyst); text-shadow: var(--glow-amethyst); }
-        
-        .crystal-name {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: var(--parchment);
-        }
+        .crystal-card:hover .crystal-icon { transform: scale(1.1) translateY(-5px); filter: drop-shadow(var(--glow-amethyst)); }
+        .crystal-vision .crystal-icon { color: var(--sapphire); }
+        .crystal-strength .crystal-icon { color: var(--emerald); }
+        .crystal-harmony .crystal-icon { color: var(--amethyst); }
+        .crystal-vision:hover { box-shadow: var(--glow-sapphire); border-color: var(--sapphire); }
+        .crystal-strength:hover { box-shadow: var(--glow-emerald); border-color: var(--emerald); }
+        .crystal-harmony:hover { box-shadow: var(--glow-amethyst); border-color: var(--amethyst); }
+        .crystal-name { font-size: 1.5rem; margin-bottom: 1rem; color: var(--parchment); }
 
         /* Footer */
-        .main-footer {
-            background-color: var(--obsidian-black);
-            padding: 4rem 0 2rem;
-            border-top: 1px solid rgba(245, 241, 230, 0.1);
-        }
-
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 2.5rem;
-            margin-bottom: 3rem;
-        }
-
-        .footer-logo {
-            font-family: 'Cinzel', serif;
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
-            display: block;
-            color: var(--parchment);
-            text-decoration: none;
-        }
+        .main-footer { background-color: var(--obsidian-black); padding: 4rem 0 2rem; border-top: 1px solid rgba(245, 241, 230, 0.1); }
+        .footer-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2.5rem; margin-bottom: 3rem; }
+        .footer-logo { font-family: 'Cinzel', serif; font-size: 1.8rem; margin-bottom: 1rem; display: block; color: var(--parchment); text-decoration: none; }
+        .footer-links h4 { margin-bottom: 1.5rem; font-size: 1.2rem; color: var(--gold); }
+        .footer-links ul { list-style: none; }
+        .footer-links li { margin-bottom: 0.8rem; }
+        .footer-links a { color: var(--parchment); text-decoration: none; transition: var(--transition-fast); opacity: 0.8; }
+        .footer-links a:hover { color: var(--gold); opacity: 1; padding-left: 5px; }
+        .copyright { text-align: center; padding-top: 2rem; border-top: 1px solid rgba(245, 241, 230, 0.1); font-size: 0.9rem; opacity: 0.7; }
         
-        .footer-links h4 {
-            margin-bottom: 1.5rem;
-            font-size: 1.2rem;
-            color: var(--gold);
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        .footer-links ul {
-            list-style: none;
-        }
-
-        .footer-links li {
-            margin-bottom: 0.8rem;
-        }
-
-        .footer-links a {
-            color: var(--parchment);
-            text-decoration: none;
-            transition: var(--transition-fast);
-            opacity: 0.8;
-        }
-
-        .footer-links a:hover {
-            color: var(--gold);
-            opacity: 1;
-            padding-left: 5px;
-        }
-
-        .copyright {
-            text-align: center;
-            padding-top: 2rem;
-            border-top: 1px solid rgba(245, 241, 230, 0.1);
-            font-size: 0.9rem;
-            opacity: 0.7;
-        }
-        
-        /* Keyframe Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Responsive Design */
         @media (max-width: 768px) {
-            .nav-menu {
-                position: fixed;
-                top: 0;
-                right: -100%;
-                height: 100vh;
-                width: 70%;
-                background: var(--obsidian-black);
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                transition: var(--transition-medium);
-                z-index: 1000;
-            }
-            
-            .nav-menu.active {
-                right: 0;
-            }
-            
-            .nav-item {
-                margin: 1.5rem 0;
-            }
-            
-            .hamburger {
-                display: block;
-            }
+            .nav-menu { position: fixed; top: 0; right: -100%; height: 100vh; width: 70%; background: var(--obsidian-black); flex-direction: column; justify-content: center; align-items: center; transition: var(--transition-medium); z-index: 1000; }
+            .nav-menu.active { right: 0; }
+            .nav-item { margin: 1.5rem 0; }
+            .hamburger { display: block; }
+            .cursor, .cursor-dot { display: none; } /* Hide custom cursor on mobile */
+            body { cursor: auto; }
         }
     </style>
 </head>
 <body>
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+    <div class="cursor-dot"></div>
+
     <!-- Navigation -->
     <header class="main-header" id="navbar">
         <div class="container nav-container">
-            <a href="#" class="logo"><span class="logo-icon">✦</span>Crystals of Fate</a>
+            <a href="#" class="logo interactive"><span class="logo-icon">✦</span>Crystals of Fate</a>
             <nav>
                 <ul class="nav-menu" id="nav-menu">
-                    <li class="nav-item"><a href="#world" class="nav-link">World</a></li>
-                    <li class="nav-item"><a href="#crystals" class="nav-link">Crystals</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link">Lore</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link">Author</a></li>
+                    <li class="nav-item"><a href="#world" class="nav-link interactive">World</a></li>
+                    <li class="nav-item"><a href="#crystals" class="nav-link interactive">Crystals</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link interactive">Lore</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link interactive">Author</a></li>
                 </ul>
             </nav>
             <div class="hamburger" id="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
+                <span></span><span></span><span></span>
             </div>
         </div>
     </header>
 
-    <!-- Hero Section -->
     <main>
+        <!-- Hero Section -->
         <section class="hero">
-            <div class="hero-content">
+            <div class="hero-content" id="hero-content">
                 <h1 class="hero-title">Crystals of Fate</h1>
                 <p class="hero-tagline">A world bound by faith, fractured by magic.</p>
-                <a href="#world" class="cta-button">Enter the Realm</a>
+                <a href="#world" class="cta-button interactive">Enter the Realm</a>
             </div>
         </section>
 
@@ -525,7 +393,7 @@
                         <p>In the ancient world of Atheria, the balance of power is maintained by seven mystical crystals, each representing a fundamental force of the universe. For millennia, these crystals have guided the fate of civilizations, bestowing incredible powers upon those deemed worthy.</p>
                         <p>But now, a creeping shadow falls across the land. The harmony is breaking. The crystals are fading, and with them, the stability of the entire realm. As darkness threatens to consume Atheria, unlikely heroes must embark on a perilous journey to restore balance before the world fractures beyond repair.</p>
                     </div>
-                    <div class="world-image-container">
+                    <div class="world-image-container interactive">
                          <img src="https://placehold.co/600x450/0a0e17/7e4ecc?text=Atheria" alt="A mystical floating island in the world of Atheria">
                     </div>
                 </div>
@@ -537,18 +405,24 @@
             <div class="container section-content">
                 <h2 class="section-title">The Crystals of Power</h2>
                 <div class="crystals-grid">
-                    <div class="crystal-card crystal-vision">
-                        <div class="crystal-icon">👁️</div>
+                    <div class="crystal-card crystal-vision interactive" data-tilt>
+                        <div class="crystal-icon">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zm0 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" fill="currentColor"/></svg>
+                        </div>
                         <h3 class="crystal-name">Crystal of Vision</h3>
                         <p>Grants foresight and cosmic clarity, revealing truths hidden from mortal eyes.</p>
                     </div>
-                    <div class="crystal-card crystal-strength">
-                        <div class="crystal-icon">💪</div>
+                    <div class="crystal-card crystal-strength interactive" data-tilt>
+                        <div class="crystal-icon">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14zM20 5h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v1H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-10-1h4v1h-4V4z" fill="currentColor"/></svg>
+                        </div>
                         <h3 class="crystal-name">Crystal of Strength</h3>
                         <p>Bestows immense physical power and resilience, demanding great discipline from its wielder.</p>
                     </div>
-                    <div class="crystal-card crystal-harmony">
-                        <div class="crystal-icon">✨</div>
+                    <div class="crystal-card crystal-harmony interactive" data-tilt>
+                        <div class="crystal-icon">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14l-5-4.87 6.91-1.01L12 2z" fill="currentColor"/></svg>
+                        </div>
                         <h3 class="crystal-name">Crystal of Harmony</h3>
                         <p>Maintains the delicate balance between opposing forces, sensitive to the slightest discord.</p>
                     </div>
@@ -562,25 +436,25 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-about">
-                    <a href="#" class="footer-logo">Crystals of Fate</a>
+                    <a href="#" class="footer-logo interactive">Crystals of Fate</a>
                     <p>An epic fantasy novel exploring the fragile balance between faith, power, and destiny.</p>
                 </div>
                 <div class="footer-links">
                     <h4>Explore</h4>
                     <ul>
-                        <li><a href="#world">The World</a></li>
-                        <li><a href="#">Characters</a></li>
-                        <li><a href="#">Lore</a></li>
-                        <li><a href="#">Gallery</a></li>
+                        <li><a href="#world" class="interactive">The World</a></li>
+                        <li><a href="#" class="interactive">Characters</a></li>
+                        <li><a href="#" class="interactive">Lore</a></li>
+                        <li><a href="#" class="interactive">Gallery</a></li>
                     </ul>
                 </div>
                 <div class="footer-links">
                     <h4>Connect</h4>
                     <ul>
-                        <li><a href="#">Newsletter</a></li>
-                        <li><a href="#">Events</a></li>
-                        <li><a href="#">Contact</a></li>
-                        <li><a href="#">Community</a></li>
+                        <li><a href="#" class="interactive">Newsletter</a></li>
+                        <li><a href="#" class="interactive">Events</a></li>
+                        <li><a href="#" class="interactive">Contact</a></li>
+                        <li><a href="#" class="interactive">Community</a></li>
                     </ul>
                 </div>
             </div>
@@ -596,14 +470,56 @@
             const hamburger = document.getElementById('hamburger');
             const navMenu = document.getElementById('nav-menu');
             const navLinks = navMenu.querySelectorAll('.nav-link');
+            const cursor = document.querySelector('.cursor');
+            const cursorDot = document.querySelector('.cursor-dot');
+            const heroContent = document.getElementById('hero-content');
+            const crystalCards = document.querySelectorAll('[data-tilt]');
+            const interactiveElements = document.querySelectorAll('.interactive');
+
+            // --- Custom Cursor & Aurora Background ---
+            document.addEventListener('mousemove', e => {
+                document.body.style.setProperty('--mouse-x', e.clientX + 'px');
+                document.body.style.setProperty('--mouse-y', e.clientY + 'px');
+
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
+                cursorDot.style.left = e.clientX + 'px';
+                cursorDot.style.top = e.clientY + 'px';
+            });
+            
+            interactiveElements.forEach(el => {
+                el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
+                el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
+            });
+
+            // --- Hero Parallax Effect ---
+            if (heroContent) {
+                document.body.addEventListener('mousemove', e => {
+                    const { clientX, clientY } = e;
+                    const { innerWidth, innerHeight } = window;
+                    const x = (clientX / innerWidth - 0.5) * 30; // 30 is the intensity
+                    const y = (clientY / innerHeight - 0.5) * 30;
+                    heroContent.style.transform = `rotateY(${-x}deg) rotateX(${y}deg) translateZ(50px)`;
+                });
+            }
+
+            // --- Crystal Card 3D Tilt Effect ---
+            crystalCards.forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const { left, top, width, height } = card.getBoundingClientRect();
+                    const x = (e.clientX - left) / width - 0.5;
+                    const y = (e.clientY - top) / height - 0.5;
+                    card.style.transform = `rotateY(${x * 20}deg) rotateX(${-y * 20}deg) scale(1.05)`;
+                });
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'rotateY(0) rotateX(0) scale(1)';
+                });
+            });
 
             // --- Navigation Scroll Effect ---
             window.addEventListener('scroll', () => {
-                if (window.scrollY > 50) {
-                    navbar.classList.add('scrolled');
-                } else {
-                    navbar.classList.remove('scrolled');
-                }
+                if (window.scrollY > 50) navbar.classList.add('scrolled');
+                else navbar.classList.remove('scrolled');
             });
 
             // --- Mobile Menu Toggle ---
@@ -613,7 +529,6 @@
                 document.body.classList.toggle('menu-open');
             });
             
-            // --- Close menu when a link is clicked ---
             navLinks.forEach(link => {
                 link.addEventListener('click', () => {
                     if (navMenu.classList.contains('active')) {
@@ -630,15 +545,12 @@
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
                     }
                 });
-            }, {
-                threshold: 0.1
-            });
+            }, { threshold: 0.1 });
 
-            sections.forEach(section => {
-                observer.observe(section);
-            });
+            sections.forEach(section => observer.observe(section));
         });
     </script>
 </body>
