@@ -24,13 +24,22 @@
             --secondary-glow: #f000ff; /* Magenta */
             --text-color: #e0e0e0;
             --border-color: rgba(0, 255, 255, 0.2);
+            --mouse-x: 50%;
+            --mouse-y: 50%;
         }
 
+        /* --- Base Setup --- */
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
             font-family: 'Inter', sans-serif;
             overflow-x: hidden;
+            /* Apply the aura background to the body */
+            background-image: radial-gradient(
+                circle at var(--mouse-x) var(--mouse-y),
+                rgba(0, 255, 255, 0.06),
+                transparent 25vw
+            );
         }
 
         .font-title {
@@ -42,25 +51,45 @@
             text-shadow: 0 0 5px var(--primary-glow), 0 0 10px var(--primary-glow), 0 0 15px rgba(0, 255, 255, 0.5);
         }
 
+        /* Upgraded Glow Border */
         .glow-border {
             border: 1px solid var(--border-color);
-            box-shadow: 0 0 8px rgba(0, 255, 255, 0.1);
+            box-shadow: 0 0 8px rgba(0, 255, 255, 0.1), inset 0 0 8px rgba(0, 255, 255, 0.1);
             transition: all 0.3s ease-in-out;
         }
+        .glow-border:hover {
+             box-shadow: 0 0 15px rgba(0, 255, 255, 0.3), inset 0 0 15px rgba(0, 255, 255, 0.2);
+        }
 
+        /* Upgraded Button */
         .btn-glow {
             position: relative;
             overflow: hidden;
             background: linear-gradient(90deg, rgba(0, 255, 255, 0.1), rgba(240, 0, 255, 0.1));
             border: 1px solid var(--border-color);
             transition: all 0.3s ease;
+            transform-style: preserve-3d;
+        }
+        .btn-glow::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, var(--primary-glow), transparent);
+            transition: left 0.4s ease;
         }
         .btn-glow:hover {
             box-shadow: 0 0 15px var(--primary-glow), 0 0 25px var(--secondary-glow);
-            transform: scale(1.05);
+            transform: scale(1.05) perspective(1000px) rotateX(5deg);
             background: linear-gradient(90deg, rgba(0, 255, 255, 0.2), rgba(240, 0, 255, 0.2));
         }
+        .btn-glow:hover::before {
+            left: 100%;
+        }
 
+        /* Navigation Link Hover */
         .nav-link::after {
             content: '';
             position: absolute;
@@ -88,7 +117,7 @@
             transform: translateY(0);
         }
 
-        /* Back to top button */
+        /* Back to top button pulse */
         #to-top-btn {
             animation: pulse 2s infinite;
         }
@@ -98,32 +127,82 @@
             100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 255, 255, 0); }
         }
 
+        /* Character Card 3D Tilt Effect */
+        .character-card {
+            transition: transform 0.1s linear;
+            transform-style: preserve-3d;
+        }
+
         /* Leaderboard highlights */
-        .leaderboard-top-3 tr:nth-child(1) { background: rgba(255, 215, 0, 0.1); border-left: 2px solid #FFD700; }
-        .leaderboard-top-3 tr:nth-child(2) { background: rgba(192, 192, 192, 0.1); border-left: 2px solid #C0C0C0; }
-        .leaderboard-top-3 tr:nth-child(3) { background: rgba(205, 127, 50, 0.1); border-left: 2px solid #CD7F32; }
-        .leaderboard-body tr:hover { background-color: rgba(0, 255, 255, 0.1); }
+        .leaderboard-top-3 tr:nth-child(1) { background: rgba(255, 215, 0, 0.1); border-left: 3px solid #FFD700; }
+        .leaderboard-top-3 tr:nth-child(2) { background: rgba(192, 192, 192, 0.1); border-left: 3px solid #C0C0C0; }
+        .leaderboard-top-3 tr:nth-child(3) { background: rgba(205, 127, 50, 0.1); border-left: 3px solid #CD7F32; }
+        .leaderboard-body tr:hover { 
+            background-color: rgba(0, 255, 255, 0.1);
+            transform: scale(1.02);
+            box-shadow: 0 0 10px rgba(0,255,255,0.3);
+        }
+        .leaderboard-body tr {
+            transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+        }
 
         /* Mobile Menu Transition */
         #mobile-menu {
             transition: transform 0.3s ease-in-out;
         }
         
-        /* Custom scrollbar for a more thematic feel */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: var(--bg-color);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--primary-glow);
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #00dddd;
-        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-color); }
+        ::-webkit-scrollbar-thumb { background: var(--primary-glow); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #00dddd; }
         
+        /* Glitch effect for main title */
+        .glitch {
+            position: relative;
+        }
+        .glitch::before, .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-color);
+            overflow: hidden;
+        }
+        .glitch::before {
+            left: 2px;
+            text-shadow: -2px 0 var(--secondary-glow);
+            animation: glitch-anim-1 2.5s infinite linear reverse;
+        }
+        .glitch::after {
+            left: -2px;
+            text-shadow: -2px 0 var(--primary-glow);
+            animation: glitch-anim-2 2s infinite linear reverse;
+        }
+        @keyframes glitch-anim-1 {
+            0%, 10%, 12%, 20%, 100% { clip-path: inset(50% 0 30% 0); }
+            11%, 14% { clip-path: inset(20% 0 70% 0); }
+            13% { clip-path: inset(10% 0 80% 0); }
+            15% { clip-path: inset(40% 0 45% 0); }
+        }
+        @keyframes glitch-anim-2 {
+            0%, 2%, 8%, 80%, 100% { clip-path: inset(45% 0 40% 0); }
+            4% { clip-path: inset(10% 0 85% 0); }
+            6% { clip-path: inset(70% 0 20% 0); }
+        }
+
+        /* Modal animations */
+        .modal {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+        .modal > div {
+            animation: scaleUp 0.3s ease-out forwards;
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes scaleUp { from { transform: scale(0.95); } to { transform: scale(1); } }
+
         /* Reduced motion for accessibility */
         @media (prefers-reduced-motion: reduce) {
             *, *::before, *::after {
@@ -135,7 +214,7 @@
         }
     </style>
 </head>
-<body class="bg-gray-900 text-gray-200">
+<body>
 
     <!-- Hero Background Canvas -->
     <canvas id="hero-canvas" class="fixed top-0 left-0 w-full h-full -z-10"></canvas>
@@ -183,8 +262,8 @@
         <!-- Hero Section -->
         <section id="home" class="h-screen flex items-center justify-center text-center">
             <div class="relative z-10 px-4">
-                <h1 class="font-title text-6xl md:text-8xl lg:text-9xl font-extrabold uppercase tracking-widest glow-text">
-                    Aetherion
+                <h1 class="font-title text-6xl md:text-8xl lg:text-9xl font-extrabold uppercase tracking-widest glow-text glitch" data-text="AETHERION">
+                    AETHERION
                 </h1>
                 <p class="mt-4 text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto">
                     Descend into the Echoes of a forgotten galaxy. Forge your legacy in a universe fractured by celestial war.
@@ -242,7 +321,7 @@
                             <p class="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 max-h-0 group-hover:max-h-40 overflow-hidden">A rogue assassin who bends shadows to her will, striking from the unseen.</p>
                         </div>
                     </div>
-                    <!-- Add more cards similarly -->
+                    <!-- Character Card -->
                      <div class="character-card group relative overflow-hidden rounded-lg glow-border cursor-pointer" onclick="openModal('modal-rex')">
                         <img src="https://placehold.co/400x600/2a2a2a/ffffff?text=Rex" alt="Rex" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
@@ -253,6 +332,7 @@
                              <p class="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 max-h-0 group-hover:max-h-40 overflow-hidden">A titan of engineering, his augmented body is a walking fortress of destruction.</p>
                         </div>
                     </div>
+                    <!-- Character Card -->
                      <div class="character-card group relative overflow-hidden rounded-lg glow-border cursor-pointer" onclick="openModal('modal-lyra')">
                         <img src="https://placehold.co/400x600/3a3a3a/ffffff?text=Lyra" alt="Lyra" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
@@ -263,6 +343,7 @@
                              <p class="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 max-h-0 group-hover:max-h-40 overflow-hidden">A mystic who manipulates cosmic energy, healing allies and shattering foes.</p>
                         </div>
                     </div>
+                    <!-- Character Card -->
                      <div class="character-card group relative overflow-hidden rounded-lg glow-border cursor-pointer" onclick="openModal('modal-zen')">
                         <img src="https://placehold.co/400x600/4a4a4a/ffffff?text=Zen" alt="Zen" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
@@ -313,23 +394,23 @@
                 <h2 class="font-title text-5xl font-bold text-center glow-text mb-12">Visuals from the Void</h2>
                 <!-- Media Gallery -->
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div class="group relative overflow-hidden rounded-lg glow-border aspect-video col-span-2 row-span-2">
+                    <div class="group relative overflow-hidden rounded-lg glow-border aspect-video col-span-2 row-span-2 cursor-pointer">
                         <img src="https://placehold.co/800x450/111/fff?text=Gameplay+Trailer" alt="Trailer" class="w-full h-full object-cover" loading="lazy">
-                         <div class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                             <svg class="w-16 h-16 text-cyan-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>
+                         <div class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                             <svg class="w-16 h-16 text-cyan-400 transform group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>
                         </div>
                     </div>
-                    <div class="group relative overflow-hidden rounded-lg glow-border aspect-square">
-                        <img src="https://placehold.co/400x400/222/fff?text=Concept+Art" alt="Concept Art" class="w-full h-full object-cover" loading="lazy">
+                    <div class="group relative overflow-hidden rounded-lg glow-border aspect-square cursor-pointer">
+                        <img src="https://placehold.co/400x400/222/fff?text=Concept+Art" alt="Concept Art" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" loading="lazy">
                     </div>
-                    <div class="group relative overflow-hidden rounded-lg glow-border aspect-square">
-                        <img src="https://placehold.co/400x400/333/fff?text=Environment" alt="Environment" class="w-full h-full object-cover" loading="lazy">
+                    <div class="group relative overflow-hidden rounded-lg glow-border aspect-square cursor-pointer">
+                        <img src="https://placehold.co/400x400/333/fff?text=Environment" alt="Environment" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" loading="lazy">
                     </div>
-                    <div class="group relative overflow-hidden rounded-lg glow-border aspect-square">
-                        <img src="https://placehold.co/400x400/444/fff?text=Character+Model" alt="Character Model" class="w-full h-full object-cover" loading="lazy">
+                    <div class="group relative overflow-hidden rounded-lg glow-border aspect-square cursor-pointer">
+                        <img src="https://placehold.co/400x400/444/fff?text=Character+Model" alt="Character Model" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" loading="lazy">
                     </div>
-                    <div class="group relative overflow-hidden rounded-lg glow-border aspect-square">
-                        <img src="https://placehold.co/400x400/555/fff?text=Wallpaper" alt="Wallpaper" class="w-full h-full object-cover" loading="lazy">
+                    <div class="group relative overflow-hidden rounded-lg glow-border aspect-square cursor-pointer">
+                        <img src="https://placehold.co/400x400/555/fff?text=Wallpaper" alt="Wallpaper" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" loading="lazy">
                     </div>
                 </div>
             </div>
@@ -339,7 +420,7 @@
         <section id="leaderboards" class="py-20 fade-in-section">
             <div class="container mx-auto px-6">
                 <h2 class="font-title text-5xl font-bold text-center glow-text mb-12">Galactic Rankings</h2>
-                <div class="overflow-x-auto glow-border rounded-lg p-1">
+                <div class="overflow-x-auto glow-border rounded-lg p-1 bg-black/20">
                     <table class="w-full text-left">
                         <thead class="bg-black/30">
                             <tr>
@@ -455,7 +536,7 @@
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg>
     </a>
 
-    <!-- Character Modal -->
+    <!-- Character Modals -->
     <div id="modal-kaira" class="modal fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden" onclick="closeAllModals()">
         <div class="bg-gray-900 glow-border rounded-lg max-w-4xl w-full grid md:grid-cols-2 gap-8 p-8" onclick="event.stopPropagation()">
             <img src="https://placehold.co/600x800/1a1a1a/ffffff?text=Kaira+Detail" alt="Kaira" class="rounded-lg w-full h-full object-cover">
@@ -474,157 +555,189 @@
             </div>
         </div>
     </div>
-    <!-- Add other modals for Rex, Lyra, Zen if needed -->
+    <!-- Add other modals here for a complete experience -->
 
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // --- Hero Canvas Particles ---
-            const canvas = document.getElementById('hero-canvas');
-            const ctx = canvas.getContext('2d');
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-
-            let particles = [];
-            const particleCount = Math.floor((canvas.width * canvas.height) / 15000); // Responsive particle count
-            const maxVelocity = 0.5;
-
-            class Particle {
-                constructor() {
-                    this.x = Math.random() * canvas.width;
-                    this.y = Math.random() * canvas.height;
-                    this.vx = (Math.random() - 0.5) * maxVelocity;
-                    this.vy = (Math.random() - 0.5) * maxVelocity;
-                    this.radius = Math.random() * 1.5 + 0.5;
-                }
-
-                update() {
-                    this.x += this.vx;
-                    this.y += this.vy;
-
-                    if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-                    if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
-                }
-
-                draw() {
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                    ctx.fillStyle = 'rgba(0, 255, 255, 0.5)';
-                    ctx.fill();
-                }
-            }
-
-            function initParticles() {
-                particles = [];
-                for (let i = 0; i < particleCount; i++) {
-                    particles.push(new Particle());
-                }
-            }
-            initParticles();
-
-            function animateParticles() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                for (const particle of particles) {
-                    particle.update();
-                    particle.draw();
-                }
-
-                // Draw lines between nearby particles
-                for (let i = 0; i < particles.length; i++) {
-                    for (let j = i + 1; j < particles.length; j++) {
-                        const dx = particles[i].x - particles[j].x;
-                        const dy = particles[i].y - particles[j].y;
-                        const distance = Math.sqrt(dx * dx + dy * dy);
-
-                        if (distance < 100) {
-                            ctx.beginPath();
-                            ctx.moveTo(particles[i].x, particles[i].y);
-                            ctx.lineTo(particles[j].x, particles[j].y);
-                            ctx.strokeStyle = `rgba(0, 255, 255, ${1 - distance / 100})`;
-                            ctx.lineWidth = 0.5;
-                            ctx.stroke();
-                        }
+            
+            const throttle = (func, limit) => {
+                let inThrottle;
+                return function() {
+                    const args = arguments;
+                    const context = this;
+                    if (!inThrottle) {
+                        func.apply(context, args);
+                        inThrottle = true;
+                        setTimeout(() => inThrottle = false, limit);
                     }
                 }
-                requestAnimationFrame(animateParticles);
-            }
-            animateParticles();
+            };
             
-            window.addEventListener('resize', () => {
+            // --- Mouse Aura Effect ---
+            const initMouseAura = () => {
+                document.body.addEventListener('mousemove', throttle(e => {
+                    document.documentElement.style.setProperty('--mouse-x', `${e.clientX}px`);
+                    document.documentElement.style.setProperty('--mouse-y', `${e.clientY}px`);
+                }, 16));
+            };
+            initMouseAura();
+
+            // --- Hero Canvas Particles ---
+            const initHeroCanvas = () => {
+                const canvas = document.getElementById('hero-canvas');
+                const ctx = canvas.getContext('2d');
                 canvas.width = window.innerWidth;
                 canvas.height = window.innerHeight;
-                initParticles();
-            });
 
-            // --- Gameplay Canvas Demo ---
-            const gameCanvas = document.getElementById('gameplay-canvas');
-            if(gameCanvas) {
+                let particles = [];
+                const particleCount = Math.floor((canvas.width * canvas.height) / 15000);
+                const maxVelocity = 0.5;
+
+                class Particle {
+                    constructor() { this.reset(); }
+                    reset() {
+                        this.x = Math.random() * canvas.width;
+                        this.y = Math.random() * canvas.height;
+                        this.vx = (Math.random() - 0.5) * maxVelocity;
+                        this.vy = (Math.random() - 0.5) * maxVelocity;
+                        this.radius = Math.random() * 1.5 + 0.5;
+                    }
+                    update() {
+                        this.x += this.vx; this.y += this.vy;
+                        if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                        if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+                    }
+                    draw() {
+                        ctx.beginPath();
+                        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                        ctx.fillStyle = 'rgba(0, 255, 255, 0.5)';
+                        ctx.fill();
+                    }
+                }
+
+                const initParticles = () => {
+                    particles = [];
+                    for (let i = 0; i < particleCount; i++) particles.push(new Particle());
+                };
+                initParticles();
+
+                const animateParticles = () => {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    particles.forEach(p => { p.update(); p.draw(); });
+
+                    for (let i = 0; i < particles.length; i++) {
+                        for (let j = i + 1; j < particles.length; j++) {
+                            const dx = particles[i].x - particles[j].x;
+                            const dy = particles[i].y - particles[j].y;
+                            const distance = Math.sqrt(dx * dx + dy * dy);
+                            if (distance < 100) {
+                                ctx.beginPath();
+                                ctx.moveTo(particles[i].x, particles[i].y);
+                                ctx.lineTo(particles[j].x, particles[j].y);
+                                ctx.strokeStyle = `rgba(0, 255, 255, ${1 - distance / 100})`;
+                                ctx.lineWidth = 0.5;
+                                ctx.stroke();
+                            }
+                        }
+                    }
+                    requestAnimationFrame(animateParticles);
+                };
+                animateParticles();
+                
+                window.addEventListener('resize', throttle(() => {
+                    canvas.width = window.innerWidth;
+                    canvas.height = window.innerHeight;
+                    initParticles();
+                }, 200));
+            };
+            initHeroCanvas();
+
+            // --- Gamified Gameplay Canvas Demo ---
+            const initGameplayCanvas = () => {
+                const gameCanvas = document.getElementById('gameplay-canvas');
+                if (!gameCanvas) return;
+
                 const gameCtx = gameCanvas.getContext('2d');
-                let player = { x: 50, y: 50, size: 20, speed: 4 };
+                let player = { x: 50, y: 50, size: 15 };
                 let mouse = { x: 50, y: 50 };
                 let particlesStream = [];
 
-                function resizeGameCanvas() {
+                const resizeGameCanvas = () => {
                     const rect = gameCanvas.getBoundingClientRect();
-                    gameCanvas.width = rect.width;
-                    gameCanvas.height = rect.height;
+                    gameCanvas.width = rect.width; gameCanvas.height = rect.height;
                     player.y = gameCanvas.height / 2;
-                }
+                };
                 resizeGameCanvas();
-                window.addEventListener('resize', resizeGameCanvas);
+                window.addEventListener('resize', throttle(resizeGameCanvas, 200));
 
-                gameCanvas.addEventListener('mousemove', (e) => {
+                gameCanvas.addEventListener('mousemove', e => {
                     const rect = gameCanvas.getBoundingClientRect();
-                    mouse.x = e.clientX - rect.left;
-                    mouse.y = e.clientY - rect.top;
+                    mouse.x = e.clientX - rect.left; mouse.y = e.clientY - rect.top;
                 });
-                
-                function animateGameplay() {
-                    gameCtx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
 
-                    // Move player towards mouse
+                const animateGameplay = () => {
+                    gameCtx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
                     player.y += (mouse.y - player.y) * 0.1;
                     
-                    // Draw player
+                    // Draw player as a triangle
                     gameCtx.fillStyle = '#00ffff';
                     gameCtx.shadowColor = '#00ffff';
-                    gameCtx.shadowBlur = 10;
-                    gameCtx.fillRect(player.x - player.size / 2, player.y - player.size / 2, player.size, player.size);
+                    gameCtx.shadowBlur = 15;
+                    gameCtx.beginPath();
+                    gameCtx.moveTo(player.x + player.size, player.y);
+                    gameCtx.lineTo(player.x - player.size / 2, player.y - player.size);
+                    gameCtx.lineTo(player.x - player.size / 2, player.y + player.size);
+                    gameCtx.closePath();
+                    gameCtx.fill();
                     gameCtx.shadowBlur = 0;
 
-                    // Update and draw particles
-                    if(Math.random() < 0.5) {
-                        particlesStream.push({ 
-                            x: gameCanvas.width, 
-                            y: Math.random() * gameCanvas.height, 
-                            size: Math.random() * 3 + 1, 
-                            speed: Math.random() * 2 + 1
+                    // Particle stream
+                    if (Math.random() < 0.6) {
+                        particlesStream.push({
+                            x: gameCanvas.width, y: Math.random() * gameCanvas.height,
+                            size: Math.random() * 4 + 1, speed: Math.random() * 3 + 1
                         });
                     }
-
                     gameCtx.fillStyle = '#f000ff';
-                    for(let i = particlesStream.length - 1; i >= 0; i--) {
+                    for (let i = particlesStream.length - 1; i >= 0; i--) {
                         let p = particlesStream[i];
                         p.x -= p.speed;
-                        gameCtx.fillRect(p.x, p.y, p.size * 2, p.size);
-                        if(p.x < 0) particlesStream.splice(i, 1);
+                        gameCtx.fillRect(p.x, p.y, p.size * 2, p.size / 2);
+                        if (p.x < 0) particlesStream.splice(i, 1);
                     }
-
                     requestAnimationFrame(animateGameplay);
-                }
+                };
                 animateGameplay();
-            }
-
+            };
+            initGameplayCanvas();
+            
+            // --- Character Card 3D Tilt Effect ---
+            const initCharacterCards = () => {
+                const cards = document.querySelectorAll('.character-card');
+                cards.forEach(card => {
+                    card.addEventListener('mousemove', e => {
+                        const rect = card.getBoundingClientRect();
+                        const x = e.clientX - rect.left;
+                        const y = e.clientY - rect.top;
+                        const { width, height } = rect;
+                        const rotateX = (y / height - 0.5) * -20; // Max 10deg rotation
+                        const rotateY = (x / width - 0.5) * 20;  // Max 10deg rotation
+                        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+                    });
+                    card.addEventListener('mouseleave', () => {
+                        card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
+                    });
+                });
+            };
+            initCharacterCards();
 
             // --- Sticky Header ---
             const header = document.getElementById('main-header');
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 50) {
-                    header.classList.add('bg-black/50', 'backdrop-blur-lg');
-                } else {
-                    header.classList.remove('bg-black/50', 'backdrop-blur-lg');
-                }
-            });
+            window.addEventListener('scroll', throttle(() => {
+                header.classList.toggle('bg-black/50', window.scrollY > 50);
+                header.classList.toggle('backdrop-blur-lg', window.scrollY > 50);
+            }, 100));
 
             // --- Mobile Menu Toggle ---
             const mobileMenuButton = document.getElementById('mobile-menu-button');
@@ -632,82 +745,105 @@
             mobileMenuButton.addEventListener('click', () => {
                 mobileMenu.classList.toggle('translate-x-full');
             });
-            // Close on link click
             mobileMenu.querySelectorAll('a').forEach(link => {
                 link.addEventListener('click', () => mobileMenu.classList.add('translate-x-full'));
             });
 
+            // --- Scroll Animations & Active Nav Link ---
+            const initScrollInteractions = () => {
+                const sections = document.querySelectorAll('.fade-in-section');
+                const navLinks = document.querySelectorAll('.nav-link');
+                const allSections = document.querySelectorAll('main > section');
 
-            // --- Scroll Animations ---
-            const sections = document.querySelectorAll('.fade-in-section');
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                    }
-                });
-            }, { threshold: 0.1 });
-            sections.forEach(section => observer.observe(section));
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                        }
+                    });
+                }, { threshold: 0.1 });
+                sections.forEach(section => observer.observe(section));
+
+                window.addEventListener('scroll', throttle(() => {
+                    let current = '';
+                    allSections.forEach(section => {
+                        const sectionTop = section.offsetTop;
+                        if (pageYOffset >= sectionTop - 150) {
+                            current = section.getAttribute('id');
+                        }
+                    });
+
+                    navLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href').substring(1) === current) {
+                            link.classList.add('active');
+                        }
+                    });
+                }, 100));
+            };
+            initScrollInteractions();
             
-            // --- Active Nav Link ---
-            const navLinks = document.querySelectorAll('.nav-link');
-            const allSections = document.querySelectorAll('section');
-            window.addEventListener('scroll', () => {
-                let current = '';
-                allSections.forEach(section => {
-                    const sectionTop = section.offsetTop;
-                    if(pageYOffset >= sectionTop - 150) {
-                        current = section.getAttribute('id');
-                    }
-                });
-
-                navLinks.forEach(link => {
-                    link.classList.remove('active');
-                    if (link.getAttribute('href').substring(1) === current) {
-                        link.classList.add('active');
-                    }
-                })
-            });
-
-
             // --- Back to Top Button ---
             const toTopBtn = document.getElementById('to-top-btn');
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 300) {
-                    toTopBtn.classList.remove('hidden');
-                } else {
-                    toTopBtn.classList.add('hidden');
-                }
-            });
-            
-            // --- Leaderboard Data ---
-            const leaderboardData = [
-                { rank: 1, name: 'VoidReaper', score: 987500, kd: 4.82 },
-                { rank: 2, name: 'CyberGlitch', score: 954300, kd: 4.51 },
-                { rank: 3, name: 'Aetheria', score: 921000, kd: 4.23 },
-                { rank: 4, name: 'Zenith', score: 898000, kd: 3.99 },
-                { rank: 5, name: 'Ghost_Protocol', score: 875000, kd: 3.85 },
-                { rank: 6, name: 'Nyx', score: 852100, kd: 3.76 },
-                { rank: 7, name: 'Rogue_AI', score: 845000, kd: 3.71 },
-                { rank: 8, name: 'Helios', score: 821300, kd: 3.65 },
-            ];
-            const top3body = document.querySelector('.leaderboard-top-3');
-            const otherBody = document.querySelector('.leaderboard-body');
-            leaderboardData.forEach(player => {
-                const row = document.createElement('tr');
-                row.className = 'border-b border-cyan-400/10';
-                row.innerHTML = `
-                    <td class="p-4 font-bold">${player.rank}</td>
-                    <td class="p-4">${player.name}</td>
-                    <td class="p-4 text-right">${player.score.toLocaleString()}</td>
-                    <td class="p-4 text-right hidden sm:table-cell">${player.kd}</td>
-                `;
-                if(player.rank <= 3) {
-                    top3body.appendChild(row);
-                } else {
-                    otherBody.appendChild(row);
-                }
-            });
+            window.addEventListener('scroll', throttle(() => {
+                toTopBtn.classList.toggle('hidden', window.scrollY <= 300);
+            }, 200));
+
+            // --- Animated Leaderboard ---
+            const initLeaderboard = () => {
+                 const leaderboardData = [
+                    { rank: 1, name: 'VoidReaper', score: 987500, kd: 4.82 },
+                    { rank: 2, name: 'CyberGlitch', score: 954300, kd: 4.51 },
+                    { rank: 3, name: 'Aetheria', score: 921000, kd: 4.23 },
+                    { rank: 4, name: 'Zenith', score: 898000, kd: 3.99 },
+                    { rank: 5, name: 'Ghost_Protocol', score: 875000, kd: 3.85 },
+                    { rank: 6, name: 'Nyx', score: 852100, kd: 3.76 },
+                    { rank: 7, name: 'Rogue_AI', score: 845000, kd: 3.71 },
+                    { rank: 8, name: 'Helios', score: 821300, kd: 3.65 },
+                ];
+                const top3body = document.querySelector('.leaderboard-top-3');
+                const otherBody = document.querySelector('.leaderboard-body');
+
+                leaderboardData.forEach(player => {
+                    const row = document.createElement('tr');
+                    row.className = 'border-b border-cyan-400/10';
+                    row.innerHTML = `
+                        <td class="p-4 font-bold">${player.rank}</td>
+                        <td class="p-4">${player.name}</td>
+                        <td class="p-4 text-right" data-score="${player.score}">0</td>
+                        <td class="p-4 text-right hidden sm:table-cell">${player.kd}</td>
+                    `;
+                    if(player.rank <= 3) top3body.appendChild(row);
+                    else otherBody.appendChild(row);
+                });
+
+                const animateCount = (el) => {
+                    const target = +el.getAttribute('data-score');
+                    let current = 0;
+                    const increment = target / 100;
+                    const update = () => {
+                        current += increment;
+                        if (current < target) {
+                            el.textContent = Math.ceil(current).toLocaleString();
+                            requestAnimationFrame(update);
+                        } else {
+                            el.textContent = target.toLocaleString();
+                        }
+                    };
+                    update();
+                };
+
+                const lbObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            document.querySelectorAll('[data-score]').forEach(animateCount);
+                            lbObserver.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.5 });
+                lbObserver.observe(document.getElementById('leaderboards'));
+            };
+            initLeaderboard();
 
             // --- Sound Toggle ---
             const soundToggle = document.getElementById('sound-toggle');
@@ -731,16 +867,15 @@
             });
         });
 
-        // --- Modal Logic ---
+        // --- Global Modal Logic ---
         function openModal(modalId) {
-            document.getElementById(modalId).classList.remove('hidden');
+            document.getElementById(modalId)?.classList.remove('hidden');
         }
         function closeAllModals() {
             document.querySelectorAll('.modal').forEach(modal => {
                 modal.classList.add('hidden');
             });
         }
-
     </script>
 </body>
 </html>
