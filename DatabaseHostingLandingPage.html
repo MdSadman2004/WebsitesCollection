@@ -1,45 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DataCore | Enterprise Database Hosting</title>
-    <!-- Using more specific font weights for better performance and design control -->
+    <title>DataCore | Dynamic Database Hosting</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Inter:wght@400;500&display=swap">
     <style>
-        /* * Color Palette Theory:
-         * A professional and trustworthy analogous palette is used, based on shades of Indigo and Slate Gray.
-         * Indigo (#4F46E5) is used as the primary accent. It evokes trust, stability, and tech sophistication.
-         * Slate Gray provides a modern, clean, and neutral background that complements the accent color without competing.
-         * This creates a high-contrast, accessible, and visually appealing design for both light and dark modes.
+        /*
+        * Design & Gamification Theory:
+        * This redesign introduces a "Digital Aurora" theme. It combines professional, clean typography with dynamic, gamified elements.
+        * Key enhancements include:
+        * 1.  Glassmorphism: A frosted-glass effect on the header for a modern, layered feel.
+        * 2.  Aurora Gradient & Spotlight: A subtle, animated background gradient combined with a mouse-reactive spotlight creates an interactive, immersive hero section.
+        * 3.  3D Tilt on Hover: Cards now have a subtle 3D tilt effect that responds to mouse movement, making them feel like tangible, interactive objects.
+        * 4.  Glow Effects: Interactive elements now feature a soft "glow" on hover, providing satisfying visual feedback.
+        * 5.  Micro-interactions & Animations: Elements animate into view on scroll, and numbers count up, making the user's journey through the page more engaging and rewarding.
         */
         :root {
             --color-primary: #ffffff;
-            --color-secondary: #111827; /* Dark Slate for Footer */
-            --color-accent: #4F46E5; /* Vibrant Indigo */
-            --color-accent-light: #6366F1; /* Lighter Indigo for hover */
-            --color-background: #F9FAFB; /* Light Slate */
+            --color-secondary: #111827;
+            --color-accent: #4F46E5;
+            --color-accent-light: #6366F1;
+            --color-glow: #4f46e580;
+            --color-background: #F9FAFB;
             --color-card: #ffffff;
-            --color-text: #1F2937; /* Dark Slate Text */
-            --color-text-light: #6B7280; /* Muted Slate Text */
+            --color-text: #1F2937;
+            --color-text-light: #6B7280;
             --color-border: #E5E7EB;
-            /* Softer, more layered shadows for a modern UI feel */
             --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
             --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
             --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-            --border-radius: 12px; /* A slightly larger radius for a softer, modern look */
-            --transition: all 0.2s ease-in-out;
+            --border-radius: 16px; /* Slightly larger for a softer feel */
+            --transition-fast: all 0.2s ease-in-out;
+            --transition-medium: all 0.4s ease-in-out;
         }
 
         .dark-mode {
             --color-primary: #111827;
             --color-secondary: #ffffff;
-            --color-background: #111827;
-            --color-card: #1F2937;
+            --color-background: #0d111c; /* Deeper space blue for dark mode */
+            --color-card: #1f2937;
             --color-text: #E5E7EB;
             --color-text-light: #9CA3AF;
             --color-border: #374151;
-             /* Adjusted shadows for dark mode visibility */
+            --color-glow: #6366f166;
             --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.2);
             --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
             --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.4);
@@ -51,12 +56,17 @@
             box-sizing: border-box;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
             color: var(--color-text);
             background-color: var(--color-background);
             line-height: 1.6;
             transition: background-color 0.3s ease, color 0.3s ease;
+            overflow-x: hidden;
         }
 
         h1, h2, h3, h4, h5, h6 {
@@ -67,26 +77,10 @@
             color: var(--color-text);
         }
 
-        h1 {
-            font-size: 3rem;
-            letter-spacing: -1.5px;
-        }
-
-        h2 {
-            font-size: 2.25rem;
-            margin-bottom: 2.5rem;
-        }
-
-        h3 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-
-        p {
-            margin-bottom: 1.5rem;
-            color: var(--color-text-light);
-        }
+        h1 { font-size: 3.2rem; letter-spacing: -1.5px; }
+        h2 { font-size: 2.5rem; margin-bottom: 2.5rem; }
+        h3 { font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem; }
+        p { margin-bottom: 1.5rem; color: var(--color-text-light); }
 
         .container {
             width: 100%;
@@ -95,160 +89,154 @@
             padding: 0 2rem;
         }
 
+        /* Gamified Button Styles */
         .btn {
             display: inline-block;
             padding: 0.875rem 2rem;
-            background-color: var(--color-accent);
+            background-image: linear-gradient(45deg, var(--color-accent) 0%, var(--color-accent-light) 100%);
+            background-size: 200% auto;
             color: white;
             border-radius: var(--border-radius);
             text-decoration: none;
             font-weight: 600;
-            transition: var(--transition);
-            border: 2px solid transparent;
+            transition: var(--transition-medium);
+            border: none;
             cursor: pointer;
             font-family: 'Montserrat', sans-serif;
+            box-shadow: var(--shadow-md), 0 0 0 0 var(--color-glow);
         }
 
         .btn:hover {
-            background-color: var(--color-accent-light);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
+            background-position: right center; /* change the direction of the change here */
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: var(--shadow-lg), 0 0 25px 0 var(--color-glow);
         }
 
         .btn-secondary {
-            background-color: transparent;
+            background: transparent;
             border: 2px solid var(--color-border);
             color: var(--color-text);
+            background-image: none;
         }
 
         .btn-secondary:hover {
-            background-color: var(--color-border);
-            border-color: var(--color-border);
-        }
-        
-        .dark-mode .btn-secondary {
-            color: var(--color-text);
+            background-color: var(--color-accent);
+            border-color: var(--color-accent);
+            color: white;
         }
 
-        /* Header & Navigation */
+        /* Header & Glassmorphism Navigation */
         header {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            background-color: var(--color-primary);
-            box-shadow: var(--shadow-sm);
+            background-color: var(--color-primary-alpha, rgba(255, 255, 255, 0.5));
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             z-index: 1000;
             padding: 1rem 0;
-            transition: background-color 0.3s ease;
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 700;
-            font-size: 1.5rem;
-            color: var(--color-text);
-            text-decoration: none;
-        }
-
-        .logo span {
-            color: var(--color-accent);
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: var(--color-text-light);
-            font-weight: 500;
-            transition: var(--transition);
-            position: relative;
-            padding-bottom: 0.5rem;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            border-bottom: 1px solid transparent;
         }
         
-        .nav-links a:hover {
-            color: var(--color-accent);
+        .dark-mode header {
+             --color-primary-alpha: rgba(17, 24, 39, 0.5);
         }
 
-        .nav-links a:after {
+        header.scrolled {
+            background-color: var(--color-primary);
+            box-shadow: var(--shadow-sm);
+        }
+        .dark-mode header.scrolled {
+             background-color: #111827;
+        }
+
+
+        nav { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.5rem; color: var(--color-text); text-decoration: none; }
+        .logo span { color: var(--color-accent); }
+        .nav-links { display: flex; list-style: none; gap: 2rem; }
+        .nav-links a { text-decoration: none; color: var(--color-text-light); font-weight: 500; transition: var(--transition-fast); position: relative; padding-bottom: 0.5rem; }
+        .nav-links a:hover { color: var(--color-accent); transform: translateY(-2px); }
+        .nav-links a:after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 2px; background-color: var(--color-accent); transform: scaleX(0); transform-origin: bottom right; transition: transform 0.25s ease-out; }
+        .nav-links a:hover:after { transform: scaleX(1); transform-origin: bottom left; }
+        .hamburger { display: none; cursor: pointer; }
+        
+        /* Hero Section with Aurora background */
+        .hero {
+            padding: 12rem 0 8rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            background-color: var(--color-background);
+        }
+
+        .hero::before {
             content: '';
             position: absolute;
-            bottom: 0;
-            left: 50%;
+            top: 0; left: 50%;
+            width: 150%;
+            height: 120%;
+            background: radial-gradient(circle at center, #6366f130, transparent 40%),
+                        radial-gradient(circle at 20% 30%, #4f46e520, transparent 40%),
+                        radial-gradient(circle at 80% 70%, #a855f720, transparent 40%);
             transform: translateX(-50%);
-            width: 0;
-            height: 2px;
-            background-color: var(--color-accent);
-            transition: var(--transition);
+            animation: aurora 20s linear infinite;
+            will-change: transform;
+            z-index: 0;
+        }
+        .dark-mode .hero::before {
+             background: radial-gradient(circle at center, #6366f125, transparent 40%),
+                        radial-gradient(circle at 20% 30%, #4f46e515, transparent 40%),
+                        radial-gradient(circle at 80% 70%, #a855f715, transparent 40%);
         }
 
-        .nav-links a:hover:after {
+        @keyframes aurora {
+            0% { transform: translateX(-50%) rotate(0deg); }
+            100% { transform: translateX(-50%) rotate(360deg); }
+        }
+
+        .spotlight {
+            position: absolute;
+            height: 100%;
             width: 100%;
-        }
-
-        .hamburger {
-            display: none;
-            cursor: pointer;
-        }
-
-        /* Hero Section */
-        .hero {
-            padding: 10rem 0 6rem;
-            background-color: var(--color-background);
-            text-align: center;
+            top: 0;
+            left: 0;
+            background: radial-gradient(circle, var(--color-glow) 0, rgba(255, 255, 255, 0) 350px);
+            opacity: 0;
+            transition: opacity .2s;
+            pointer-events: none;
+            z-index: 1;
         }
 
         .hero-content {
-            max-width: 750px;
+            max-width: 800px;
             margin: 0 auto;
+            position: relative;
+            z-index: 2;
         }
         
         .hero h1 {
             margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, var(--color-text), var(--color-accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        .hero p {
-            font-size: 1.125rem;
-            max-width: 650px;
-            margin: 0 auto 2.5rem;
-        }
+        .hero p { font-size: 1.25rem; max-width: 650px; margin: 0 auto 2.5rem; }
+        .hero-buttons { display: flex; gap: 1rem; justify-content: center; }
 
-        .hero-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-        }
-        
-        .hero-graphic {
-            display: none; /* A purely decorative SVG can be removed for a cleaner look */
-        }
+        /* General Section Styling */
+        section { padding: 6rem 0; }
+        .solutions { background-color: var(--color-primary); }
+        .performance { background-color: var(--color-background); }
+        .pricing { background-color: var(--color-primary); }
+        .section-header { text-align: center; max-width: 700px; margin: 0 auto 4rem; }
+        .section-header p { font-size: 1.125rem; }
 
-        /* Solutions Section */
-        .solutions {
-            padding: 6rem 0;
-            background-color: var(--color-primary);
-        }
-
-        .section-header {
-            text-align: center;
-            max-width: 700px;
-            margin: 0 auto 4rem;
-        }
-        
-        .section-header p {
-             font-size: 1.125rem;
-        }
-
+        /* Solutions Section with 3D Tilt Cards */
         .solutions-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -261,316 +249,89 @@
             padding: 2.5rem;
             box-shadow: var(--shadow-md);
             border: 1px solid var(--color-border);
-            transition: var(--transition);
+            transition: var(--transition-medium);
+            transform-style: preserve-3d;
+            will-change: transform;
         }
 
         .solution-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-lg);
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: var(--shadow-lg), 0 0 30px var(--color-glow);
             border-color: var(--color-accent);
         }
 
         .solution-icon {
             width: 50px;
             height: 50px;
-            background-color: var(--color-accent);
-            border-radius: 10px;
+            background-image: linear-gradient(45deg, var(--color-accent) 0%, var(--color-accent-light) 100%);
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             margin-bottom: 1.5rem;
+            color: white;
         }
+        .solution-icon svg { width: 28px; height: 28px; stroke: currentColor; }
+        .solution-link { color: var(--color-accent); text-decoration: none; font-weight: 500; display: inline-flex; align-items: center; gap: 0.5rem; }
+        .solution-link svg { transition: var(--transition-fast); }
+        .solution-link:hover svg { transform: translateX(4px); }
 
-        .solution-icon svg {
-            width: 28px;
-            height: 28px;
-            stroke: white; /* Changed from fill to stroke for consistency */
-        }
-
-        .solution-link {
-            color: var(--color-accent);
-            text-decoration: none;
-            font-weight: 500;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
+        /* Performance Section & Animated Chart */
+        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2rem; }
+        .metric-card { text-align: center; padding: 2rem; background-color: var(--color-card); border-radius: var(--border-radius); box-shadow: var(--shadow-md); border: 1px solid var(--color-border); transition: var(--transition-medium); transform-style: preserve-3d; }
+        .metric-card:hover { transform: translateY(-5px) scale(1.02); box-shadow: var(--shadow-lg); }
+        .metric-value { font-size: 2.5rem; font-weight: 700; color: var(--color-accent); margin-bottom: 0.5rem; font-family: 'Montserrat', sans-serif; }
+        .metric-label { color: var(--color-text-light); font-size: 1rem; }
         
-        .solution-link svg {
-            transition: var(--transition);
-        }
-
-        .solution-link:hover svg {
-            transform: translateX(4px);
-        }
-        
-        /* Performance Section */
-        .performance {
-            padding: 6rem 0;
-            background-color: var(--color-background);
-        }
-
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 2rem;
-        }
-
-        .metric-card {
-            text-align: center;
-            padding: 2rem;
-            background-color: var(--color-card);
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow-md);
-            border: 1px solid var(--color-border);
-        }
-
-        .metric-value {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--color-accent);
-            margin-bottom: 0.5rem;
-            font-family: 'Montserrat', sans-serif;
-        }
-
-        .metric-label {
-            color: var(--color-text-light);
-            font-size: 1rem;
-        }
-        
-        .performance-chart {
-            background-color: var(--color-card);
-            border-radius: var(--border-radius);
-            padding: 2.5rem;
-            box-shadow: var(--shadow-md);
-            margin-top: 4rem;
-            border: 1px solid var(--color-border);
-        }
-        
-        .chart-container {
-             height: 200px; 
-             background-color: var(--color-background); 
-             border-radius: var(--border-radius); 
-             margin-top: 1.5rem; 
-             display: flex; 
-             align-items: flex-end; 
-             padding: 1rem; 
-             gap: 1.5rem;
-        }
-        
-        .chart-bar-wrapper {
-             flex: 1; 
-             display: flex; 
-             flex-direction: column; 
-             align-items: center;
-             text-align: center;
-        }
-        
-        .chart-bar {
-             width: 100%;
-             border-radius: var(--border-radius);
-             transition: height 0.5s ease-out;
-        }
-        
-        .chart-bar-label {
-             margin-top: 0.5rem; 
-             font-weight: 500;
-             font-size: 0.875rem;
-             color: var(--color-text-light);
-        }
+        .performance-chart { background-color: var(--color-card); border-radius: var(--border-radius); padding: 2.5rem; box-shadow: var(--shadow-md); margin-top: 4rem; border: 1px solid var(--color-border); }
+        .chart-container { height: 200px; background-color: var(--color-background); border-radius: var(--border-radius); margin-top: 1.5rem; display: flex; align-items: flex-end; padding: 1rem; gap: 1.5rem; }
+        .chart-bar-wrapper { flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; }
+        .chart-bar { width: 100%; border-radius: 8px; transition: height 1s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.3s; height: 0; }
+        .chart-bar:hover { filter: brightness(1.2); }
+        .chart-bar-label { margin-top: 0.5rem; font-weight: 500; font-size: 0.875rem; color: var(--color-text-light); }
 
         /* Pricing Section */
-        .pricing {
-            padding: 6rem 0;
-            background-color: var(--color-primary);
-        }
+        .pricing-toggle { display: flex; justify-content: center; align-items: center; margin-bottom: 3rem; }
+        .toggle-label { margin: 0 1rem; color: var(--color-text-light); font-weight: 500; }
+        .toggle-switch { position: relative; display: inline-block; width: 50px; height: 28px; }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--color-border); transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--color-accent); }
+        input:checked + .slider:before { transform: translateX(22px); }
 
-        .pricing-toggle {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 3rem;
-        }
-
-        .toggle-label {
-            margin: 0 1rem;
-            color: var(--color-text-light);
-            font-weight: 500;
-        }
-
-        .toggle-switch {
-            position: relative;
-            display: inline-block;
-            width: 50px;
-            height: 28px;
-        }
-
-        .toggle-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: var(--color-border);
-            transition: .4s;
-            border-radius: 34px;
-        }
-
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 20px;
-            width: 20px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-
-        input:checked + .slider {
-            background-color: var(--color-accent);
-        }
-
-        input:checked + .slider:before {
-            transform: translateX(22px);
-        }
-
-        .pricing-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            align-items: center;
-        }
-
-        .pricing-card {
-            background-color: var(--color-card);
-            border-radius: var(--border-radius);
-            padding: 2.5rem;
-            box-shadow: var(--shadow-md);
-            text-align: center;
-            transition: var(--transition);
-            border: 1px solid var(--color-border);
-        }
+        .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; align-items: center; }
+        .pricing-card { background-color: var(--color-card); border-radius: var(--border-radius); padding: 2.5rem; box-shadow: var(--shadow-md); text-align: center; transition: var(--transition-medium); border: 2px solid var(--color-border); position: relative; overflow: hidden; transform-style: preserve-3d; }
+        .pricing-card:hover { transform: translateY(-8px) scale(1.02); border-color: var(--color-accent); box-shadow: var(--shadow-lg); }
 
         .pricing-card.featured {
-            border: 2px solid var(--color-accent);
+            border-image: linear-gradient(45deg, var(--color-accent), var(--color-accent-light)) 1;
             transform: scale(1.05);
             box-shadow: var(--shadow-lg);
         }
-        
-        .pricing-card h3 {
-             font-size: 1.5rem;
-        }
 
-        .price {
-            font-size: 3rem;
-            font-weight: 700;
-            color: var(--color-text);
-            margin-bottom: 2rem;
-            font-family: 'Montserrat', sans-serif;
-        }
-
-        .price span {
-            font-size: 1rem;
-            color: var(--color-text-light);
-            font-weight: 400;
-        }
-
-        .features-list {
-            list-style: none;
-            margin-bottom: 2rem;
-            text-align: left;
-        }
-
-        .features-list li {
-            margin-bottom: 0.75rem;
-            display: flex;
-            align-items: center;
-            color: var(--color-text-light);
-        }
-
-        .features-list li:before {
-            content: '✓';
-            color: var(--color-accent);
-            font-weight: bold;
-            margin-right: 0.75rem;
-        }
+        .pricing-card h3 { font-size: 1.5rem; }
+        .price { font-size: 3rem; font-weight: 700; color: var(--color-text); margin-bottom: 2rem; font-family: 'Montserrat', sans-serif; }
+        .price span { font-size: 1rem; color: var(--color-text-light); font-weight: 400; }
+        .features-list { list-style: none; margin-bottom: 2rem; text-align: left; }
+        .features-list li { margin-bottom: 0.75rem; display: flex; align-items: center; color: var(--color-text-light); }
+        .features-list li::before { content: '✓'; color: var(--color-accent); font-weight: bold; margin-right: 0.75rem; }
 
         /* Footer */
-        footer {
-            background-color: var(--color-secondary);
-            color: var(--color-text-light);
-            padding: 4rem 0 2rem;
-        }
+        footer { background-color: var(--color-secondary); color: #9ca3af; padding: 4rem 0 2rem; }
+        .dark-mode footer { background-color: #0d111c; border-top: 1px solid var(--color-border); }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-bottom: 3rem; }
+        .footer-column h4 { color: white; margin-bottom: 1.5rem; font-size: 1.125rem; font-weight: 600; }
+        .footer-links { list-style: none; }
+        .footer-links li { margin-bottom: 0.75rem; }
+        .footer-links a { color: #9ca3af; text-decoration: none; transition: var(--transition-fast); }
+        .footer-links a:hover { color: white; padding-left: 5px; }
+        .footer-bottom { border-top: 1px solid #374151; padding-top: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+        .footer-bottom p { margin-bottom: 0; }
+        .social-links { display: flex; gap: 1.5rem; }
+        .social-links a { color: #9ca3af; text-decoration: none; transition: var(--transition-fast); }
+        .social-links a:hover { color: white; transform: translateY(-2px); }
 
-        .footer-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-
-        .footer-column h4 {
-            color: white;
-            margin-bottom: 1.5rem;
-            font-size: 1.125rem;
-            font-weight: 600;
-        }
-
-        .footer-links {
-            list-style: none;
-        }
-
-        .footer-links li {
-            margin-bottom: 0.75rem;
-        }
-
-        .footer-links a {
-            color: var(--color-text-light);
-            text-decoration: none;
-            transition: var(--transition);
-        }
-
-        .footer-links a:hover {
-            color: white;
-        }
-
-        .footer-bottom {
-            border-top: 1px solid #374151;
-            padding-top: 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        
-        .footer-bottom p {
-            margin-bottom: 0;
-        }
-
-        .social-links {
-            display: flex;
-            gap: 1.5rem;
-        }
-
-        .social-links a {
-            color: var(--color-text-light);
-            text-decoration: none;
-            transition: var(--transition);
-        }
-
-        .social-links a:hover {
-            color: white;
-        }
-        
         /* Dark Mode Toggle */
         .dark-mode-toggle {
             position: fixed;
@@ -588,20 +349,33 @@
             cursor: pointer;
             box-shadow: var(--shadow-md);
             z-index: 999;
-            transition: var(--transition);
+            transition: var(--transition-fast);
         }
-        .dark-mode-toggle:hover {
-            transform: scale(1.1);
+        .dark-mode-toggle:hover { transform: scale(1.1) rotate(15deg); box-shadow: var(--shadow-lg); }
+
+        /* Animation Utility Classes */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            will-change: opacity, transform;
+        }
+
+        .fade-in-up.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         /* Responsive Design */
         @media (max-width: 992px) {
-            h1 { font-size: 2.5rem; }
-            h2 { font-size: 2rem; }
+            h1 { font-size: 2.8rem; }
+            h2 { font-size: 2.2rem; }
+            .hero { padding: 10rem 0 6rem; }
         }
 
         @media (max-width: 768px) {
-            .nav-links { display: none; }
+            .nav-actions { display: none; }
+            .nav-links { display: none; } /* Add logic for mobile menu */
             .hamburger { display: block; }
             .hero { padding: 8rem 0 4rem; }
             .hero-buttons { flex-direction: column; align-items: center; }
@@ -616,211 +390,172 @@
             .metrics-grid { grid-template-columns: 1fr; }
             .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
         }
+
     </style>
 </head>
+
 <body>
-    <!-- Header & Navigation -->
+
     <header>
         <div class="container">
             <nav>
                 <a href="#" class="logo">Data<span>Core</span></a>
                 <ul class="nav-links">
-                    <li><a href="#">Solutions</a></li>
-                    <li><a href="#">Pricing</a></li>
+                    <li><a href="#solutions">Solutions</a></li>
+                    <li><a href="#pricing">Pricing</a></li>
                     <li><a href="#">Documentation</a></li>
                     <li><a href="#">Security</a></li>
                 </ul>
-                <div>
+                <div class="nav-actions">
                     <a href="#" class="btn btn-secondary">Sign In</a>
                     <a href="#" class="btn nav-cta">Start Free Trial</a>
                 </div>
                 <div class="hamburger">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M3 12H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                        <path d="M3 6H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                        <path d="M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M3 12H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                        <path d="M3 6H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                        <path d="M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
                     </svg>
                 </div>
             </nav>
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <h1>Fast, Secure, and Scalable Database Hosting</h1>
-                <p>Built for developers, trusted by enterprises. Deploy production-ready databases in seconds with our high-performance cloud platform.</p>
-                <div class="hero-buttons">
-                    <a href="#" class="btn">Deploy Now</a>
-                    <a href="#" class="btn btn-secondary">View Pricing</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Solutions Section -->
-    <section class="solutions">
-        <div class="container">
-            <div class="section-header">
-                <h2>Enterprise-Grade Database Solutions</h2>
-                <p>Our fully managed database services provide high availability, automated backups, and seamless scaling to fit your business needs.</p>
-            </div>
-            <div class="solutions-grid">
-                <!-- Solution Card 1 -->
-                <div class="solution-card">
-                    <div class="solution-icon">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="m3.27 6.96 8.73 5.04 8.73-5.04" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M12 22.08V12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                        </svg>
+    <main>
+        <section class="hero">
+            <div class="spotlight"></div>
+            <div class="container">
+                <div class="hero-content fade-in-up">
+                    <h1>Fast, Secure, and Scalable Database Hosting</h1>
+                    <p>Built for developers, trusted by enterprises. Deploy production-ready databases in seconds with our high-performance cloud platform.</p>
+                    <div class="hero-buttons">
+                        <a href="#" class="btn">Deploy Now</a>
+                        <a href="#pricing" class="btn btn-secondary">View Pricing</a>
                     </div>
-                    <h3>Cloud Databases</h3>
-                    <p>Fully managed relational and NoSQL databases with automated scaling and backups.</p>
-                    <a href="#" class="solution-link">Learn More <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 5L19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
                 </div>
-                 <!-- Solution Card 2 -->
-                <div class="solution-card">
-                    <div class="solution-icon">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M23 7L13.5 16.5L8.5 11.5L1 19" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M17 7H23V13" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+        </section>
+
+        <section class="solutions" id="solutions">
+            <div class="container">
+                <div class="section-header fade-in-up">
+                    <h2>Enterprise-Grade Database Solutions</h2>
+                    <p>Our fully managed database services provide high availability, automated backups, and seamless scaling to fit your business needs.</p>
+                </div>
+                <div class="solutions-grid">
+                    <div class="solution-card fade-in-up" style="transition-delay: 100ms;">
+                        <div class="solution-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="m3.27 6.96 8.73 5.04 8.73-5.04" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M12 22.08V12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
+                        <h3>Cloud Databases</h3>
+                        <p>Fully managed relational and NoSQL databases with automated scaling and backups.</p>
+                        <a href="#" class="solution-link">Learn More <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 5L19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
                     </div>
-                    <h3>Analytics Integration</h3>
-                    <p>Real-time analytics and data processing with seamless integration to your data pipeline.</p>
-                    <a href="#" class="solution-link">Learn More <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 5L19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-                </div>
-                <!-- Solution Card 3 -->
-                <div class="solution-card">
-                    <div class="solution-icon">
-                         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 3H5a2 2 0 0 0-2 2v3m15-5h-3a2 2 0 0 0-2 2v3m0 11h3a2 2 0 0 0 2-2v-3m-15 5H5a2 2 0 0 1-2-2v-3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <div class="solution-card fade-in-up" style="transition-delay: 200ms;">
+                        <div class="solution-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M23 7L13.5 16.5L8.5 11.5L1 19" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M17 7H23V13" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                        <h3>Analytics Integration</h3>
+                        <p>Real-time analytics and data processing with seamless integration to your data pipeline.</p>
+                        <a href="#" class="solution-link">Learn More <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 5L19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
                     </div>
-                    <h3>High-Availability</h3>
-                    <p>Multi-region replication with automatic failover for mission-critical applications.</p>
-                    <a href="#" class="solution-link">Learn More <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 5L19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+                    <div class="solution-card fade-in-up" style="transition-delay: 300ms;">
+                        <div class="solution-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M8 3H5a2 2 0 0 0-2 2v3m15-5h-3a2 2 0 0 0-2 2v3m0 11h3a2 2 0 0 0 2-2v-3m-15 5H5a2 2 0 0 1-2-2v-3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                        <h3>High-Availability</h3>
+                        <p>Multi-region replication with automatic failover for mission-critical applications.</p>
+                        <a href="#" class="solution-link">Learn More <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 5L19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Performance Section -->
-    <section class="performance">
-        <div class="container">
-            <div class="section-header">
-                <h2>Uncompromising Performance</h2>
-                <p>Our global infrastructure is optimized for speed, reliability, and massive scalability.</p>
-            </div>
-            <div class="metrics-grid">
-                <div class="metric-card"><div class="metric-value">99.99%</div><div class="metric-label">Uptime SLA</div></div>
-                <div class="metric-card"><div class="metric-value">&lt;5ms</div><div class="metric-label">Query Response</div></div>
-                <div class="metric-card"><div class="metric-value">100k+</div><div class="metric-label">Queries/Second</div></div>
-                <div class="metric-card"><div class="metric-value">Global</div><div class="metric-label">15 Regions</div></div>
-            </div>
-            <div class="performance-chart">
-                <h3>Query Performance Comparison</h3>
-                <p>Average response time compared to other cloud database providers (lower is better).</p>
-                <!-- Refactored inline styles into dedicated classes -->
-                <div class="chart-container">
-                    <div class="chart-bar-wrapper"><div class="chart-bar" style="background-color: var(--color-accent); height: 35%;"></div><div class="chart-bar-label">DataCore</div></div>
-                    <div class="chart-bar-wrapper"><div class="chart-bar" style="background-color: var(--color-border); height: 65%;"></div><div class="chart-bar-label">Provider B</div></div>
-                    <div class="chart-bar-wrapper"><div class="chart-bar" style="background-color: var(--color-border); height: 85%;"></div><div class="chart-bar-label">Provider C</div></div>
-                    <div class="chart-bar-wrapper"><div class="chart-bar" style="background-color: var(--color-border); height: 75%;"></div><div class="chart-bar-label">Provider D</div></div>
+        <section class="performance">
+            <div class="container">
+                <div class="section-header fade-in-up">
+                    <h2>Uncompromising Performance</h2>
+                    <p>Our global infrastructure is optimized for speed, reliability, and massive scalability.</p>
+                </div>
+                <div class="metrics-grid">
+                    <div class="metric-card fade-in-up"><div class="metric-value" data-target="99.99">0</div><div class="metric-label">Uptime SLA</div></div>
+                    <div class="metric-card fade-in-up"><div class="metric-value" data-target="5">&lt;0ms</div><div class="metric-label">Query Response</div></div>
+                    <div class="metric-card fade-in-up"><div class="metric-value" data-target="100">0k+</div><div class="metric-label">Queries/Second</div></div>
+                    <div class="metric-card fade-in-up"><div class="metric-value" data-target="15">0</div><div class="metric-label">Global Regions</div></div>
+                </div>
+                <div class="performance-chart fade-in-up">
+                    <h3>Query Performance Comparison</h3>
+                    <p>Average response time compared to other cloud database providers (lower is better).</p>
+                    <div class="chart-container">
+                        <div class="chart-bar-wrapper"><div class="chart-bar" data-height="35" style="background-color: var(--color-accent);"></div><div class="chart-bar-label">DataCore</div></div>
+                        <div class="chart-bar-wrapper"><div class="chart-bar" data-height="65" style="background-color: var(--color-border);"></div><div class="chart-bar-label">Provider B</div></div>
+                        <div class="chart-bar-wrapper"><div class="chart-bar" data-height="85" style="background-color: var(--color-border);"></div><div class="chart-bar-label">Provider C</div></div>
+                        <div class="chart-bar-wrapper"><div class="chart-bar" data-height="75" style="background-color: var(--color-border);"></div><div class="chart-bar-label">Provider D</div></div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Pricing Section -->
-    <section class="pricing">
-        <div class="container">
-            <div class="section-header">
-                <h2>Simple, Transparent Pricing</h2>
-                <p>Choose the plan that fits your needs. Scale up or down as your business evolves.</p>
-            </div>
-            <div class="pricing-toggle">
-                <span class="toggle-label">Monthly</span>
-                <label class="toggle-switch"><input type="checkbox"><span class="slider"></span></label>
-                <span class="toggle-label">Annual (Save 20%)</span>
-            </div>
-            <div class="pricing-grid">
-                <!-- Pricing Card 1 -->
-                <div class="pricing-card">
-                    <h3>Developer</h3>
-                    <div class="price">$29<span>/month</span></div>
-                    <ul class="features-list">
-                        <li>Up to 10GB Storage</li>
-                        <li>1 CPU Core / 2GB RAM</li>
-                        <li>Single Region</li>
-                        <li>Basic Monitoring</li>
-                        <li>7-Day Backup Retention</li>
-                    </ul>
-                    <a href="#" class="btn btn-secondary">Get Started</a>
+        <section class="pricing" id="pricing">
+            <div class="container">
+                <div class="section-header fade-in-up">
+                    <h2>Simple, Transparent Pricing</h2>
+                    <p>Choose the plan that fits your needs. Scale up or down as your business evolves.</p>
                 </div>
-                <!-- Pricing Card 2 (Featured) -->
-                <div class="pricing-card featured">
-                    <h3>Professional</h3>
-                    <div class="price">$99<span>/month</span></div>
-                    <ul class="features-list">
-                        <li>Up to 100GB Storage</li>
-                        <li>4 CPU Cores / 8GB RAM</li>
-                        <li>Multi-Region Replication</li>
-                        <li>Advanced Monitoring</li>
-                        <li>30-Day Backup Retention</li>
-                        <li>Priority Support</li>
-                    </ul>
-                    <a href="#" class="btn">Get Started</a>
+                <div class="pricing-toggle fade-in-up">
+                    <span class="toggle-label">Monthly</span>
+                    <label class="toggle-switch"><input type="checkbox" id="pricing-toggle-checkbox"><span class="slider"></span></label>
+                    <span class="toggle-label">Annual (Save 20%)</span>
                 </div>
-                <!-- Pricing Card 3 -->
-                <div class="pricing-card">
-                    <h3>Enterprise</h3>
-                    <div class="price">Custom</div>
-                    <ul class="features-list">
-                        <li>Unlimited Storage</li>
-                        <li>Dedicated Resources</li>
-                        <li>Global Multi-Region</li>
-                        <li>Custom SLA</li>
-                        <li>24/7 Dedicated Support</li>
-                    </ul>
-                    <a href="#" class="btn btn-secondary">Contact Sales</a>
+                <div class="pricing-grid">
+                    <div class="pricing-card fade-in-up" style="transition-delay: 100ms;">
+                        <h3>Developer</h3>
+                        <div class="price" data-monthly="29" data-annual="23">$29<span>/month</span></div>
+                        <ul class="features-list">
+                            <li>Up to 10GB Storage</li><li>1 CPU Core / 2GB RAM</li><li>Single Region</li><li>Basic Monitoring</li><li>7-Day Backup Retention</li>
+                        </ul>
+                        <a href="#" class="btn btn-secondary">Get Started</a>
+                    </div>
+                    <div class="pricing-card featured fade-in-up" style="transition-delay: 200ms;">
+                        <h3>Professional</h3>
+                        <div class="price" data-monthly="99" data-annual="79">$99<span>/month</span></div>
+                        <ul class="features-list">
+                            <li>Up to 100GB Storage</li><li>4 CPU Cores / 8GB RAM</li><li>Multi-Region Replication</li><li>Advanced Monitoring</li><li>30-Day Backup Retention</li><li>Priority Support</li>
+                        </ul>
+                        <a href="#" class="btn">Get Started</a>
+                    </div>
+                    <div class="pricing-card fade-in-up" style="transition-delay: 300ms;">
+                        <h3>Enterprise</h3>
+                        <div class="price">Custom</div>
+                        <ul class="features-list">
+                            <li>Unlimited Storage</li><li>Dedicated Resources</li><li>Global Multi-Region</li><li>Custom SLA</li><li>24/7 Dedicated Support</li>
+                        </ul>
+                        <a href="#" class="btn btn-secondary">Contact Sales</a>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </main>
 
-    <!-- Footer -->
     <footer>
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-column">
                     <h4>Product</h4>
                     <ul class="footer-links">
-                        <li><a href="#">Solutions</a></li>
-                        <li><a href="#">Pricing</a></li>
-                        <li><a href="#">Documentation</a></li>
-                        <li><a href="#">API</a></li>
+                        <li><a href="#solutions">Solutions</a></li><li><a href="#pricing">Pricing</a></li><li><a href="#">Documentation</a></li><li><a href="#">API</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
                     <h4>Company</h4>
                     <ul class="footer-links">
-                        <li><a href="#">About</a></li>
-                        <li><a href="#">Blog</a></li>
-                        <li><a href="#">Careers</a></li>
-                        <li><a href="#">Press</a></li>
+                        <li><a href="#">About</a></li><li><a href="#">Blog</a></li><li><a href="#">Careers</a></li><li><a href="#">Press</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
                     <h4>Support</h4>
                     <ul class="footer-links">
-                        <li><a href="#">Help Center</a></li>
-                        <li><a href="#">Status</a></li>
-                        <li><a href="#">Contact Us</a></li>
-                        <li><a href="#">Community</a></li>
+                        <li><a href="#">Help Center</a></li><li><a href="#">Status</a></li><li><a href="#">Contact Us</a></li><li><a href="#">Community</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
                     <h4>Legal</h4>
                     <ul class="footer-links">
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Terms of Service</a></li>
-                        <li><a href="#">Security</a></li>
+                        <li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Service</a></li><li><a href="#">Security</a></li>
                     </ul>
                 </div>
             </div>
@@ -833,20 +568,16 @@
         </div>
     </footer>
 
-    <!-- Dark Mode Toggle -->
     <div class="dark-mode-toggle" title="Toggle Dark Mode">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M21 12.79C20.8427 14.4922 20.2039 16.1144 19.1582 17.4668C18.1126 18.8192 16.7035 19.8458 15.0957 20.4265C13.4879 21.0073 11.748 21.1181 10.0795 20.7461C8.41102 20.3741 6.88299 19.5345 5.67422 18.3258C4.46545 17.117 3.62593 15.589 3.2539 13.9205C2.88187 12.252 2.99274 10.5121 3.57348 8.9043C4.15422 7.29651 5.18085 5.88737 6.53323 4.84175C7.88561 3.79614 9.50782 3.15731 11.21 3C10.2134 4.34827 9.73375 6.00945 9.85849 7.68141C9.98324 9.35338 10.7039 10.9251 11.8894 12.1106C13.0749 13.2961 14.6466 14.0168 16.3186 14.1415C17.9906 14.2663 19.6517 13.7866 21 12.79Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21 12.79C20.8427 14.4922 20.2039 16.1144 19.1582 17.4668C18.1126 18.8192 16.7035 19.8458 15.0957 20.4265C13.4879 21.0073 11.748 21.1181 10.0795 20.7461C8.41102 20.3741 6.88299 19.5345 5.67422 18.3258C4.46545 17.117 3.62593 15.589 3.2539 13.9205C2.88187 12.252 2.99274 10.5121 3.57348 8.9043C4.15422 7.29651 5.18085 5.88737 6.53323 4.84175C7.88561 3.79614 9.50782 3.15731 11.21 3C10.2134 4.34827 9.73375 6.00945 9.85849 7.68141C9.98324 9.35338 10.7039 10.9251 11.8894 12.1106C13.0749 13.2961 14.6466 14.0168 16.3186 14.1415C17.9906 14.2663 19.6517 13.7866 21 12.79Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Dark mode toggle functionality
+
+            // --- 1. DARK MODE LOGIC ---
             const darkModeToggle = document.querySelector('.dark-mode-toggle');
             const body = document.body;
-            
-            // Function to apply theme based on saved preference or system setting
             const applyTheme = () => {
                 const savedTheme = localStorage.getItem('darkMode');
                 if (savedTheme === 'enabled' || (savedTheme === null && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -855,69 +586,142 @@
                     body.classList.remove('dark-mode');
                 }
             };
-            
             darkModeToggle.addEventListener('click', () => {
                 body.classList.toggle('dark-mode');
                 localStorage.setItem('darkMode', body.classList.contains('dark-mode') ? 'enabled' : 'disabled');
             });
-            
             applyTheme();
-
-            // Intersection Observer for animations
-            const observerOptions = {
-                threshold: 0.5,
-                rootMargin: '0px 0px -50px 0px'
-            };
             
-            const observer = new IntersectionObserver((entries, observer) => {
+            // --- 2. HEADER SCROLL EFFECT ---
+            const header = document.querySelector('header');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+
+
+            // --- 3. INTERSECTION OBSERVER FOR ANIMATIONS ---
+            const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        const target = entry.target;
-                        // Animate metrics counter
-                        if (target.classList.contains('metric-value')) {
-                             animateCounter(target);
+                        // General fade-in-up animation
+                        if (entry.target.classList.contains('fade-in-up')) {
+                            entry.target.classList.add('visible');
                         }
-                        observer.unobserve(target);
+                        
+                        // Animate metrics counter
+                        const metricValue = entry.target.querySelector('.metric-value');
+                        if (metricValue && !metricValue.classList.contains('animated')) {
+                            animateCounter(metricValue);
+                            metricValue.classList.add('animated');
+                        }
+
+                        // Animate chart bars
+                        const chartBars = entry.target.querySelectorAll('.chart-bar');
+                        if (chartBars.length > 0) {
+                            chartBars.forEach(bar => {
+                                const height = bar.dataset.height;
+                                bar.style.height = `${height}%`;
+                            });
+                        }
+                        
+                        observer.unobserve(entry.target);
                     }
                 });
-            }, observerOptions);
+            }, { threshold: 0.1 });
 
-            // Function to animate counter
+            // Observe all elements that need animation
+            document.querySelectorAll('.fade-in-up, .metric-card, .performance-chart').forEach(el => observer.observe(el));
+
+
+            // --- 4. COUNTER ANIMATION FUNCTION ---
             const animateCounter = (metric) => {
-                const targetValue = metric.textContent;
-                const numericValue = parseFloat(targetValue.replace(/[^0-9.]/g, ''));
-                if (isNaN(numericValue)) return;
+                const target = parseFloat(metric.dataset.target);
+                if (isNaN(target)) return;
                 
-                let startValue = 0;
+                let startTimestamp = null;
                 const duration = 2000;
                 const step = (timestamp) => {
-                    if (!startValue) startValue = timestamp;
-                    const progress = Math.min((timestamp - startValue) / duration, 1);
-                    const currentValue = Math.floor(progress * numericValue);
-                    
-                    if (targetValue.includes('<')) {
-                         metric.textContent = `<${currentValue}ms`;
-                    } else if (targetValue.includes('%')) {
-                         metric.textContent = `${(progress * numericValue).toFixed(2)}%`;
-                    } else if (targetValue.includes('+')) {
-                         metric.textContent = `${currentValue.toLocaleString()}k+`;
+                    if (!startTimestamp) startTimestamp = timestamp;
+                    const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                    const currentVal = progress * target;
+
+                    // Formatting logic based on original text content
+                    if (metric.textContent.includes('<')) {
+                        metric.textContent = `<${Math.floor(currentVal)}ms`;
+                    } else if (metric.textContent.includes('k+')) {
+                        metric.textContent = `${Math.floor(currentVal).toLocaleString()}k+`;
+                    } else if (metric.dataset.target.includes('.')) {
+                        metric.textContent = `${currentVal.toFixed(2)}%`;
                     } else {
-                         metric.textContent = currentValue.toLocaleString();
+                        metric.textContent = Math.floor(currentVal).toLocaleString();
                     }
 
                     if (progress < 1) {
                         window.requestAnimationFrame(step);
                     } else {
-                         metric.textContent = targetValue;
+                         if (metric.textContent.includes('%')) {
+                            metric.textContent = `${target.toFixed(2)}%`;
+                         }
                     }
                 };
                 window.requestAnimationFrame(step);
             };
 
-            // Observe all elements with '.metric-value'
-            document.querySelectorAll('.metric-value').forEach(metric => {
-                observer.observe(metric);
+            // --- 5. HERO SPOTLIGHT EFFECT ---
+            const hero = document.querySelector('.hero');
+            const spotlight = document.querySelector('.spotlight');
+            if(hero && spotlight) {
+                hero.addEventListener('mousemove', e => {
+                    spotlight.style.opacity = '1';
+                    const rect = hero.getBoundingClientRect();
+                    spotlight.style.background = `radial-gradient(circle at ${e.clientX - rect.left}px ${e.clientY - rect.top}px, var(--color-glow) 0, rgba(255, 255, 255, 0) 350px)`;
+                });
+                hero.addEventListener('mouseleave', () => {
+                    spotlight.style.opacity = '0';
+                });
+            }
+
+            // --- 6. 3D CARD TILT EFFECT ---
+            const tiltableCards = document.querySelectorAll('.solution-card, .pricing-card, .metric-card');
+            tiltableCards.forEach(card => {
+                card.addEventListener('mousemove', e => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const { width, height } = rect;
+                    const rotateX = (y / height - 0.5) * -15; // Max 7.5 deg
+                    const rotateY = (x / width - 0.5) * 15; // Max 7.5 deg
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-5px) scale(1.03)`;
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
+                });
             });
+
+            // --- 7. PRICING TOGGLE LOGIC ---
+            const pricingToggle = document.getElementById('pricing-toggle-checkbox');
+            const priceElements = document.querySelectorAll('.price');
+
+            pricingToggle.addEventListener('change', () => {
+                const isAnnual = pricingToggle.checked;
+                priceElements.forEach(priceEl => {
+                    const monthlyPrice = priceEl.dataset.monthly;
+                    const annualPrice = priceEl.dataset.annual;
+                    if (monthlyPrice && annualPrice) {
+                        if (isAnnual) {
+                            priceEl.innerHTML = `$${annualPrice}<span>/month</span>`;
+                        } else {
+                            priceEl.innerHTML = `$${monthlyPrice}<span>/month</span>`;
+                        }
+                    }
+                });
+            });
+
         });
     </script>
 </body>
