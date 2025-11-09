@@ -1,0 +1,2637 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" data-motion="normal">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artistic Portfolio</title>
+    <meta name="description" content="An interactive, single-file artistic portfolio micro-experience.">
+    <meta name="theme-color" content="#111111"> <!-- Will be updated by JS -->
+
+    <!--
+    ============================================================================
+    == STYLESHEET
+    ============================================================================
+    All CSS is inlined here for the single-file constraint.
+    -->
+    <style>
+        /*
+        ========================================
+        == 1. VARIABLES & THEMES
+        ========================================
+        */
+
+        :root {
+            /* Light Theme */
+            --bg: #f4f4f5;
+            --surface: #ffffff;
+            --surface-transparent: hsla(0, 0%, 100%, 0.7);
+            --text: #18181b;
+            --text-muted: #52525b;
+            --accent-1: #6366f1;
+            --accent-2: #ec4899;
+            --accent-gradient: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            --border: #e4e4e7;
+            --shadow-color: 220 3% 15%;
+            --shadow-sm: 0 1px 2px 0 hsl(var(--shadow-color) / 0.05);
+            --shadow-md: 0 4px 6px -1px hsl(var(--shadow-color) / 0.1), 0 2px 4px -2px hsl(var(--shadow-color) / 0.1);
+            --shadow-lg: 0 10px 15px -3px hsl(var(--shadow-color) / 0.1), 0 4px 6px -4px hsl(var(--shadow-color) / 0.1);
+            --glass-bg: hsla(0, 0%, 100%, 0.5);
+            --glass-border: hsla(0, 0%, 100%, 0.7);
+            --focus-ring: #4f46e5;
+        }
+
+        [data-theme="dark"] {
+            --bg: #09090b;
+            --surface: #18181b;
+            --surface-transparent: hsla(240, 6%, 10%, 0.7);
+            --text: #f4f4f5;
+            --text-muted: #a1a1aa;
+            --accent-1: #818cf8;
+            --accent-2: #f472b6;
+            --border: #27272a;
+            --shadow-color: 240 10% 3.9%;
+            --shadow-sm: 0 1px 2px 0 hsl(var(--shadow-color) / 0.05); /* Stays subtle */
+            --shadow-md: 0 4px 6px -1px hsl(var(--shadow-color) / 0.2), 0 2px 4px -2px hsl(var(--shadow-color) / 0.2);
+            --shadow-lg: 0 10px 15px -3px hsl(var(--shadow-color) / 0.2), 0 4px 6px -4px hsl(var(--shadow-color) / 0.2);
+            --glass-bg: hsla(240, 6%, 10%, 0.5);
+            --glass-border: hsla(240, 6%, 10%, 0.7);
+            --focus-ring: #a5b4fc;
+        }
+
+        [data-theme="art"] {
+            --bg: #fffbeb;
+            --surface: #fef3c7;
+            --surface-transparent: hsla(48, 94%, 89%, 0.7);
+            --text: #78350f;
+            --text-muted: #92400e;
+            --accent-1: #fb923c;
+            --accent-2: #16a34a;
+            --border: #fde68a;
+            --shadow-color: 44 98% 39%;
+            --shadow-sm: 0 1px 2px 0 hsl(var(--shadow-color) / 0.05);
+            --shadow-md: 0 4px 6px -1px hsl(var(--shadow-color) / 0.1), 0 2px 4px -2px hsl(var(--shadow-color) / 0.1);
+            --shadow-lg: 0 10px 15px -3px hsl(var(--shadow-color) / 0.1), 0 4px 6px -4px hsl(var(--shadow-color) / 0.1);
+            --glass-bg: hsla(48, 94%, 89%, 0.5);
+            --glass-border: hsla(48, 94%, 89%, 0.7);
+            --focus-ring: #f59e0b;
+        }
+
+        /* Typography Scale */
+        :root {
+            --fs-sm: 0.875rem;   /* 14px */
+            --fs-md: 1rem;       /* 16px */
+            --fs-lg: 1.125rem;   /* 18px */
+            --fs-xl: 1.5rem;     /* 24px */
+            --fs-xxl: 2.25rem;   /* 36px */
+            --fs-display: 3rem;  /* 48px */
+        }
+
+        @media (min-width: 768px) {
+            :root {
+                --fs-xl: 2.25rem;
+                --fs-xxl: 3rem;
+                --fs-display: 4.5rem;
+            }
+        }
+
+        /*
+        ========================================
+        == 2. RESET & BASE
+        ========================================
+        */
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            font-size: var(--fs-md);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            line-height: 1.2;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        h1 { font-size: var(--fs-display); }
+        h2 { font-size: var(--fs-xxl); }
+        h3 { font-size: var(--fs-xl); }
+
+        p {
+            margin-bottom: 1.25rem;
+            max-width: 65ch;
+        }
+
+        a {
+            color: var(--accent-1);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        a:hover {
+            color: var(--accent-2);
+        }
+
+        img, svg, canvas {
+            display: block;
+            max-width: 100%;
+        }
+
+        /*
+        ========================================
+        == 3. UTILITIES & ACCESSIBILITY
+        ========================================
+        */
+
+        /* Screen-reader only */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+
+        /* Visible focus ring */
+        :focus-visible {
+            outline: 2px solid var(--focus-ring);
+            outline-offset: 2px;
+            border-radius: 4px;
+        }
+        /* Remove default outline when :focus-visible is supported */
+        :focus:not(:focus-visible) {
+            outline: none;
+        }
+
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+        
+        /* JS-controlled reduced motion */
+        [data-motion="reduced"] {
+            scroll-behavior: auto;
+        }
+        [data-motion="reduced"] *,
+        [data-motion="reduced"] *::before,
+        [data-motion="reduced"] *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+            scroll-behavior: auto !important;
+        }
+
+        /* Skip to content link */
+        .skip-link {
+            position: absolute;
+            top: -1000px;
+            left: 1rem;
+            background: var(--surface);
+            color: var(--text);
+            padding: 0.5rem 1rem;
+            z-index: 9999;
+            border-radius: 4px;
+            box-shadow: var(--shadow-lg);
+            transition: top 0.3s ease;
+        }
+        .skip-link:focus {
+            top: 1rem;
+        }
+
+        /*
+        ========================================
+        == 4. LAYOUT
+        ========================================
+        */
+        
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+        }
+
+        /* Main sections */
+        main > section {
+            min-height: 100vh;
+            padding-top: 8rem;
+            padding-bottom: 4rem;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Glassmorphism effect */
+        .glass-panel {
+            background-color: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow-md);
+            border-radius: 12px;
+            /* Fallback for browsers that don't support backdrop-filter */
+            background-color: var(--surface-transparent);
+        }
+
+        @supports (backdrop-filter: blur(10px)) or (-webkit-backdrop-filter: blur(10px)) {
+            .glass-panel {
+                -webkit-backdrop-filter: blur(10px);
+                backdrop-filter: blur(10px);
+                background-color: var(--glass-bg);
+            }
+        }
+
+        /*
+        ========================================
+        == 5. HEADER (Site Header)
+        ========================================
+        */
+
+        .site-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 1rem 0;
+            z-index: 1000;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .site-header.is-scrolled {
+            background-color: var(--glass-bg);
+            box-shadow: var(--shadow-md);
+        }
+        @supports (backdrop-filter: blur(10px)) or (-webkit-backdrop-filter: blur(10px)) {
+            .site-header.is-scrolled {
+                -webkit-backdrop-filter: blur(10px);
+                backdrop-filter: blur(10px);
+            }
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .site-title {
+            font-size: var(--fs-lg);
+            font-weight: 800;
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        .site-nav {
+            display: none; /* Hidden on mobile */
+        }
+
+        @media (min-width: 768px) {
+            .site-nav {
+                display: flex;
+                gap: 0.5rem;
+            }
+            .site-nav__link {
+                padding: 0.5rem 1rem;
+                color: var(--text-muted);
+                font-weight: 500;
+                border-radius: 6px;
+                position: relative;
+                overflow: hidden;
+            }
+            .site-nav__link:hover {
+                color: var(--text);
+                background-color: var(--border);
+            }
+            .site-nav__link[data-active="true"] {
+                color: var(--accent-1);
+                font-weight: 700;
+            }
+            
+            /* Active link indicator */
+            .site-nav__link::after {
+                content: '';
+                position: absolute;
+                bottom: 4px;
+                left: 50%;
+                width: 0;
+                height: 2px;
+                background: var(--accent-1);
+                border-radius: 1px;
+                transform: translateX(-50%);
+                transition: width 0.3s ease;
+            }
+            .site-nav__link[data-active="true"]::after {
+                width: 40%;
+            }
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .icon-button {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 2.5rem;
+            height: 2.5rem;
+            background-color: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+        .icon-button:hover {
+            background-color: var(--surface);
+            color: var(--text);
+            border-color: var(--border);
+            box-shadow: var(--shadow-sm);
+        }
+        .icon-button svg {
+            width: 1.25rem;
+            height: 1.25rem;
+        }
+        /* Mobile nav toggle, shown instead of .site-nav */
+        .mobile-nav-toggle {
+            display: block;
+        }
+         @media (min-width: 768px) {
+            .mobile-nav-toggle {
+                display: none;
+            }
+         }
+
+        /*
+        ========================================
+        == 6. HERO SECTION (#hero)
+        ========================================
+        */
+
+        #hero {
+            align-items: center;
+        }
+
+        #hero-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            transition: opacity 0.5s ease;
+            opacity: 0.6;
+        }
+        [data-theme="dark"] #hero-canvas {
+            opacity: 0.4;
+        }
+        [data-motion="reduced"] #hero-canvas {
+            opacity: 0.2;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 600px;
+        }
+        
+        .hero-content h1 {
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-content .subtitle {
+            font-size: var(--fs-lg);
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+        
+        .hero-cta-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            font-size: var(--fs-md);
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        .cta-button--primary {
+            background: var(--accent-gradient);
+            color: white;
+            border: none;
+        }
+        .cta-button--secondary {
+            background: var(--surface);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        /* Decorative SVG shapes for parallax */
+        .hero-shape {
+            position: absolute;
+            z-index: -1;
+            opacity: 0.1;
+            will-change: transform;
+            transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .hero-shape--1 {
+            width: 200px;
+            height: 200px;
+            bottom: 10vh;
+            right: 10vw;
+        }
+        .hero-shape--2 {
+            width: 100px;
+            height: 100px;
+            top: 20vh;
+            left: 15vw;
+        }
+
+        /*
+        ========================================
+        == 7. ABOUT SECTION (#about)
+        ========================================
+        */
+        
+        #about .container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+        
+        @media (min-width: 768px) {
+            #about .container {
+                grid-template-columns: 2fr 3fr;
+            }
+        }
+        
+        .about-statement h2 {
+            margin-bottom: 1.5rem;
+        }
+        
+        .about-skills {
+            padding: 1.5rem;
+        }
+
+        .about-skills h3 {
+            margin-bottom: 1.5rem;
+        }
+
+        .skills-list {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+        
+        .skill-item {
+            padding: 0.5rem 1rem;
+            background-color: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            font-size: var(--fs-sm);
+            font-weight: 500;
+            cursor: default;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        [data-motion="normal"] .skill-item:hover {
+             transform: scale(1.05);
+             box-shadow: var(--shadow-md);
+        }
+
+
+        /*
+        ========================================
+        == 8. WORKS SECTION (#works)
+        ========================================
+        */
+
+        #works {
+            background-color: var(--surface);
+            transition: background-color 0.3s ease;
+        }
+        
+        #works h2 {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+        
+        .gallery-card {
+            background-color: var(--bg);
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+        }
+        [data-motion="normal"] .gallery-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+        .gallery-card:focus-visible {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .gallery-card__thumbnail {
+            width: 100%;
+            height: 200px;
+            background-color: var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .gallery-card__thumbnail img,
+        .gallery-card__thumbnail svg {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .gallery-card__content {
+            padding: 1.5rem;
+            flex-grow: 1;
+        }
+        
+        .gallery-card__content h3 {
+            margin-bottom: 0.5rem;
+            font-size: var(--fs-lg);
+        }
+
+        .gallery-card__tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .gallery-card__tag {
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 0.25rem 0.75rem;
+            background-color: var(--accent-1);
+            color: white;
+            border-radius: 12px;
+            opacity: 0.8;
+        }
+        [data-theme="art"] .gallery-card__tag {
+            color: var(--text);
+        }
+        .gallery-card__tag:nth-child(2n) {
+            background-color: var(--accent-2);
+        }
+        
+        /*
+        ========================================
+        == 9. MODAL / LIGHTBOX
+        ========================================
+        */
+        
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        
+        .modal-overlay.is-open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background-color: var(--surface);
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+        .modal-overlay.is-open .modal-content {
+            transform: scale(1);
+        }
+        
+        .modal-art-container {
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+            position: relative;
+            background-color: var(--bg);
+        }
+        
+        .modal-art-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .modal-info {
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+        
+        .modal-info h2 {
+            font-size: var(--fs-xl);
+            margin-bottom: 0.5rem;
+        }
+        
+        .modal-info .gallery-card__tags {
+             margin-top: 0;
+             margin-bottom: 1rem;
+        }
+
+        .modal-controls {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            display: flex;
+            gap: 0.5rem;
+            z-index: 2001;
+        }
+        
+        .modal-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 2001;
+            width: 3rem;
+            height: 3rem;
+        }
+        .modal-nav--prev {
+            left: 1rem;
+        }
+        .modal-nav--next {
+            right: 1rem;
+        }
+        
+        /*
+        ========================================
+        == 10. CONTACT SECTION (#contact)
+        ========================================
+        */
+        
+        #contact .container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 3rem;
+        }
+        @media (min-width: 768px) {
+            #contact .container {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        #contact h2 {
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-form .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .contact-form label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: var(--fs-sm);
+        }
+        
+        .form-input,
+        .form-textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border);
+            background-color: var(--surface);
+            border-radius: 8px;
+            font-size: var(--fs-md);
+            color: var(--text);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .form-input:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--accent-1);
+            box-shadow: 0 0 0 2px var(--accent-1-translucent, var(--accent-1));
+        }
+        
+        /* Invalid state */
+        .form-input:invalid,
+        .form-textarea:invalid {
+            border-color: #f87171; /* Red-400 */
+        }
+        .form-input:invalid:focus,
+        .form-textarea:invalid:focus {
+            border-color: #f87171;
+            box-shadow: 0 0 0 2px #fca5a5;
+        }
+        .form-error {
+            color: #ef4444;
+            font-size: var(--fs-sm);
+            margin-top: 0.25rem;
+            display: none;
+        }
+        /* Show error message when input is invalid AND has been interacted with */
+        .form-input.is-invalid + .form-error,
+        .form-textarea.is-invalid + .form-error {
+            display: block;
+        }
+
+        .form-textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        .form-message {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            font-size: var(--fs-sm);
+            display: none;
+        }
+        .form-message.is-success {
+            background-color: #dcfce7; /* Green-100 */
+            color: #166534; /* Green-800 */
+            border: 1px solid #86efac; /* Green-300 */
+        }
+        .form-message.is-error {
+            background-color: #fee2e2; /* Red-100 */
+            color: #991b1b; /* Red-800 */
+            border: 1px solid #fca5a5; /* Red-300 */
+        }
+        .form-message a {
+            font-weight: 600;
+            color: inherit;
+            text-decoration: underline;
+        }
+        
+        .contact-info .cta-button {
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 2rem;
+            list-style: none;
+        }
+        .social-links a {
+            color: var(--text-muted);
+            transition: color 0.2s ease, transform 0.2s ease;
+        }
+        .social-links a:hover {
+            color: var(--accent-1);
+            transform: scale(1.1);
+        }
+        .social-links svg {
+            width: 1.75rem;
+            height: 1.75rem;
+        }
+
+        /*
+        ========================================
+        == 11. ASIDE (Controls Panel)
+        ========================================
+        */
+        
+        .controls-panel {
+            position: fixed;
+            top: 80px;
+            right: -300px;
+            width: 300px;
+            height: calc(100vh - 100px);
+            max-height: 500px;
+            z-index: 900;
+            border-top-left-radius: 12px;
+            border-bottom-left-radius: 12px;
+            transition: right 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            overflow-y: auto;
+        }
+        .controls-panel.is-open {
+            right: 0;
+        }
+        
+        .controls-toggle {
+            position: absolute;
+            top: 50%;
+            left: -41px;
+            transform: translateY(-50%);
+            width: 2.5rem;
+            height: 2.5rem;
+            border-top-left-radius: 8px;
+            border-bottom-left-radius: 8px;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+            border-right: none;
+        }
+        
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .control-group label {
+            font-weight: 500;
+            font-size: var(--fs-sm);
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .control-group .value-display {
+            color: var(--text-muted);
+        }
+
+        /* Custom toggle switch */
+        .toggle-switch {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .toggle-slider {
+            width: 44px;
+            height: 24px;
+            background-color: var(--border);
+            border-radius: 12px;
+            position: relative;
+            transition: background-color 0.2s ease;
+        }
+        .toggle-slider::before {
+            content: '';
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            left: 3px;
+            top: 3px;
+            background-color: white;
+            border-radius: 50%;
+            transition: transform 0.2s ease;
+        }
+        .toggle-switch input:checked + .toggle-slider {
+            background-color: var(--accent-1);
+        }
+        .toggle-switch input:checked + .toggle-slider::before {
+            transform: translateX(20px);
+        }
+        
+        /* Custom slider */
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            background: var(--border);
+            border-radius: 4px;
+            outline: none;
+            opacity: 0.7;
+            transition: opacity .2s;
+        }
+        input[type="range"]:hover {
+            opacity: 1;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            background: var(--accent-1);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        input[type="range"]::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            background: var(--accent-1);
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .control-group select {
+            width: 100%;
+            padding: 0.5rem;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            background-color: var(--surface);
+            color: var(--text);
+            font-size: var(--fs-sm);
+        }
+        
+        .controls-panel-buttons {
+            margin-top: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .btn-small {
+            padding: 0.5rem 0.75rem;
+            font-size: var(--fs-sm);
+            font-weight: 500;
+            border-radius: 6px;
+            cursor: pointer;
+            text-align: center;
+            border: 1px solid var(--border);
+            background-color: var(--surface);
+            color: var(--text);
+        }
+        .btn-small:hover {
+            background-color: var(--bg);
+        }
+        
+        #import-settings {
+            display: none;
+        }
+
+        /*
+        ========================================
+        == 12. FOOTER
+        ========================================
+        */
+
+        .site-footer {
+            padding: 2rem 0;
+            text-align: center;
+            font-size: var(--fs-sm);
+            color: var(--text-muted);
+            border-top: 1px solid var(--border);
+        }
+        .site-footer p {
+            margin: 0;
+        }
+        
+        /*
+        ========================================
+        == 13. DEBUG & ERROR OVERLAY
+        ========================================
+        */
+        
+        #error-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(20, 0, 0, 0.9);
+            color: white;
+            z-index: 9998;
+            display: none; /* Hidden by default */
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+        }
+        #error-overlay h2 {
+            color: #f87171;
+            margin-bottom: 1rem;
+        }
+        #error-overlay p {
+            max-width: 500px;
+            margin-bottom: 2rem;
+        }
+        #error-overlay button {
+            padding: 0.75rem 1.5rem;
+            font-size: var(--fs-md);
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            background-color: #f87171;
+            color: white;
+            border: none;
+        }
+        
+        #debug-overlay {
+            position: fixed;
+            bottom: 1rem;
+            left: 1rem;
+            background-color: var(--surface-transparent);
+            border: 1px solid var(--border);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-family: monospace;
+            z-index: 9997;
+            display: none; /* Hidden by default */
+            pointer-events: none;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!--
+    ============================================================================
+    == DOCUMENTATION & META
+    ============================================================================
+    
+    Project:    Artistic Portfolio Micro-site
+    Author:     Gemini
+    Date:       November 9, 2025
+    
+    Summary:
+    A single-file, production-quality, artistic, and interactive portfolio website.
+    It includes a procedural canvas background, a procedurally generated gallery
+    with a lightbox, a persistent theme/controls system, and an accessible
+    contact form, all without external dependencies.
+    
+    Features:
+    - Single HTML file (all CSS, JS, SVG inline).
+    - 3 Color Themes (Light, Dark, Art) with localStorage persistence.
+    - Procedural animated <canvas> background (particles).
+    - Interactive controls panel (particle count, motion, theme, etc.)
+    - Controls persistence via localStorage.
+    - "Reduce Motion" toggle and `prefers-reduced-motion` support.
+    - Procedurally generated SVG gallery thumbnails (seeded).
+    - Accessible modal/lightbox with focus trap and keyboard navigation.
+    - Modal features larger procedural <canvas> artwork.
+    - SPA-like smooth scrolling with IntersectionObserver active nav.
+    - Contact form with client-side validation, .txt download, and copy-to-clipboard.
+    - Debug mode with performance meter.
+    - Settings export/import (JSON).
+    
+    Keyboard Shortcuts:
+    - Tab / Shift+Tab: Navigate focusable elements.
+    - Enter / Space:    Activate buttons/links.
+    - Escape:           Close modal.
+    - Left Arrow:       Previous item in modal.
+    - Right Arrow:      Next item in modal.
+    - 'T':              Toggle theme.
+    
+    Debug Mode:
+    - Append #debug=true to the URL to enable.
+    
+    Changelog:
+    - 2025-11-09: v1.0.0 - Initial generation.
+    
+    ============================================================================
+    -->
+
+    <a href="#main" class="skip-link">Skip to main content</a>
+
+    <!--
+    ========================================
+    == 1. SITE HEADER
+    ========================================
+    -->
+    <header class="site-header" id="site-header">
+        <div class="container header-container">
+            <a href="#hero" class="site-title">Artisan.io</a>
+            
+            <nav class="site-nav" aria-label="Main navigation">
+                <a href="#hero" class="site-nav__link" data-section="hero" data-active="true">Home</a>
+                <a href="#about" class="site-nav__link" data-section="about">About</a>
+                <a href="#works" class="site-nav__link" data-section="works">Works</a>
+                <a href="#contact" class="site-nav__link" data-section="contact">Contact</a>
+            </nav>
+
+            <div class="header-controls">
+                <button class="icon-button" id="theme-toggle" aria-label="Toggle color theme" aria-pressed="false">
+                    <!-- Theme icons will be injected by JS -->
+                </button>
+                <button class="icon-button" id="motion-toggle" aria-label="Toggle reduced motion" aria-pressed="false">
+                    <!-- Motion icons will be injected by JS -->
+                </button>
+                <!-- Mobile nav toggle (functionality not fully implemented for this demo) -->
+                <button class="icon-button mobile-nav-toggle" aria-label="Open navigation menu">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!--
+    ========================================
+    == 2. MAIN CONTENT
+    ========================================
+    -->
+    <main id="main">
+
+        <!-- ========== 2.1 HERO SECTION ========== -->
+        <section id="hero">
+            <canvas id="hero-canvas" aria-hidden="true"></canvas>
+
+            <!-- Decorative SVG shapes for parallax -->
+            <svg class="hero-shape hero-shape--1" data-parallax-depth="0.2" viewBox="0 0 100 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+                <circle cx="50" cy="50" r="40" fill="var(--accent-1)" />
+            </svg>
+            <svg class="hero-shape hero-shape--2" data-parallax-depth="0.4" viewBox="0 0 100 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+                <rect x="10" y="10" width="80" height="80" transform="rotate(15 50 50)" fill="var(--accent-2)" />
+            </svg>
+            
+            <div class="container hero-content">
+                <h1>Creative <br>Digital Artisan</h1>
+                <p class="subtitle">
+                    Crafting unique, performant, and accessible web experiences
+                    from procedural art and modern code.
+                </p>
+                <div class="hero-cta-group">
+                    <a href="#works" class="cta-button cta-button--primary">View My Work</a>
+                    <a href="#contact" class="cta-button cta-button--secondary">Get In Touch</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== 2.2 ABOUT SECTION ========== -->
+        <section id="about">
+            <div class="container">
+                <div class="about-statement">
+                    <h2>Design is thinking made visual.</h2>
+                    <p>
+                        I am a digital artisan specializing in the intersection of code and creativity. 
+                        My passion lies in building beautiful, interactive systems from the ground up,
+                        focusing on performance, accessibility, and the small details that create a
+                        delightful user experience.
+                    </p>
+                    <p>
+                        This entire site, for example, is a single HTML file. No external libraries, 
+                        no image files, no frameworks. Just pure, progressively-enhanced web technology. 
+                        The particles in the background, the thumbnails in the gallery, and the art 
+                        in the lightbox are all generated procedurally by your browser.
+                    </p>
+                </div>
+                <aside class="about-skills glass-panel">
+                    <h3>Core Toolkit</h3>
+                    <ul class="skills-list">
+                        <li class="skill-item">JavaScript (ESNext)</li>
+                        <li class="skill-item">HTML5 &amp; CSS3</li>
+                        <li class="skill-item">Canvas &amp; SVG</li>
+                        <li class="skill-item">Web Animations API</li>
+                        <li class="skill-item">Accessibility (WCAG)</li>
+                        <li class="skill-item">Web Performance</li>
+                        <li class="skill-item">Procedural Generation</li>
+                        <li class="skill-item">Vanilla JS</li>
+                    </ul>
+                </aside>
+            </div>
+        </section>
+
+        <!-- ========== 2.3 WORKS SECTION ========== -->
+        <section id="works">
+            <div class="container">
+                <h2>Generative Works</h2>
+                <div class="gallery-grid" id="gallery-grid">
+                    <!-- Gallery cards will be injected by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== 2.4 CONTACT SECTION ========== -->
+        <section id="contact">
+            <div class="container">
+                <div class="contact-form-container">
+                    <h2>Let's connect.</h2>
+                    <p>
+                        Have a project in mind or just want to talk about generative art? 
+                        Send me a message using the form below.
+                    </p>
+                    <form class="contact-form" id="contact-form" novalidate>
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" id="name" name="name" class="form-input" required>
+                            <span class="form-error" role="alert">Please enter your name.</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" class="form-input" required>
+                            <span class="form-error" role="alert">Please enter a valid email address.</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" class="form-textarea" required minlength="10"></textarea>
+                            <span class="form-error" role="alert">Message must be at least 10 characters.</span>
+                        </div>
+                        <button type="submit" class="cta-button cta-button--primary" style="width: 100%;">
+                            Submit Message
+                        </button>
+                        <div id="form-message-container" class="form-message" role="status"></div>
+                    </form>
+                </div>
+
+                <div class="contact-info">
+                    <h3>...or reach out directly.</h3>
+                    <p>
+                        If you prefer, you can copy my details or a pre-filled 
+                        email message to your clipboard.
+                    </p>
+                    <button class="cta-button cta-button--secondary" id="copy-email-btn">
+                        Copy mailto: link
+                    </button>
+                    <button class="cta-button cta-button--secondary" id="copy-message-btn">
+                        Copy message as text
+                    </button>
+                    <ul class="social-links" aria-label="Social media links">
+                        <li>
+                            <a href="#" aria-label="GitHub">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" aria-label="LinkedIn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" aria-label="Twitter / X">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 9.01V6c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2v-3.01M12 12H6m12-5.5l-3 3 3 3M12.5 22v-3.5"></path></svg>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!--
+    ========================================
+    == 3. FOOTER
+    ========================================
+    -->
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2025 Artisan.io. All rights reserved.</p>
+            <p>Built from a single file with HTML, CSS, and vanilla JS.</p>
+        </div>
+    </footer>
+
+    <!--
+    ========================================
+    == 4. ASIDE (Controls Panel)
+    ========================================
+    -->
+    <aside class="controls-panel glass-panel" id="controls-panel">
+        <button class="icon-button controls-toggle" id="controls-toggle-btn" aria-label="Toggle controls panel" aria-expanded="false">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        </button>
+        
+        <h4>Visual Controls</h4>
+        
+        <div class="control-group">
+            <label class="toggle-switch">
+                <span>Reduce Motion</span>
+                <input type="checkbox" id="control-reduce-motion">
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+        
+        <div class="control-group">
+            <label for="control-theme">Color Theme</label>
+            <select id="control-theme">
+                <option value="dark">Dark</option>
+                <option value="light">Light</option>
+                <option value="art">Artistic</option>
+            </select>
+        </div>
+
+        <div class="control-group">
+            <label for="control-particle-count">
+                <span>Particle Count</span>
+                <span id="particle-count-value" class="value-display">100</span>
+            </label>
+            <input type="range" id="control-particle-count" min="0" max="500" step="10" value="100">
+        </div>
+        
+        <div class="control-group">
+            <label for="control-motion-intensity">
+                <span>Motion Intensity</span>
+                <span id="motion-intensity-value" class="value-display">1.0</span>
+            </label>
+            <input type="range" id="control-motion-intensity" min="0" max="2" step="0.1" value="1.0">
+        </div>
+        
+        <div class="control-group">
+            <label class="toggle-switch">
+                <span>Audio Cues (Muted)</span>
+                <input type="checkbox" id="control-audio-enable">
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+        
+        <div class="controls-panel-buttons">
+            <button class="btn-small" id="export-settings-btn">Export Settings</button>
+            <button class="btn-small" id="import-settings-btn">Import Settings</button>
+            <input type="file" id="import-settings-input" accept=".json">
+            <button class="btn-small" id="reset-settings-btn">Reset to Defaults</button>
+        </div>
+        
+    </aside>
+
+    <!--
+    ========================================
+    == 5. MODAL (Lightbox)
+    ========================================
+    -->
+    <div class="modal-overlay" id="gallery-modal" role="dialog" aria-modal="true" aria-hidden="true">
+        <div class="modal-content" role="document">
+            
+            <div class="modal-controls">
+                <button class="icon-button modal-nav modal-nav--prev" aria-label="Previous item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                </button>
+                <button class="icon-button modal-nav modal-nav--next" aria-label="Next item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </button>
+                <button class="icon-button modal-close" id="modal-close-btn" aria-label="Close modal">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            
+            <div class="modal-art-container">
+                <canvas class="modal-art-canvas" id="modal-art-canvas"></canvas>
+            </div>
+            
+            <div class="modal-info">
+                <h2 id="modal-title"></h2>
+                <div class="gallery-card__tags" id="modal-tags">
+                    <!-- Tags injected by JS -->
+                </div>
+                <p id="modal-description"></p>
+            </div>
+
+        </div>
+    </div>
+    
+    <!--
+    ========================================
+    == 6. OVERLAYS (Debug & Error)
+    ========================================
+    -->
+    <div id="error-overlay" role="alert" aria-live="assertive">
+        <div class="error-content">
+            <h2>Oops! Something went wrong.</h2>
+            <p>
+                A critical error occurred while trying to initialize the page. 
+                Please try reloading.
+            </p>
+            <button id="error-reload-btn">Reload Page</button>
+        </div>
+    </div>
+    
+    <div id="debug-overlay" aria-hidden="true">
+        <!-- Content injected by JS -->
+    </div>
+
+    <!--
+    ============================================================================
+    == JAVASCRIPT
+    ============================================================================
+    All JavaScript is inlined here for the single-file constraint.
+    -->
+    <script>
+    (function() {
+        'use strict';
+
+        // ========== 1. GLOBAL STATE & CONFIG ==========
+
+        // Application-wide settings, loaded from localStorage
+        let settings = {};
+        
+        // Default settings
+        const DEFAULT_SETTINGS = {
+            theme: 'dark',
+            motion: 'normal',
+            particleCount: 100,
+            motionIntensity: 1.0,
+            audio: false
+        };
+
+        // DOM element cache
+        const $ = {
+            html: document.documentElement,
+            body: document.body,
+            header: document.getElementById('site-header'),
+            navLinks: document.querySelectorAll('.site-nav__link'),
+            sections: document.querySelectorAll('main > section'),
+            
+            // Toggles
+            themeToggle: document.getElementById('theme-toggle'),
+            motionToggle: document.getElementById('motion-toggle'),
+            
+            // Hero
+            heroCanvas: document.getElementById('hero-canvas'),
+            heroShapes: document.querySelectorAll('.hero-shape'),
+            
+            // Gallery & Modal
+            galleryGrid: document.getElementById('gallery-grid'),
+            modal: document.getElementById('gallery-modal'),
+            modalContent: document.querySelector('.modal-content'),
+            modalCloseBtn: document.getElementById('modal-close-btn'),
+            modalPrevBtn: document.querySelector('.modal-nav--prev'),
+            modalNextBtn: document.querySelector('.modal-nav--next'),
+            modalTitle: document.getElementById('modal-title'),
+            modalDescription: document.getElementById('modal-description'),
+            modalTags: document.getElementById('modal-tags'),
+            modalArtCanvas: document.getElementById('modal-art-canvas'),
+            
+            // Controls Panel
+            controlsPanel: document.getElementById('controls-panel'),
+            controlsToggleBtn: document.getElementById('controls-toggle-btn'),
+            controlReduceMotion: document.getElementById('control-reduce-motion'),
+            controlTheme: document.getElementById('control-theme'),
+            controlParticleCount: document.getElementById('control-particle-count'),
+            particleCountValue: document.getElementById('particle-count-value'),
+            controlMotionIntensity: document.getElementById('control-motion-intensity'),
+            motionIntensityValue: document.getElementById('motion-intensity-value'),
+            controlAudio: document.getElementById('control-audio-enable'),
+            exportSettingsBtn: document.getElementById('export-settings-btn'),
+            importSettingsBtn: document.getElementById('import-settings-btn'),
+            importSettingsInput: document.getElementById('import-settings-input'),
+            resetSettingsBtn: document.getElementById('reset-settings-btn'),
+
+            // Contact Form
+            contactForm: document.getElementById('contact-form'),
+            formMessageContainer: document.getElementById('form-message-container'),
+            copyEmailBtn: document.getElementById('copy-email-btn'),
+            copyMessageBtn: document.getElementById('copy-message-btn'),
+            
+            // Overlays
+            errorOverlay: document.getElementById('error-overlay'),
+            errorReloadBtn: document.getElementById('error-reload-btn'),
+            debugOverlay: document.getElementById('debug-overlay'),
+        };
+
+        // Application state
+        const state = {
+            isDebug: false,
+            isPageVisible: true,
+            isReducedMotion: false,
+            activeSection: 'hero',
+            modalIndex: 0,
+            lastFrameTime: 0,
+            frameCount: 0,
+            fps: 0,
+            isControlsOpen: false,
+            lastScrollY: 0,
+            isHeaderScrolled: false,
+            audioCtx: null,
+            mainGain: null,
+            lastFocus: null,
+        };
+        
+        // Mock gallery data
+        const GALLERY_ITEMS = [
+            { id: 1, title: 'Nebula Bloom', description: 'An exploration of particle systems mimicking gaseous clouds in space. Generated using simplex noise fields.', tags: ['Canvas', 'Particles', 'Noise'] },
+            { id: 2, title: 'Circuit Board', description: 'A recursive algorithm generates paths resembling electronic traces on a PCB. Color palette is theme-adaptive.', tags: ['SVG', 'Recursive', 'Generative'] },
+            { id: 3, title: 'Metropolis Grid', description: 'Using 3D projection logic on a 2D canvas, this piece renders an endless, abstract city skyline.', tags: ['Canvas', '3D', 'Perspective'] },
+            { id: 4, title: 'Tidal Flow', description: 'Layered sine waves create a mesmerizing, water-like flow field. Interactivity allows users to disturb the waves.', tags: ['SVG', 'Animation', 'Math'] },
+            { id: 5, title: 'Crystalline', description: 'A simple seeded random function creates deterministic, crystal-like geometric shapes. Each refresh with the same seed yields the same result.', tags: ['Canvas', 'Geometry', 'Seeded'] },
+            { id: 6, title: 'Woven', description: 'Simulates a simple weaving pattern with two sets of overlapping perpendicular lines. Blend modes create depth.', tags: ['SVG', 'Pattern', 'Minimal'] },
+            { id: 7, title: 'Orbital', description: 'Simulated gravity attracts particles to a central point, creating orbital paths. Motion intensity is configurable.', tags: ['Canvas', 'Physics', 'Simulation'] },
+            { id: 8, title: 'Echo Chamber', description: 'Recursive division of space creates a fractal-like pattern. Click to subdivide squares further.', tags: ['SVG', 'Fractal', 'Interactive'] },
+        ];
+
+        // Inline SVG icons
+        const ICONS = {
+            sun: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>`,
+            moon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`,
+            brush: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 14c-2-2-3-5-3-7 0-2 2-4 4-4 2 0 4 2 4 4 0 2-1 5-3 7z"></path><path d="M12 14c-2 2-5 3-7 3s-4-2-4-4 2-4 4-4"></path><path d="M14 12c2 2 3 5 3 7 0 2-2 4-4 4-2 0-4-2-4-4 0-2 1-5 3-7z"></path></svg>`,
+            motion: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>`,
+            motionReduced: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></svg>`,
+            settings: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33A1.65 1.65 0 0 0 9 4.6V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>`,
+            chevronLeft: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>`
+        };
+
+        
+        // ========== 2. INITIALIZATION ==========
+
+        /**
+         * Main initialization function.
+         * Runs after DOM is loaded.
+         */
+        function init() {
+            try {
+                // Check for debug mode
+                if (location.hash === '#debug=true') {
+                    state.isDebug = true;
+                    $.debugOverlay.style.display = 'block';
+                }
+
+                // Load settings from localStorage
+                loadSettings();
+
+                // Initialize managers
+                ThemeManager.init();
+                AccessibilityManager.init();
+                ParticleSystem.init($.heroCanvas);
+                ScrollManager.init();
+                ControlsManager.init();
+                GalleryManager.init();
+                FormManager.init();
+                AudioManager.init();
+
+                // Bind remaining global events
+                bindGlobalEvents();
+
+                // Start the main animation loop
+                requestAnimationFrame(animationLoop);
+                
+                // Expose a global re-init function for debugging
+                window.__ARTSITE__ = {
+                    reinit: () => {
+                        ParticleSystem.initParticles();
+                    },
+                    getSettings: () => settings,
+                };
+                
+            } catch (error) {
+                console.error("ArtSite Init Error:", error);
+                $.errorOverlay.style.display = 'flex';
+            }
+        }
+        
+        /**
+         * Binds global event listeners.
+         */
+        function bindGlobalEvents() {
+            // Page visibility
+            document.addEventListener('visibilitychange', () => {
+                state.isPageVisible = document.visibilityState === 'visible';
+            });
+            
+            // Global keydown (for shortcuts)
+            window.addEventListener('keydown', (e) => {
+                if (e.key === 't' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+                    ThemeManager.toggleTheme();
+                }
+            });
+
+            // Error reload
+            $.errorReloadBtn.addEventListener('click', () => location.reload());
+        }
+        
+        // ========== 3. SETTINGS MANAGER ==========
+
+        /**
+         * Loads settings from localStorage or uses defaults.
+         */
+        function loadSettings(importedSettings = null) {
+            let loadedSettings;
+            if (importedSettings) {
+                loadedSettings = importedSettings;
+            } else {
+                try {
+                    const stored = localStorage.getItem('artsite:settings');
+                    loadedSettings = stored ? JSON.parse(stored) : null;
+                } catch (e) {
+                    console.warn('Could not parse settings from localStorage', e);
+                    loadedSettings = null;
+                }
+            }
+            
+            settings = { ...DEFAULT_SETTINGS, ...loadedSettings };
+            
+            // Special check for prefers-reduced-motion
+            const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (prefersReduced && !loadedSettings) { // Only override if no settings are saved
+                settings.motion = 'reduced';
+            }
+            state.isReducedMotion = settings.motion === 'reduced';
+        }
+        
+        /**
+         * Saves current settings to localStorage.
+         */
+        function saveSettings() {
+            try {
+                localStorage.setItem('artsite:settings', JSON.stringify(settings));
+            } catch (e) {
+                console.warn('Could not save settings to localStorage', e);
+            }
+        }
+
+        // ========== 4. THEME MANAGER ==========
+
+        const ThemeManager = {
+            themes: ['dark', 'light', 'art'],
+            current: 0,
+            
+            init() {
+                this.current = this.themes.indexOf(settings.theme);
+                if (this.current === -1) this.current = 0;
+                
+                this.applyTheme(settings.theme);
+                $.themeToggle.addEventListener('click', this.toggleTheme.bind(this));
+            },
+            
+            toggleTheme() {
+                this.current = (this.current + 1) % this.themes.length;
+                const newTheme = this.themes[this.current];
+                this.applyTheme(newTheme);
+                playAudioCue();
+            },
+            
+            applyTheme(themeName) {
+                $.html.setAttribute('data-theme', themeName);
+                settings.theme = themeName;
+                saveSettings();
+                
+                let icon = ICONS.moon;
+                if (themeName === 'light') icon = ICONS.sun;
+                if (themeName === 'art') icon = ICONS.brush;
+                $.themeToggle.innerHTML = icon;
+                
+                const pressed = themeName !== 'light';
+                $.themeToggle.setAttribute('aria-pressed', pressed.toString());
+                
+                // Update theme-color meta tag
+                const themeColor = getComputedStyle($.html).getPropertyValue('--surface').trim();
+                document.querySelector('meta[name="theme-color"]').setAttribute('content', themeColor);
+                
+                // Notify other modules
+                window.dispatchEvent(new CustomEvent('artsite:themechange', { detail: { theme: themeName } }));
+            }
+        };
+
+        // ========== 5. ACCESSIBILITY MANAGER ==========
+
+        const AccessibilityManager = {
+            init() {
+                this.applyMotion(settings.motion);
+                $.motionToggle.addEventListener('click', this.toggleMotion.bind(this));
+                
+                // Listen for system changes
+                window.matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', (e) => {
+                    if (e.matches) {
+                        this.applyMotion('reduced');
+                    }
+                });
+            },
+            
+            toggleMotion() {
+                const newMotion = state.isReducedMotion ? 'normal' : 'reduced';
+                this.applyMotion(newMotion);
+                playAudioCue();
+            },
+            
+            applyMotion(motion) {
+                state.isReducedMotion = motion === 'reduced';
+                $.html.setAttribute('data-motion', motion);
+                settings.motion = motion;
+                saveSettings();
+                
+                $.motionToggle.innerHTML = state.isReducedMotion ? ICONS.motionReduced : ICONS.motion;
+                $.motionToggle.setAttribute('aria-pressed', state.isReducedMotion.toString());
+                
+                // Update control panel
+                if ($.controlReduceMotion) {
+                    $.controlReduceMotion.checked = state.isReducedMotion;
+                }
+                
+                // Notify other modules
+                window.dispatchEvent(new CustomEvent('artsite:motionchange', { detail: { motion: motion } }));
+            }
+        };
+
+        // ========== 6. PARTICLE SYSTEM (Hero Canvas) ==========
+
+        const ParticleSystem = {
+            canvas: null,
+            ctx: null,
+            width: 0,
+            height: 0,
+            dpr: 1,
+            particles: [],
+            mouse: { x: 9999, y: 9999, radius: 150 },
+            colors: [],
+
+            init(canvas) {
+                if (!canvas) return;
+                this.canvas = canvas;
+                this.ctx = this.canvas.getContext('2d');
+                
+                this.resizeCanvas();
+                this.updateColors();
+                this.initParticles();
+
+                window.addEventListener('resize', Helpers.throttle(this.resizeCanvas.bind(this), 250));
+                window.addEventListener('mousemove', Helpers.throttle(this.onMouseMove.bind(this), 16));
+                window.addEventListener('artsite:themechange', this.updateColors.bind(this));
+                window.addEventListener('artsite:motionchange', this.onMotionChange.bind(this));
+            },
+
+            resizeCanvas() {
+                this.dpr = Math.min(window.devicePixelRatio, 2);
+                this.width = this.canvas.clientWidth;
+                this.height = this.canvas.clientHeight;
+                
+                this.canvas.width = this.width * this.dpr;
+                this.canvas.height = this.height * this.dpr;
+                
+                this.ctx.scale(this.dpr, this.dpr);
+            },
+            
+            updateColors() {
+                const styles = getComputedStyle($.html);
+                this.colors = [
+                    styles.getPropertyValue('--accent-1').trim(),
+                    styles.getPropertyValue('--accent-2').trim(),
+                    styles.getPropertyValue('--text-muted').trim(),
+                ];
+                // Re-color existing particles
+                this.particles.forEach(p => p.color = this.colors[Math.floor(Math.random() * this.colors.length)]);
+            },
+
+            initParticles() {
+                this.particles = [];
+                const count = state.isReducedMotion ? settings.particleCount / 4 : settings.particleCount;
+                for (let i = 0; i < count; i++) {
+                    this.particles.push(this.createParticle());
+                }
+            },
+            
+            createParticle(x, y) {
+                const intensity = settings.motionIntensity;
+                return {
+                    x: x || Math.random() * this.width,
+                    y: y || Math.random() * this.height,
+                    vx: (Math.random() - 0.5) * 0.5 * intensity,
+                    vy: (Math.random() - 0.5) * 0.5 * intensity,
+                    radius: Math.random() * 1.5 + 0.5,
+                    color: this.colors[Math.floor(Math.random() * this.colors.length)],
+                    originalVx: (Math.random() - 0.5) * 0.5 * intensity,
+                    originalVy: (Math.random() - 0.5) * 0.5 * intensity,
+                };
+            },
+            
+            onMouseMove(e) {
+                this.mouse.x = e.clientX;
+                this.mouse.y = e.clientY;
+            },
+            
+            onMotionChange() {
+                // Re-init particles based on new motion setting
+                this.initParticles();
+            },
+
+            update() {
+                if (state.isReducedMotion) return; // Don't update if motion is off
+                
+                const intensity = settings.motionIntensity;
+
+                for (let p of this.particles) {
+                    // Mouse interaction
+                    const dx = p.x - this.mouse.x;
+                    const dy = p.y - this.mouse.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (dist < this.mouse.radius) {
+                        const force = (this.mouse.radius - dist) / this.mouse.radius;
+                        p.vx += (dx / dist) * force * 0.2 * intensity;
+                        p.vy += (dy / dist) * force * 0.2 * intensity;
+                    }
+                    
+                    // Friction / return to original velocity
+                    p.vx *= 0.97;
+                    p.vy *= 0.97;
+                    
+                    if (Math.abs(p.vx) < 0.1) p.vx = p.originalVx;
+                    if (Math.abs(p.vy) < 0.1) p.vy = p.originalVy;
+
+                    // Update position
+                    p.x += p.vx * intensity;
+                    p.y += p.vy * intensity;
+
+                    // Wall collision
+                    if (p.x < 0 || p.x > this.width) {
+                        p.vx *= -1;
+                        p.x = Math.max(0, Math.min(p.x, this.width));
+                    }
+                    if (p.y < 0 || p.y > this.height) {
+                        p.vy *= -1;
+                        p.y = Math.max(0, Math.min(p.y, this.height));
+                    }
+                }
+            },
+
+            draw() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                for (let p of this.particles) {
+                    this.ctx.beginPath();
+                    this.ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                    this.ctx.fillStyle = p.color;
+                    this.ctx.fill();
+                }
+            },
+            
+            // Public methods for controls
+            setParticleCount(count) {
+                settings.particleCount = parseInt(count, 10);
+                saveSettings();
+                this.initParticles(); // Re-create particle array
+            },
+            
+            setMotionIntensity(intensity) {
+                settings.motionIntensity = parseFloat(intensity);
+                saveSettings();
+                // Update original velocities
+                this.particles.forEach(p => {
+                    p.originalVx = (Math.random() - 0.5) * 0.5 * settings.motionIntensity;
+                    p.originalVy = (Math.random() - 0.5) * 0.5 * settings.motionIntensity;
+                });
+            }
+        };
+        
+        // ========== 7. PARALLAX & ANIMATION LOOP ==========
+
+        /**
+         * The main animation loop, powered by requestAnimationFrame.
+         */
+        function animationLoop(timestamp) {
+            if (state.isDebug) {
+                DebugManager.updateFPS(timestamp);
+            }
+
+            // Only run animations if page is visible
+            if (state.isPageVisible) {
+                if (!state.isReducedMotion) {
+                    ParticleSystem.update();
+                    ParallaxManager.update();
+                }
+                ParticleSystem.draw(); // Always draw, even if static
+            }
+
+            requestAnimationFrame(animationLoop);
+        }
+        
+        const ParallaxManager = {
+            update() {
+                const x = ParticleSystem.mouse.x;
+                const y = ParticleSystem.mouse.y;
+                const midX = window.innerWidth / 2;
+                const midY = window.innerHeight / 2;
+                
+                $.heroShapes.forEach(shape => {
+                    const depth = parseFloat(shape.dataset.parallaxDepth || 0.1);
+                    const moveX = (x - midX) * depth * -0.1;
+                    const moveY = (y - midY) * depth * -0.1;
+                    shape.style.transform = `translate(${moveX}px, ${moveY}px)`;
+                });
+            }
+        };
+
+        // ========== 8. SCROLL & NAVIGATION MANAGER ==========
+
+        const ScrollManager = {
+            observer: null,
+
+            init() {
+                // Header scroll state
+                window.addEventListener('scroll', Helpers.throttle(this.onScroll.bind(this), 16), { passive: true });
+                
+                // Nav link smooth scroll
+                $.navLinks.forEach(link => {
+                    link.addEventListener('click', this.onNavClick.bind(this));
+                });
+                
+                // IntersectionObserver for active section
+                this.initObserver();
+            },
+            
+            onScroll() {
+                const scrollY = window.scrollY;
+                
+                // Header style
+                const shouldBeScrolled = scrollY > 20;
+                if (shouldBeScrolled !== state.isHeaderScrolled) {
+                    $.header.classList.toggle('is-scrolled', shouldBeScrolled);
+                    state.isHeaderScrolled = shouldBeScrolled;
+                }
+                
+                state.lastScrollY = scrollY;
+            },
+            
+            onNavClick(e) {
+                e.preventDefault();
+                const targetId = e.currentTarget.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                    // Update URL hash
+                    history.pushState(null, null, targetId);
+                }
+            },
+            
+            initObserver() {
+                const options = {
+                    root: null, // viewport
+                    rootMargin: '-50% 0px -50% 0px', // trigger at vertical center
+                    threshold: 0
+                };
+                
+                this.observer = new IntersectionObserver(this.observerCallback.bind(this), options);
+                $.sections.forEach(section => this.observer.observe(section));
+            },
+            
+            observerCallback(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const id = entry.target.id;
+                        this.setActiveLink(id);
+                    }
+                });
+            },
+            
+            setActiveLink(id) {
+                if (state.activeSection === id) return;
+                state.activeSection = id;
+                
+                $.navLinks.forEach(link => {
+                    const isActive = link.dataset.section === id;
+                    link.setAttribute('data-active', isActive.toString());
+                    link.setAttribute('aria-current', isActive ? 'page' : 'false');
+                });
+            }
+        };
+        
+        // ========== 9. CONTROLS PANEL MANAGER ==========
+
+        const ControlsManager = {
+            init() {
+                $.controlsToggleBtn.addEventListener('click', this.togglePanel.bind(this));
+                
+                // Set initial values from loaded settings
+                this.updateControlValues();
+                
+                // Bind control inputs
+                $.controlReduceMotion.addEventListener('change', () => {
+                    AccessibilityManager.applyMotion($.controlReduceMotion.checked ? 'reduced' : 'normal');
+                });
+                
+                $.controlTheme.addEventListener('change', (e) => {
+                    ThemeManager.applyTheme(e.target.value);
+                });
+                
+                $.controlParticleCount.addEventListener('input', (e) => {
+                    const count = e.target.value;
+                    $.particleCountValue.textContent = count;
+                    ParticleSystem.setParticleCount(count);
+                });
+                
+                $.controlMotionIntensity.addEventListener('input', (e) => {
+                    const intensity = e.target.value;
+                    $.motionIntensityValue.textContent = parseFloat(intensity).toFixed(1);
+                    ParticleSystem.setMotionIntensity(intensity);
+                });
+                
+                $.controlAudio.addEventListener('change', (e) => {
+                    settings.audio = e.target.checked;
+                    saveSettings();
+                    AudioManager.setMuted(!settings.audio);
+                    $.controlAudio.previousElementSibling.textContent = `Audio Cues (${settings.audio ? 'On' : 'Muted'})`;
+                });
+                
+                // Settings Import/Export
+                $.exportSettingsBtn.addEventListener('click', this.exportSettings.bind(this));
+                $.importSettingsBtn.addEventListener('click', () => $.importSettingsInput.click());
+                $.importSettingsInput.addEventListener('change', this.importSettings.bind(this));
+                $.resetSettingsBtn.addEventListener('click', this.resetSettings.bind(this));
+            },
+            
+            togglePanel() {
+                state.isControlsOpen = !state.isControlsOpen;
+                $.controlsPanel.classList.toggle('is-open', state.isControlsOpen);
+                $.controlsToggleBtn.setAttribute('aria-expanded', state.isControlsOpen.toString());
+                $.controlsToggleBtn.innerHTML = state.isControlsOpen ? ICONS.chevronLeft : ICONS.settings;
+            },
+            
+            updateControlValues() {
+                // Sync panel controls with loaded settings
+                $.controlReduceMotion.checked = state.isReducedMotion;
+                $.controlTheme.value = settings.theme;
+                $.controlParticleCount.value = settings.particleCount;
+                $.particleCountValue.textContent = settings.particleCount;
+                $.controlMotionIntensity.value = settings.motionIntensity;
+                $.motionIntensityValue.textContent = parseFloat(settings.motionIntensity).toFixed(1);
+                $.controlAudio.checked = settings.audio;
+                $.controlAudio.previousElementSibling.textContent = `Audio Cues (${settings.audio ? 'On' : 'Muted'})`;
+            },
+            
+            exportSettings() {
+                const settingsString = JSON.stringify(settings, null, 2);
+                const blob = new Blob([settingsString], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'artsite-settings.json';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                playAudioCue();
+            },
+            
+            importSettings(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    try {
+                        const imported = JSON.parse(event.target.result);
+                        // Re-load and apply new settings
+                        loadSettings(imported);
+                        ThemeManager.applyTheme(settings.theme);
+                        AccessibilityManager.applyMotion(settings.motion);
+                        ParticleSystem.setParticleCount(settings.particleCount);
+                        ParticleSystem.setMotionIntensity(settings.motionIntensity);
+                        AudioManager.setMuted(!settings.audio);
+                        this.updateControlValues();
+                        playAudioCue();
+                    } catch (err) {
+                        console.error('Failed to import settings:', err);
+                        alert('Error: Could not import settings. File may be corrupt.');
+                    }
+                };
+                reader.readAsText(file);
+                // Reset input
+                e.target.value = null;
+            },
+            
+            resetSettings() {
+                if (confirm('Are you sure you want to reset all settings to their defaults?')) {
+                    loadSettings(DEFAULT_SETTINGS); // Load defaults
+                    ThemeManager.applyTheme(settings.theme);
+                    AccessibilityManager.applyMotion(settings.motion);
+                    ParticleSystem.setParticleCount(settings.particleCount);
+                    ParticleSystem.setMotionIntensity(settings.motionIntensity);
+                    AudioManager.setMuted(!settings.audio);
+                    this.updateControlValues();
+                    saveSettings(); // Overwrite localStorage with defaults
+                    playAudioCue();
+                }
+            }
+        };
+
+        // ========== 10. GALLERY & MODAL MANAGER ==========
+
+        const GalleryManager = {
+            focusableElements: 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+            
+            init() {
+                this.populateGallery();
+                $.modalCloseBtn.addEventListener('click', this.closeModal.bind(this));
+                $.modal.addEventListener('click', (e) => {
+                    if (e.target === $.modal) this.closeModal();
+                });
+                $.modalPrevBtn.addEventListener('click', this.showPrev.bind(this));
+                $.modalNextBtn.addEventListener('click', this.showNext.bind(this));
+                
+                window.addEventListener('keydown', this.onKeydown.bind(this));
+            },
+            
+            populateGallery() {
+                $.galleryGrid.innerHTML = '';
+                GALLERY_ITEMS.forEach((item, index) => {
+                    const card = document.createElement('article');
+                    card.className = 'gallery-card';
+                    card.tabIndex = 0;
+                    card.setAttribute('role', 'button');
+                    card.setAttribute('aria-label', `View details for ${item.title}`);
+                    card.dataset.index = index;
+                    
+                    const thumbnailSVG = ArtGenerator.generateThumbnailSVG(item.id, item.title);
+                    
+                    card.innerHTML = `
+                        <div class="gallery-card__thumbnail">
+                            <img src="${thumbnailSVG}" alt="Procedural art for ${item.title}">
+                        </div>
+                        <div class="gallery-card__content">
+                            <h3>${item.title}</h3>
+                            <div class="gallery-card__tags">
+                                ${item.tags.map(tag => `<span class="gallery-card__tag">${tag}</span>`).join('')}
+                            </div>
+                        </div>
+                    `;
+                    
+                    card.addEventListener('click', () => this.openModal(index));
+                    card.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter' || e.key === ' ') this.openModal(index);
+                    });
+                    
+                    $.galleryGrid.appendChild(card);
+                });
+            },
+            
+            openModal(index) {
+                state.lastFocus = document.activeElement;
+                state.modalIndex = index;
+                const item = GALLERY_ITEMS[index];
+                
+                $.modalTitle.textContent = item.title;
+                $.modalDescription.textContent = item.description;
+                $.modalTags.innerHTML = item.tags.map(tag => `<span class="gallery-card__tag">${tag}</span>`).join('');
+                
+                $.modal.classList.add('is-open');
+                $.modal.setAttribute('aria-hidden', 'false');
+                
+                // Defer canvas drawing for smooth transition
+                requestAnimationFrame(() => {
+                    ArtGenerator.drawModalArt($.modalArtCanvas, item.id + item.tags.length);
+                });
+                
+                this.trapFocus();
+                playAudioCue(120);
+            },
+            
+            closeModal() {
+                $.modal.classList.remove('is-open');
+                $.modal.setAttribute('aria-hidden', 'true');
+                
+                if (state.lastFocus) {
+                    state.lastFocus.focus();
+                }
+                playAudioCue(100);
+            },
+            
+            showPrev() {
+                const newIndex = (state.modalIndex - 1 + GALLERY_ITEMS.length) % GALLERY_ITEMS.length;
+                this.openModal(newIndex);
+            },
+            
+            showNext() {
+                const newIndex = (state.modalIndex + 1) % GALLERY_ITEMS.length;
+                this.openModal(newIndex);
+            },
+            
+            onKeydown(e) {
+                if (!$.modal.classList.contains('is-open')) return;
+                
+                switch (e.key) {
+                    case 'Escape':
+                        this.closeModal();
+                        break;
+                    case 'ArrowLeft':
+                        this.showPrev();
+                        break;
+                    case 'ArrowRight':
+                        this.showNext();
+                        break;
+                    case 'Tab':
+                        this.trapFocus(e);
+                        break;
+                }
+            },
+            
+            trapFocus(e = null) {
+                const focusable = $.modalContent.querySelectorAll(this.focusableElements);
+                const first = focusable[0];
+                const last = focusable[focusable.length - 1];
+                
+                if (e) { // Tab key pressed
+                    if (e.shiftKey) { // Shift + Tab
+                        if (document.activeElement === first) {
+                            last.focus();
+                            e.preventDefault();
+                        }
+                    } else { // Tab
+                        if (document.activeElement === last) {
+                            first.focus();
+                            e.preventDefault();
+                        }
+                    }
+                } else { // On modal open
+                    // Find first focusable, which is likely the Prev button
+                    $.modalPrevBtn.focus();
+                }
+            }
+        };
+
+        // ========== 11. PROCEDURAL ART GENERATOR ==========
+
+        const ArtGenerator = {
+            // Simple seeded random number generator
+            seededRandom(seed) {
+                let s = Math.sin(seed) * 10000;
+                return s - Math.floor(s);
+            },
+
+            generateThumbnailSVG(id, title) {
+                // Create a deterministic seed
+                const seed = id + title.length;
+                let rand = (min, max) => this.seededRandom(seed + min + (max * 10)) * (max - min) + min;
+
+                const styles = getComputedStyle($.html);
+                const colors = [
+                    styles.getPropertyValue('--accent-1').trim(),
+                    styles.getPropertyValue('--accent-2').trim(),
+                    styles.getPropertyValue('--text-muted').trim(),
+                    styles.getPropertyValue('--surface').trim(),
+                ];
+                
+                let svg = `<svg width="300" height="200" viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" style="background-color: ${styles.getPropertyValue('--bg').trim()}">`;
+                
+                const numShapes = Math.floor(rand(5, 15));
+                for (let i = 0; i < numShapes; i++) {
+                    const type = rand(0, 10);
+                    const color = colors[Math.floor(rand(0, colors.length))];
+                    const opacity = rand(0.2, 0.8);
+                    
+                    if (type < 5) { // Rect
+                        svg += `<rect 
+                                    x="${rand(-20, 280)}" 
+                                    y="${rand(-20, 180)}" 
+                                    width="${rand(20, 100)}" 
+                                    height="${rand(20, 100)}" 
+                                    fill="${color}" 
+                                    opacity="${opacity}" 
+                                    transform="rotate(${rand(-45, 45)} ${rand(0, 300)} ${rand(0, 200)})"
+                                />`;
+                    } else { // Circle
+                        svg += `<circle 
+                                    cx="${rand(0, 300)}" 
+                                    cy="${rand(0, 200)}" 
+                                    r="${rand(10, 60)}" 
+                                    fill="${color}" 
+                                    opacity="${opacity}" 
+                                />`;
+                    }
+                }
+                svg += '</svg>';
+                
+                return `data:image/svg+xml;base64,${btoa(svg)}`;
+            },
+            
+            drawModalArt(canvas, seed) {
+                const ctx = canvas.getContext('2d');
+                const dpr = Math.min(window.devicePixelRatio, 2);
+                const width = canvas.clientWidth;
+                const height = canvas.clientHeight;
+                
+                canvas.width = width * dpr;
+                canvas.height = height * dpr;
+                ctx.scale(dpr, dpr);
+                
+                let rand = (min, max) => this.seededRandom(seed++) * (max - min) + min;
+
+                const styles = getComputedStyle($.html);
+                const bg = styles.getPropertyValue('--bg').trim();
+                const colors = [
+                    styles.getPropertyValue('--accent-1').trim(),
+                    styles.getPropertyValue('--accent-2').trim(),
+                    styles.getPropertyValue('--text-muted').trim(),
+                    styles.getPropertyValue('--text').trim(),
+                ];
+
+                // Clear canvas
+                ctx.fillStyle = bg;
+                ctx.fillRect(0, 0, width, height);
+                
+                // Draw something more complex than the thumbnail
+                // e.g., a "flow field" of lines
+                ctx.lineWidth = 1.5;
+                const gridStep = 20;
+                
+                for (let x = 0; x < width; x += gridStep) {
+                    for (let y = 0; y < height; y += gridStep) {
+                        ctx.beginPath();
+                        const angle = rand(0, Math.PI * 2) * (x / width);
+                        const length = rand(5, gridStep * 0.8);
+                        
+                        ctx.strokeStyle = colors[Math.floor(rand(0, colors.length))];
+                        ctx.globalAlpha = rand(0.3, 0.9);
+                        
+                        ctx.moveTo(x, y);
+                        ctx.lineTo(x + Math.cos(angle) * length, y + Math.sin(angle) * length);
+                        ctx.stroke();
+                    }
+                }
+                ctx.globalAlpha = 1.0;
+            }
+        };
+
+        // ========== 12. FORM MANAGER ==========
+
+        const FormManager = {
+            init() {
+                $.contactForm.addEventListener('submit', this.handleSubmit.bind(this));
+                $.copyEmailBtn.addEventListener('click', () => this.copyToClipboard('mailto'));
+                $.copyMessageBtn.addEventListener('click', () => this.copyToClipboard('text'));
+                
+                // Add live validation feedback
+                const inputs = $.contactForm.querySelectorAll('.form-input, .form-textarea');
+                inputs.forEach(input => {
+                    input.addEventListener('blur', this.validateInput.bind(this));
+                    input.addEventListener('input', this.validateInput.bind(this));
+                });
+            },
+            
+            validateInput(e) {
+                const input = e.target;
+                if (input.validity.valid) {
+                    input.classList.remove('is-invalid');
+                } else {
+                    input.classList.add('is-invalid');
+                }
+            },
+            
+            validateForm() {
+                let isValid = true;
+                const inputs = $.contactForm.querySelectorAll('.form-input, .form-textarea');
+                inputs.forEach(input => {
+                    if (!input.validity.valid) {
+                        isValid = false;
+                        input.classList.add('is-invalid');
+                    } else {
+                        input.classList.remove('is-invalid');
+                    }
+                });
+                return isValid;
+            },
+
+            handleSubmit(e) {
+                e.preventDefault();
+                
+                if (!this.validateForm()) {
+                    this.showFormMessage('Please correct the errors in the form.', 'error');
+                    return;
+                }
+                
+                const formData = new FormData($.contactForm);
+                const name = formData.get('name');
+                const email = formData.get('email');
+                const message = formData.get('message');
+                
+                const fileContent = `
+                    From: ${name} (${email})
+                    Date: ${new Date().toISOString()}
+                    ------------------------------------
+                    
+                    ${message}
+                `;
+                
+                try {
+                    const blob = new Blob([fileContent], { type: 'text/plain' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `message-from-${name.replace(/ /g, '_')}.txt`;
+                    
+                    this.showFormMessage(`
+                        Submission successful! Your message is downloading.
+                        (Note: This is a demo. No data was sent.)
+                        <a href="${url}" download="message.txt">Download again</a>
+                    `, 'success');
+                    
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                    
+                    $.contactForm.reset();
+                    // Clear validation state
+                    $.contactForm.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+                    
+                } catch (err) {
+                    console.error('Form submission error:', err);
+                    this.showFormMessage('An error occurred. Could not create download.', 'error');
+                }
+            },
+            
+            copyToClipboard(type) {
+                const formData = new FormData($.contactForm);
+                const name = formData.get('name') || 'Visitor';
+                const message = formData.get('message') || 'I have a question.';
+                const myEmail = 'hello@artisan.io'; // Placeholder
+                
+                let textToCopy;
+                let feedback;
+                
+                if (type === 'mailto') {
+                    const subject = `Message from ${name}`;
+                    textToCopy = `mailto:${myEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
+                    feedback = 'Mailto link copied!';
+                } else {
+                    textToCopy = `
+                        From: ${name}
+                        Message: ${message}
+                    `;
+                    feedback = 'Message copied!';
+                }
+                
+                // Use temp textarea to copy
+                const tempArea = document.createElement('textarea');
+                tempArea.value = textToCopy;
+                tempArea.style.position = 'absolute';
+                tempArea.style.left = '-9999px';
+                document.body.appendChild(tempArea);
+                tempArea.select();
+                try {
+                    // Use execCommand as requested for iframe compatibility
+                    document.execCommand('copy');
+                    this.showFormMessage(feedback, 'success');
+                } catch (err) {
+                    console.error('Copy failed:', err);
+                    this.showFormMessage('Could not copy to clipboard.', 'error');
+                }
+                document.body.removeChild(tempArea);
+            },
+            
+            showFormMessage(message, type) {
+                $.formMessageContainer.innerHTML = message;
+                $.formMessageContainer.className = `form-message is-${type}`;
+                $.formMessageContainer.style.display = 'block';
+                
+                // Clear message after 5 seconds
+                setTimeout(() => {
+                    $.formMessageContainer.style.display = 'none';
+                }, 5000);
+            }
+        };
+
+        // ========== 13. AUDIO MANAGER (Extra) ==========
+
+        const AudioManager = {
+            init() {
+                try {
+                    window.AudioContext = window.AudioContext || window.webkitAudioContext;
+                    if (window.AudioContext) {
+                        state.audioCtx = new AudioContext();
+                        state.mainGain = state.audioCtx.createGain();
+                        state.mainGain.connect(state.audioCtx.destination);
+                        this.setMuted(!settings.audio);
+                    } else {
+                        console.warn('Web Audio API not supported.');
+                        $.controlAudio.disabled = true;
+                    }
+                } catch (e) {
+                    console.error('Could not initialize AudioContext:', e);
+                    $.controlAudio.disabled = true;
+                }
+            },
+            
+            setMuted(muted) {
+                if (!state.mainGain) return;
+                state.mainGain.gain.setValueAtTime(muted ? 0 : 0.1, state.audioCtx.currentTime);
+            }
+        };
+        
+        /**
+         * Plays a simple audio cue if enabled.
+         */
+        function playAudioCue(freq = 150, type = 'sine') {
+            if (!settings.audio || !state.audioCtx || state.audioCtx.state === 'suspended') {
+                if (state.audioCtx && state.audioCtx.state === 'suspended') {
+                    state.audioCtx.resume();
+                }
+                return;
+            }
+            
+            try {
+                const osc = state.audioCtx.createOscillator();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, state.audioCtx.currentTime);
+                osc.connect(state.mainGain);
+                osc.start();
+                osc.stop(state.audioCtx.currentTime + 0.1);
+            } catch (e) {
+                console.warn('Could not play audio cue:', e);
+            }
+        }
+
+        // ========== 14. DEBUG MANAGER (Extra) ==========
+
+        const DebugManager = {
+            updateFPS(timestamp) {
+                if (!state.lastFrameTime) {
+                    state.lastFrameTime = timestamp;
+                    return;
+                }
+                
+                const delta = timestamp - state.lastFrameTime;
+                state.lastFrameTime = timestamp;
+                state.fps = 1000 / delta;
+                
+                state.frameCount++;
+                if (state.frameCount % 20 === 0) { // Update display less frequently
+                    $.debugOverlay.innerHTML = `
+                        FPS: ${state.fps.toFixed(1)}<br>
+                        Particles: ${ParticleSystem.particles.length}<br>
+                        Theme: ${settings.theme}<br>
+                        Motion: ${settings.motion}
+                    `;
+                }
+            }
+        };
+
+        // ========== 15. HELPERS ==========
+        
+        const Helpers = {
+            /**
+             * Throttles a function.
+             */
+            throttle(func, limit) {
+                let inThrottle;
+                return function() {
+                    const args = arguments;
+                    const context = this;
+                    if (!inThrottle) {
+                        func.apply(context, args);
+                        inThrottle = true;
+                        setTimeout(() => inThrottle = false, limit);
+                    }
+                };
+            }
+        };
+
+        // ========== GO! ==========
+        
+        // Defer heavy init until after first paint
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                requestIdleCallback ? requestIdleCallback(init) : setTimeout(init, 1);
+            });
+        } else {
+            requestIdleCallback ? requestIdleCallback(init) : setTimeout(init, 1);
+        }
+
+    })();
+    </script>
+
+</body>
+</html>
