@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS | Hyper-Marketplace System</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- React & ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
+    <!-- Babel -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Fira+Code:wght@300;400;500;600&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=Roboto+Slab:wght@100;300;400;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                        orbitron: ['Orbitron', 'sans-serif'], // PlayStation
+                        rajdhani: ['Rajdhani', 'sans-serif'], // Xbox
+                        bebas: ['Bebas Neue', 'sans-serif'], // Netflix
+                        roboto: ['Roboto Slab', 'serif'], // Steam
+                        grotesk: ['Space Grotesk', 'sans-serif'], // Spotify
+                    },
+                    colors: {
+                        neutral: { 950: '#050505', 900: '#0a0a0a', 800: '#171717' },
+                        ps: { blue: '#0041FF', dark: '#001a66', accent: '#0070d1' },
+                        xbox: { green: '#107C10', dark: '#0b3d0b', neon: '#52ff52' },
+                        steam: { dark: '#171a21', blue: '#66c0f4', grey: '#1b2838', accent: '#c7d5e0' },
+                        spotify: { green: '#1DB954', dark: '#191414', black: '#121212' },
+                        netflix: { red: '#E50914', dark: '#141414', black: '#000000' },
+                        apple: { grey: '#F5F5F7', dark: '#1d1d1f', titanium: '#8E8E93' }
+                    },
+                    animation: {
+                        'spin-slow': 'spin 12s linear infinite',
+                        'spin-reverse-slow': 'spin 15s linear infinite reverse',
+                        'float': 'float 6s ease-in-out infinite',
+                        'radar-sweep': 'radar 4s linear infinite',
+                        'rise': 'rise 8s infinite ease-in',
+                        'equalizer': 'equalizer 0.8s infinite ease-in-out alternate',
+                        'aurora': 'aurora 10s infinite alternate',
+                        'flicker': 'flicker 0.15s infinite',
+                        'grain': 'grain 8s steps(10) infinite',
+                        'pulse-glow': 'pulseGlow 2s infinite',
+                        'glitch': 'glitch 1s linear infinite',
+                        'scan': 'scan 3s linear infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        radar: {
+                            '0%': { transform: 'rotate(0deg)' },
+                            '100%': { transform: 'rotate(360deg)' },
+                        },
+                        rise: {
+                            '0%': { bottom: '-20px', transform: 'translateX(0) scale(0.5)', opacity: '0' },
+                            '20%': { opacity: '0.8' },
+                            '100%': { bottom: '100%', transform: 'translateX(-20px) scale(1.5)', opacity: '0' },
+                        },
+                        equalizer: {
+                            '0%': { height: '10%' },
+                            '100%': { height: '100%' },
+                        },
+                        aurora: {
+                            '0%': { backgroundPosition: '0% 50%' },
+                            '100%': { backgroundPosition: '100% 50%' },
+                        },
+                        flicker: {
+                            '0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100%': { opacity: '0.99', filter: 'drop-shadow(0 0 1px rgba(255,255,255,0.1))' },
+                            '20%, 21.999%, 63%, 63.999%, 65%, 69.999%': { opacity: '0.4', filter: 'none' },
+                        },
+                        grain: {
+                            '0%, 100%': { transform: 'translate(0, 0)' },
+                            '10%': { transform: 'translate(-5%, -10%)' },
+                            '20%': { transform: 'translate(-15%, 5%)' },
+                            '30%': { transform: 'translate(7%, -25%)' },
+                            '40%': { transform: 'translate(-5%, 25%)' },
+                            '50%': { transform: 'translate(-15%, 10%)' },
+                            '60%': { transform: 'translate(15%, 0%)' },
+                            '70%': { transform: 'translate(0%, 15%)' },
+                            '80%': { transform: 'translate(3%, 35%)' },
+                            '90%': { transform: 'translate(-10%, 10%)' },
+                        },
+                        pulseGlow: {
+                            '0%, 100%': { boxShadow: '0 0 10px rgba(0, 255, 0, 0.2)' },
+                            '50%': { boxShadow: '0 0 25px rgba(0, 255, 0, 0.6)' },
+                        },
+                        scan: {
+                            '0%': { top: '-10%' },
+                            '100%': { top: '110%' },
+                        },
+                        glitch: {
+                            '2%, 64%': { transform: 'translate(2px,0) skew(0deg)' },
+                            '4%, 60%': { transform: 'translate(-2px,0) skew(0deg)' },
+                            '62%': { transform: 'translate(0,0) skew(5deg)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Base Reset */
+        body {
+            background-color: #050505;
+            color: white;
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- Scrollbar --- */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; border: 1px solid #000; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
+
+        /* --- Global Utility Animations --- */
+        .animate-delay-100 { animation-delay: 100ms; }
+        .animate-delay-200 { animation-delay: 200ms; }
+        .animate-delay-300 { animation-delay: 300ms; }
+        .animate-delay-500 { animation-delay: 500ms; }
+        .animate-delay-700 { animation-delay: 700ms; }
+        .animate-delay-1000 { animation-delay: 1000ms; }
+
+        /* --- PlayStation Theme: "Cyber-Core" --- */
+        .theme-ps .scanlines {
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,65,255,0.1) 50%, rgba(0,65,255,0.1));
+            background-size: 100% 4px;
+            position: absolute; inset: 0; pointer-events: none; z-index: 2;
+        }
+        .theme-ps .matrix-rain {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><text x="10" y="30" fill="rgba(0, 65, 255, 0.2)" font-family="monospace" font-size="20">1</text><text x="50" y="70" fill="rgba(0, 65, 255, 0.2)" font-family="monospace" font-size="20">0</text><text x="80" y="20" fill="rgba(0, 65, 255, 0.2)" font-family="monospace" font-size="14">X</text></svg>');
+            animation: rain 15s linear infinite;
+        }
+        @keyframes rain { 0% { background-position: 0% 0%; } 100% { background-position: 0% 100%; } }
+
+        /* --- Xbox Theme: "Tactical Green" --- */
+        .theme-xbox .hex-grid {
+            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h40v40H0V0zm20 20h20v20H20V20zM0 20h20v20H0V20z' fill='%23107C10' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+            mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
+        }
+        .theme-xbox .radar-line {
+            background: linear-gradient(90deg, transparent 50%, #52ff52 100%);
+            border-right: 1px solid #52ff52;
+            box-shadow: 0 0 10px #52ff52;
+        }
+
+        /* --- Steam Theme: "Industrial Vapor" --- */
+        .theme-steam .fog {
+            background: radial-gradient(circle, rgba(102,192,244,0.1) 0%, transparent 70%);
+            filter: blur(20px);
+        }
+        .theme-steam .gears {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2366c0f4' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        /* --- Spotify Theme: "Sonic Wave" --- */
+        .theme-spotify .eq-bar {
+            width: 8px;
+            background: #1DB954;
+            border-radius: 4px;
+            animation: equalizer 0.8s ease-in-out infinite;
+        }
+
+        /* --- Netflix Theme: "Cinema Darkroom" --- */
+        .theme-netflix .grain-overlay {
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.1'/%3E%3C/svg%3E");
+            animation: grain 6s steps(10) infinite;
+        }
+        .theme-netflix .vignette {
+            background: radial-gradient(circle at center, transparent 40%, #000000 100%);
+        }
+
+        /* --- Apple Theme: "Titanium Flow" --- */
+        .theme-apple .mesh {
+            background-color: #000000;
+            background-image: 
+                radial-gradient(at 80% 0%, hsla(189,100%,56%,0.1) 0px, transparent 50%),
+                radial-gradient(at 0% 50%, hsla(355,100%,93%,0.1) 0px, transparent 50%),
+                radial-gradient(at 80% 50%, hsla(340,100%,76%,0.1) 0px, transparent 50%);
+            filter: blur(60px);
+            animation: aurora 20s infinite alternate;
+        }
+        .apple-glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        /* --- Glitch Wrapper --- */
+        .glitch-wrapper { position: relative; display: inline-block; }
+        .glitch-wrapper::before, .glitch-wrapper::after {
+            content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.8;
+        }
+        .glitch-wrapper::before { color: #f0f; clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%); transform: translate(-2px, -2px); animation: glitch 2s infinite; }
+        .glitch-wrapper::after { color: #0ff; clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%); transform: translate(2px, 2px); animation: glitch 2s infinite reverse; }
+
+        /* --- Global Noise for Dashboard --- */
+        .bg-noise { background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E"); }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef, useMemo } = React;
+
+        // ==========================================
+        // 1. ICON SYSTEM (Inline SVG for portability)
+        // ==========================================
+        const Icon = ({ children, className, size = 24, ...props }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} {...props}>{children}</svg>
+        );
+        const Icons = {
+            Home: (p) => <Icon {...p}><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></Icon>,
+            Gamepad: (p) => <Icon {...p}><line x1="6" x2="10" y1="12" y2="12"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="15" x2="15.01" y1="13" y2="13"/><line x1="18" x2="18.01" y1="11" y2="11"/><rect width="20" height="12" x="2" y="6" rx="2"/></Icon>,
+            CreditCard: (p) => <Icon {...p}><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></Icon>,
+            Settings: (p) => <Icon {...p}><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></Icon>,
+            LogOut: (p) => <Icon {...p}><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></Icon>,
+            Menu: (p) => <Icon {...p}><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></Icon>,
+            X: (p) => <Icon {...p}><path d="M18 6 6 18"/><path d="m6 6 12 12"/></Icon>,
+            ShoppingBag: (p) => <Icon {...p}><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></Icon>,
+            TrendingUp: (p) => <Icon {...p}><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></Icon>,
+            Search: (p) => <Icon {...p}><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></Icon>,
+            Bell: (p) => <Icon {...p}><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></Icon>,
+            Zap: (p) => <Icon {...p}><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></Icon>,
+            User: (p) => <Icon {...p}><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></Icon>,
+            ChevronRight: (p) => <Icon {...p}><path d="m9 18 6-6-6-6"/></Icon>,
+            Activity: (p) => <Icon {...p}><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></Icon>,
+            ArrowLeft: (p) => <Icon {...p}><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></Icon>,
+            ShieldCheck: (p) => <Icon {...p}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="m9 12 2 2 4-4"/></Icon>,
+            Download: (p) => <Icon {...p}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></Icon>,
+            Star: (p) => <Icon {...p}><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></Icon>,
+            Music: (p) => <Icon {...p}><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></Icon>,
+            Film: (p) => <Icon {...p}><rect width="20" height="20" x="2" y="2" rx="2.18" ry="2.18"/><line x1="7" x2="7" y1="2" y2="22"/><line x1="17" x2="17" y1="2" y2="22"/><line x1="2" x2="22" y1="12" y2="12"/><line x1="2" x2="7" y1="7" y2="7"/><line x1="2" x2="7" y1="17" y2="17"/><line x1="17" x2="22" y1="17" y2="17"/><line x1="17" x2="22" y1="7" y2="7"/></Icon>,
+            Cloud: (p) => <Icon {...p}><path d="M17.5 19c0-3.037-2.463-5.5-5.5-5.5S6.5 15.963 6.5 19"/><path d="M12 13.5V4l7 4 3-2-2 7.5h-5.5"/></Icon>,
+            Cpu: (p) => <Icon {...p}><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3"/><path d="M15 1v3"/><path d="M9 20v3"/><path d="M15 20v3"/><path d="M20 9h3"/><path d="M20 14h3"/><path d="M1 9h3"/><path d="M1 14h3"/></Icon>,
+            Lock: (p) => <Icon {...p}><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></Icon>,
+            AlertCircle: (p) => <Icon {...p}><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></Icon>
+        };
+
+        // ==========================================
+        // 2. CONFIGURATION & DATA (The "Brain")
+        // ==========================================
+        
+        // --- Product Metadata ---
+        const PRODUCTS = [
+            { id: 1, name: 'PlayStation Store', value: '$50', price: 48.50, stock: 86, color: 'text-ps-blue', bg: 'bg-ps-blue/10', border: 'group-hover:border-ps-blue/50', icon: 'PS' },
+            { id: 2, name: 'Xbox Live Gold', value: '$25', price: 24.00, stock: 93, color: 'text-xbox-green', bg: 'bg-xbox-green/10', border: 'group-hover:border-xbox-green/50', icon: 'XB' },
+            { id: 3, name: 'Steam Wallet', value: '$100', price: 98.00, stock: 81, color: 'text-steam-blue', bg: 'bg-steam-blue/10', border: 'group-hover:border-steam-blue/50', icon: 'ST' },
+            { id: 4, name: 'Spotify Premium', value: '1 Year', price: 90.00, stock: 96, color: 'text-spotify-green', bg: 'bg-spotify-green/10', border: 'group-hover:border-spotify-green/50', icon: 'SP' },
+            { id: 5, name: 'Netflix', value: '$30', price: 29.50, stock: 45, color: 'text-netflix-red', bg: 'bg-netflix-red/10', border: 'group-hover:border-netflix-red/50', icon: 'NF' },
+            { id: 6, name: 'Apple Store', value: '$50', price: 49.00, stock: 92, color: 'text-gray-400', bg: 'bg-gray-500/10', border: 'group-hover:border-gray-500/50', icon: 'AP' },
+        ];
+
+        // --- Simulated Transaction History ---
+        const TRANSACTIONS = [
+            { id: 8933, item: 'PlayStation $50', date: 'Today, 10:42 AM', status: 'Delivered', amount: '-$48.50', type: 'out' },
+            { id: 8932, item: 'Wallet Top-up', date: 'Yesterday, 4:00 PM', status: 'Success', amount: '+$100.00', type: 'in' },
+            { id: 8931, item: 'Steam Wallet $20', date: '28 Feb, 2024', status: 'Delivered', amount: '-$19.50', type: 'out' },
+            { id: 8930, item: 'Netflix Basic', date: '25 Feb, 2024', status: 'Processing', amount: '-$9.99', type: 'out' },
+        ];
+
+        // --- System Logs ---
+        const UPDATES = [
+            { id: 1, title: 'Summer Sale', msg: '5% off all PSN cards.', time: '2m ago', urgent: true },
+            { id: 2, title: 'System Maint.', msg: 'Crypto paused for 1h.', time: '10m ago', urgent: false },
+            { id: 3, title: 'Traffic Spike', msg: 'Rerouting nodes...', time: '45m ago', urgent: false },
+        ];
+
+        const SELLERS = [
+            { name: 'GameStop Digital', status: 'Online', color: 'bg-green-500' },
+            { name: 'BestBuy Codes', status: 'Away', color: 'bg-yellow-500' },
+            { name: 'Amazon Direct', status: 'Online', color: 'bg-green-500' },
+        ];
+
+        // --- THEME DEFINITIONS (The "Soul") ---
+        const THEMES = {
+            1: { // PlayStation
+                id: 'playstation',
+                title: "PLAYSTATION",
+                subtitle: "NETWORK CARD",
+                font: 'font-orbitron',
+                colors: { primary: 'text-ps-blue', bg: 'bg-ps-blue', border: 'border-ps-blue', accent: 'text-white' },
+                desc: "Your gateway to the PlayStation Universe. Fund your wallet to download the latest games, DLC, and videos, as well as stream movies, music, and more.",
+                specs: [
+                    { label: 'Platform', val: 'PS4, PS5, Vita' },
+                    { label: 'Region', val: 'North America (US)' },
+                    { label: 'Expiry', val: 'None' },
+                    { label: 'Activation', val: 'Instant Digital' }
+                ],
+                reviews: [
+                    { user: 'Kratos_God88', rating: 5, text: "Instant delivery. I was back in the game in seconds." },
+                    { user: 'SpiderMan2099', rating: 5, text: "Best price I've found online. The interface is slick." }
+                ],
+                // Background Component
+                Bg: () => (
+                    <div className="absolute inset-0 z-0 pointer-events-none theme-ps overflow-hidden bg-[#000a1f]">
+                        <div className="matrix-rain absolute inset-0 opacity-20"></div>
+                        <div className="scanlines absolute inset-0 z-10 opacity-10"></div>
+                        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-black via-transparent to-ps-blue/10"></div>
+                        {/* Floating Geomety */}
+                        <div className="absolute top-20 right-20 w-32 h-32 border border-ps-blue/20 rounded-full animate-pulse opacity-50"></div>
+                        <div className="absolute bottom-40 left-20 w-64 h-64 border border-ps-blue/10 rounded-full animate-spin-slow opacity-30 border-dashed"></div>
+                    </div>
+                )
+            },
+            2: { // Xbox
+                id: 'xbox',
+                title: "XBOX LIVE",
+                subtitle: "GOLD MEMBERSHIP",
+                font: 'font-rajdhani',
+                colors: { primary: 'text-xbox-green', bg: 'bg-xbox-green', border: 'border-xbox-green', accent: 'text-xbox-neon' },
+                desc: "Join the best community of gamers on the fastest, most reliable multiplayer network. Get free games every month and up to 50-75% store discounts.",
+                specs: [
+                    { label: 'Platform', val: 'Xbox One, Series X|S' },
+                    { label: 'Region', val: 'Global Key' },
+                    { label: 'Type', val: 'Subscription' },
+                    { label: 'Speed', val: '< 5 Seconds' }
+                ],
+                reviews: [
+                    { user: 'MasterChief117', rating: 5, text: "Tactical reload of my subscription. Fast and reliable." },
+                    { user: 'Cortana_AI', rating: 4, text: "Efficient processing. System functional." }
+                ],
+                Bg: () => (
+                    <div className="absolute inset-0 z-0 pointer-events-none theme-xbox overflow-hidden bg-black">
+                        <div className="hex-grid absolute inset-0 opacity-20"></div>
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120vw] h-[120vw] radar-line animate-radar-sweep rounded-full opacity-10 blur-xl"></div>
+                        {/* Target Reticles */}
+                        <div className="absolute top-1/4 left-1/4 w-8 h-8 border-t-2 border-l-2 border-xbox-green opacity-50"></div>
+                        <div className="absolute bottom-1/4 right-1/4 w-8 h-8 border-b-2 border-r-2 border-xbox-green opacity-50"></div>
+                        {/* Rolling Scan Line */}
+                        <div className="absolute top-0 left-0 w-full h-1 bg-xbox-neon shadow-[0_0_20px_#52ff52] animate-scan opacity-30"></div>
+                    </div>
+                )
+            },
+            3: { // Steam
+                id: 'steam',
+                title: "STEAM",
+                subtitle: "WALLET CODE",
+                font: 'font-roboto',
+                colors: { primary: 'text-steam-blue', bg: 'bg-steam-blue', border: 'border-steam-blue', accent: 'text-steam-accent' },
+                desc: "Instant access to thousands of games. Enjoy exclusive deals, cloud saves, and automatic game updates. Create and share content.",
+                specs: [
+                    { label: 'Client', val: 'Steam PC/Mac/Linux' },
+                    { label: 'Region', val: 'Global' },
+                    { label: 'Expiry', val: 'Never' },
+                    { label: 'Format', val: 'Alphanumeric' }
+                ],
+                reviews: [
+                    { user: 'GabeN_Fan', rating: 5, text: "Ready for the Summer Sale. My wallet is crying but I am happy." },
+                    { user: 'Freeman', rating: 5, text: "..." }
+                ],
+                Bg: () => (
+                    <div className="absolute inset-0 z-0 pointer-events-none theme-steam overflow-hidden bg-[#101217]">
+                        <div className="fog absolute inset-0 opacity-40 animate-pulse-glow"></div>
+                        <div className="gears absolute top-0 right-0 w-full h-full opacity-5 animate-spin-slow"></div>
+                        {/* Floating Particles */}
+                        {[...Array(20)].map((_,i) => (
+                            <div key={i} className="absolute w-1 h-1 bg-steam-blue rounded-full opacity-40 animate-rise" 
+                                style={{left: `${Math.random()*100}%`, animationDelay: `${Math.random()*5}s`, animationDuration: `${5+Math.random()*5}s`}}></div>
+                        ))}
+                        <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-[#171a21] to-transparent"></div>
+                    </div>
+                )
+            },
+            4: { // Spotify
+                id: 'spotify',
+                title: "SPOTIFY",
+                subtitle: "PREMIUM AUDIO",
+                font: 'font-grotesk',
+                colors: { primary: 'text-spotify-green', bg: 'bg-spotify-green', border: 'border-spotify-green', accent: 'text-white' },
+                desc: "Play millions of songs ad-free, on-demand, and offline. Upgrade your listening experience with better sound quality.",
+                specs: [
+                    { label: 'Plan', val: 'Individual Premium' },
+                    { label: 'Duration', val: '1 / 3 / 12 Months' },
+                    { label: 'Audio', val: '320kbps' },
+                    { label: 'Device', val: 'All' }
+                ],
+                reviews: [
+                    { user: 'Audiophile99', rating: 5, text: "Music to my ears. Literally. Instant code." },
+                    { user: 'DJ_Spin', rating: 5, text: "Keeps the party going without ads." }
+                ],
+                Bg: () => (
+                    <div className="absolute inset-0 z-0 pointer-events-none theme-spotify overflow-hidden bg-[#121212] flex items-end justify-center">
+                        <div className="absolute inset-0 bg-gradient-to-b from-black via-[#121212] to-[#121212]"></div>
+                        {/* Simulated Visualizer */}
+                        <div className="flex gap-1 items-end w-full h-1/2 opacity-20 px-10">
+                            {[...Array(40)].map((_,i) => (
+                                <div key={i} className="eq-bar flex-1 bg-spotify-green rounded-t-sm" style={{animationDelay: `${i*0.05}s`, height: `${Math.random()*50 + 10}%`}}></div>
+                            ))}
+                        </div>
+                        {/* Floating Notes/Circles */}
+                        <div className="absolute top-1/3 left-1/4 w-64 h-64 bg-spotify-green blur-[100px] opacity-10 animate-pulse"></div>
+                    </div>
+                )
+            },
+            5: { // Netflix
+                id: 'netflix',
+                title: "NETFLIX",
+                subtitle: "GIFT SUBSCRIPTION",
+                font: 'font-bebas',
+                colors: { primary: 'text-netflix-red', bg: 'bg-netflix-red', border: 'border-netflix-red', accent: 'text-gray-200' },
+                desc: "Watch TV shows and movies anytime, anywhere. Personalized for you. Join the streaming revolution.",
+                specs: [
+                    { label: 'Service', val: 'Streaming' },
+                    { label: 'Quality', val: 'HD / Ultra HD' },
+                    { label: 'Screens', val: '1 - 4' },
+                    { label: 'Region', val: 'Global' }
+                ],
+                reviews: [
+                    { user: 'BingeWatcher', rating: 5, text: "Just in time for the new season. Smooth." },
+                    { user: 'ChillGuy', rating: 4, text: "Good gift for friends." }
+                ],
+                Bg: () => (
+                    <div className="absolute inset-0 z-0 pointer-events-none theme-netflix overflow-hidden bg-black">
+                        <div className="grain-overlay absolute inset-0 opacity-10"></div>
+                        <div className="vignette absolute inset-0 z-10"></div>
+                        {/* Cinematic Spotlight */}
+                        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-full bg-gradient-to-b from-netflix-red/30 to-transparent blur-[80px]"></div>
+                        <div className="absolute bottom-10 left-10 text-[200px] font-bebas text-white opacity-5 select-none leading-none">N</div>
+                    </div>
+                )
+            },
+            6: { // Apple
+                id: 'apple',
+                title: "APPLE",
+                subtitle: "STORE CARD",
+                font: 'font-sans',
+                colors: { primary: 'text-gray-200', bg: 'bg-white', border: 'border-white', accent: 'text-apple-titanium' },
+                desc: "Get apps, games, music, movies, TV shows, and more. The perfect gift for everything Apple.",
+                specs: [
+                    { label: 'Ecosystem', val: 'iOS / Mac / TV' },
+                    { label: 'Valid For', val: 'All Digital Content' },
+                    { label: 'Expiry', val: 'None' },
+                    { label: 'Delivery', val: 'Email' }
+                ],
+                reviews: [
+                    { user: 'iFanboy', rating: 5, text: "Clean, simple, works. Typical Apple experience." },
+                    { user: 'Dev_Ops', rating: 5, text: "Used for Xcode developer account. fast." }
+                ],
+                Bg: () => (
+                    <div className="absolute inset-0 z-0 pointer-events-none theme-apple overflow-hidden bg-black">
+                        <div className="mesh absolute inset-0 opacity-30 animate-aurora"></div>
+                        <div className="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.1)_1px,transparent_1px)] [background-size:20px_20px] opacity-20"></div>
+                        <div className="apple-glass absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[60%] rounded-full blur-[100px] opacity-20 bg-white"></div>
+                    </div>
+                )
+            }
+        };
+
+        // ==========================================
+        // 3. COMPONENTS (The "Body")
+        // ==========================================
+
+        const AlienText = ({ text, active, className }) => {
+            const [displayText, setDisplayText] = useState(text);
+            const alienChars = "⍙⍝⍸⍼⍽⍾⎉⎊⎋⏣";
+            useEffect(() => {
+                if (!active) { setDisplayText(text); return; }
+                let interval;
+                let iteration = 0;
+                interval = setInterval(() => {
+                    setDisplayText(text.split("").map((l, i) => i < iteration ? text[i] : alienChars[Math.floor(Math.random() * alienChars.length)]).join(""));
+                    if (iteration >= text.length) iteration = 0;
+                    iteration += 1 / 3;
+                }, 50);
+                return () => clearInterval(interval);
+            }, [active, text]);
+            return <span className={`${active ? 'text-green-400 animate-pulse font-mono tracking-widest' : ''} ${className}`}>{displayText}</span>;
+        };
+
+        const Meteors = ({ number = 10 }) => {
+            const [meteors, setMeteors] = useState([]);
+            useEffect(() => {
+                setMeteors([...Array(number)].map(() => ({
+                    left: Math.floor(Math.random() * 100) + 'vw',
+                    animationDelay: Math.random() * 5 + 's',
+                    animationDuration: Math.floor(Math.random() * 5 + 3) + 's',
+                    top: -100 + 'px',
+                })));
+            }, [number]);
+            return <>{meteors.map((s, i) => <span key={i} className="pointer-events-none absolute left-1/2 top-1/2 h-0.5 w-[150px] rotate-[215deg] bg-gradient-to-r from-transparent to-orange-500/50 opacity-0 animate-meteor rounded-full z-0" style={s} />)}</>;
+        };
+
+        const MegaMeteor = () => (
+            <div className="pointer-events-none absolute left-[80%] top-[-20%] h-8 w-[1500px] rotate-[225deg] bg-gradient-to-r from-transparent via-red-600 via-orange-500 to-white animate-mega-meteor rounded-full shadow-[0_0_100px_30px_rgba(255,69,0,0.5)] z-0 mix-blend-screen"></div>
+        );
+
+        const GlassCard = ({ children, className = "", alienMode }) => (
+            <div className={`relative bg-[#0a0a0a]/60 backdrop-blur-xl border p-6 rounded-[2rem] shadow-xl transition-all duration-500 group overflow-hidden ${alienMode ? 'border-green-500/30 hover:border-green-500/60 shadow-[0_0_30px_rgba(34,197,94,0.1)]' : 'border-white/5 hover:border-orange-500/30 hover:shadow-[0_10px_40px_-10px_rgba(249,115,22,0.15)]'} ${className}`}>
+                {children}
+            </div>
+        );
+
+        const SystemMonitor = ({ alienMode }) => {
+            const [cpu, setCpu] = useState(24);
+            const [mem, setMem] = useState(45);
+            useEffect(() => {
+                const interval = setInterval(() => {
+                    setCpu(prev => Math.min(100, Math.max(10, prev + (Math.random() * 10 - 5))));
+                    setMem(prev => Math.min(100, Math.max(20, prev + (Math.random() * 6 - 3))));
+                }, 1000);
+                return () => clearInterval(interval);
+            }, []);
+            
+            return (
+                <div className={`mt-auto mb-6 p-4 rounded-xl border ${alienMode ? 'border-green-500/20 bg-green-900/10' : 'border-white/5 bg-white/5'} font-mono text-xs space-y-2`}>
+                    <div className="flex justify-between items-center text-gray-400">
+                        <span className="flex items-center gap-2"><Icons.Cpu size={14} /> CORE</span>
+                        <span className={alienMode ? 'text-green-400' : 'text-orange-400'}>{cpu.toFixed(0)}%</span>
+                    </div>
+                    <div className="w-full h-1 bg-black rounded-full overflow-hidden">
+                        <div className={`h-full transition-all duration-500 ${alienMode ? 'bg-green-500' : 'bg-orange-500'}`} style={{width: `${cpu}%`}}></div>
+                    </div>
+                    <div className="flex justify-between items-center text-gray-400">
+                        <span className="flex items-center gap-2"><Icons.Activity size={14} /> MEM</span>
+                        <span className={alienMode ? 'text-green-400' : 'text-blue-400'}>{mem.toFixed(0)}%</span>
+                    </div>
+                    <div className="w-full h-1 bg-black rounded-full overflow-hidden">
+                        <div className={`h-full transition-all duration-500 ${alienMode ? 'bg-green-500' : 'bg-blue-500'}`} style={{width: `${mem}%`}}></div>
+                    </div>
+                </div>
+            );
+        };
+
+        // --- PRODUCT PAGE COMPONENT ---
+        const ProductPage = ({ onBack, productId }) => {
+            const theme = THEMES[productId];
+            const [selectedAmount, setSelectedAmount] = useState(50);
+            const [isBuying, setIsBuying] = useState(false);
+            const [buyStage, setBuyStage] = useState(0); // 0: Idle, 1: Process, 2: Success
+            const [activeTab, setActiveTab] = useState('details');
+            const denominations = [10, 25, 50, 100];
+
+            if (!theme) return null;
+
+            const Bg = theme.Bg;
+
+            const handleBuy = () => {
+                setIsBuying(true);
+                setBuyStage(1);
+                // Simulate complex transaction
+                setTimeout(() => setBuyStage(2), 2000);
+                setTimeout(() => {
+                    setIsBuying(false);
+                    setBuyStage(0);
+                    alert(`Code for $${selectedAmount} sent to email!`);
+                }, 3500);
+            };
+
+            return (
+                <div className="relative min-h-full w-full bg-[#050505] text-white overflow-y-auto pb-20 animate-in fade-in zoom-in duration-500">
+                    <Bg />
+
+                    <div className="relative z-20 container mx-auto px-4 lg:px-12 pt-6">
+                        {/* Nav Header */}
+                        <div className="flex items-center justify-between mb-8 sticky top-0 z-50 py-4 backdrop-blur-sm rounded-b-2xl">
+                            <button onClick={onBack} className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors group">
+                                <div className="p-2 rounded-full bg-white/5 group-hover:bg-white/20 transition-colors"><Icons.ArrowLeft size={20} /></div>
+                                <span className="font-medium tracking-wide">RETURN TO NEXUS</span>
+                            </button>
+                            <div className="flex items-center gap-4">
+                                <div className={`px-4 py-1.5 rounded-full border ${theme.colors.border} bg-black/40 ${theme.colors.primary} text-xs font-bold tracking-wider animate-pulse flex items-center gap-2 shadow-[0_0_15px_rgba(0,0,0,0.5)]`}>
+                                    <Icons.Lock size={12} /> SECURE CONNECTION ESTABLISHED
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Main Grid */}
+                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+                            
+                            {/* Left Column: Visuals */}
+                            <div className="lg:col-span-5 space-y-8">
+                                <div className="relative group perspective-1000">
+                                    <div className={`relative aspect-[3/4] rounded-[2.5rem] overflow-hidden border-2 ${theme.colors.border} bg-black/40 shadow-2xl transition-all duration-500 group-hover:scale-[1.02] hover:shadow-[0_0_50px_rgba(255,255,255,0.1)]`}>
+                                        <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent opacity-50"></div>
+                                        
+                                        {/* Dynamic Logo Center */}
+                                        <div className="absolute inset-0 flex flex-col items-center justify-center z-10 p-6">
+                                            <div className={`w-32 h-32 rounded-3xl bg-white text-black flex items-center justify-center text-5xl font-bold shadow-[0_0_30px_rgba(255,255,255,0.3)] animate-float ${theme.colors.primary.replace('text-', 'text-')}`}>
+                                                {/* Map Icons based on ID */}
+                                                {productId === 1 && "PS"}
+                                                {productId === 2 && "XB"}
+                                                {productId === 3 && <Icons.Cloud size={64} className="text-steam-grey"/>}
+                                                {productId === 4 && <Icons.Music size={64} className="text-spotify-green"/>}
+                                                {productId === 5 && <span className="text-netflix-red font-bebas text-7xl">N</span>}
+                                                {productId === 6 && <span className="text-black font-sans text-6xl"></span>}
+                                            </div>
+                                            <h1 className={`mt-8 text-4xl font-black text-center tracking-tighter uppercase glitch-wrapper ${theme.font}`} data-text={theme.title}>
+                                                {theme.title}
+                                            </h1>
+                                            <p className={`mt-2 ${theme.colors.primary} font-mono tracking-widest text-sm text-center bg-black/50 px-3 py-1 rounded`}>{theme.subtitle}</p>
+                                        </div>
+
+                                        {/* Decorative Elements */}
+                                        <div className="absolute bottom-6 right-6 font-mono text-[10px] text-gray-500 text-right">
+                                            ID: {88400 + productId}-X <br/>
+                                            HASH: {Math.random().toString(36).substring(7).toUpperCase()}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="grid grid-cols-3 gap-4">
+                                    {[{icon: Icons.Zap, label: "Instant"}, {icon: Icons.ShieldCheck, label: "Official"}, {icon: Icons.Download, label: "Digital"}].map((b, i) => (
+                                        <div key={i} className={`flex flex-col items-center justify-center p-4 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors cursor-default`}>
+                                            <b.icon size={20} className={`${theme.colors.primary} mb-2`} />
+                                            <span className="text-[10px] text-gray-400 font-bold uppercase text-center">{b.label}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Right Column: Details */}
+                            <div className="lg:col-span-7 space-y-8">
+                                <div>
+                                    <div className="flex items-center gap-3 mb-2">
+                                        <span className="px-2 py-0.5 rounded bg-white text-black text-[10px] font-bold uppercase tracking-wider">Digital Code</span>
+                                        <span className="text-green-400 text-xs font-mono flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span>IN STOCK</span>
+                                    </div>
+                                    <h1 className={`text-6xl font-black mb-6 leading-none ${theme.font} ${theme.colors.primary} drop-shadow-2xl`}>{theme.title}</h1>
+                                    <p className="text-gray-300 text-lg leading-relaxed max-w-xl font-light">{theme.desc}</p>
+                                </div>
+
+                                {/* Denominations */}
+                                <div>
+                                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4 block flex items-center gap-2">
+                                        <Icons.CreditCard size={14}/> Select Value (USD)
+                                    </label>
+                                    <div className="grid grid-cols-4 gap-4">
+                                        {denominations.map((val) => (
+                                            <button key={val} onClick={() => setSelectedAmount(val)} className={`relative h-20 rounded-xl font-bold text-2xl transition-all duration-300 overflow-hidden group border ${selectedAmount === val ? `bg-white text-black scale-105 border-white shadow-[0_0_20px_rgba(255,255,255,0.3)]` : 'bg-white/5 border-white/5 text-gray-400 hover:bg-white/10'}`}>
+                                                <span className="relative z-10 flex flex-col items-center">
+                                                    <span>${val}</span>
+                                                    {selectedAmount === val && <span className="text-[10px] uppercase font-sans tracking-wide opacity-50">Selected</span>}
+                                                </span>
+                                                {selectedAmount === val && <div className="absolute inset-0 bg-gradient-to-tr from-gray-200 to-white opacity-50"></div>}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Main Action Card */}
+                                <div className="p-8 rounded-[2.5rem] bg-gradient-to-br from-[#0a0a0a] to-[#111] border border-white/10 flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl relative overflow-hidden group">
+                                    <div className={`absolute inset-0 ${theme.colors.bg} opacity-5 group-hover:opacity-10 transition-opacity duration-500 pointer-events-none`}></div>
+                                    
+                                    <div className="relative z-10 space-y-1">
+                                        <p className="text-gray-500 text-xs font-bold uppercase tracking-widest">Total Price</p>
+                                        <div className="flex items-baseline gap-3">
+                                            <span className="text-5xl font-black text-white tracking-tight">${(selectedAmount * 0.97).toFixed(2)}</span>
+                                            <span className="px-2 py-1 rounded bg-green-500/20 text-green-400 text-xs font-bold font-mono">-3%</span>
+                                        </div>
+                                    </div>
+
+                                    <button 
+                                        onClick={handleBuy} 
+                                        disabled={isBuying} 
+                                        className={`relative z-10 group w-full md:w-auto px-12 py-5 rounded-2xl font-bold tracking-widest uppercase transition-all duration-300 overflow-hidden shadow-lg ${isBuying ? 'bg-gray-800 text-gray-400 cursor-not-allowed' : `text-white ${theme.colors.bg} hover:brightness-110 hover:shadow-[0_0_30px_rgba(255,255,255,0.2)]`}`}
+                                    >
+                                        <span className="relative z-10 flex items-center gap-3">
+                                            {buyStage === 0 && <>PURCHASE <Icons.ChevronRight size={18} /></>}
+                                            {buyStage === 1 && <><Icons.Zap size={18} className="animate-spin" /> PROCESSING...</>}
+                                            {buyStage === 2 && <><Icons.ShieldCheck size={18} className="text-green-400" /> SUCCESS</>}
+                                        </span>
+                                    </button>
+                                </div>
+
+                                {/* Tabs Section */}
+                                <div className="mt-12 bg-black/20 rounded-3xl p-6 border border-white/5 backdrop-blur-md">
+                                    <div className="flex gap-8 border-b border-white/10 mb-6">
+                                        {['details', 'reviews', 'specs'].map(tab => (
+                                            <button key={tab} onClick={() => setActiveTab(tab)} className={`pb-4 text-sm font-bold uppercase tracking-wider transition-colors relative ${activeTab === tab ? `${theme.colors.primary}` : 'text-gray-500 hover:text-white'}`}>
+                                                {tab}
+                                                {activeTab === tab && <div className={`absolute bottom-0 left-0 w-full h-0.5 ${theme.colors.bg}`}></div>}
+                                            </button>
+                                        ))}
+                                    </div>
+                                    
+                                    <div className="min-h-[150px]">
+                                        {activeTab === 'details' && (
+                                            <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                                                <p className="text-gray-400 leading-relaxed font-light">
+                                                    This official {theme.title} code adds funds to your account instantly. 
+                                                    Redeemable on all supported devices. 
+                                                    <br/><br/>
+                                                    <span className={`${theme.colors.accent}`}>✓ No Expiration Date</span><br/>
+                                                    <span className={`${theme.colors.accent}`}>✓ 24/7 Support</span><br/>
+                                                    <span className={`${theme.colors.accent}`}>✓ Instant Delivery via Email</span>
+                                                </p>
+                                            </div>
+                                        )}
+                                        {activeTab === 'reviews' && (
+                                            <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                                                {theme.reviews.map((r, i) => (
+                                                    <div key={i} className="p-4 rounded-xl bg-white/5 border border-white/5 flex gap-4">
+                                                        <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-gray-700 to-gray-600 flex items-center justify-center font-bold text-xs">{r.user[0]}</div>
+                                                        <div>
+                                                            <div className="flex items-center gap-2 mb-1">
+                                                                <span className="font-bold text-sm text-white">{r.user}</span>
+                                                                <div className="flex text-yellow-400">{[...Array(r.rating)].map((_,j)=><Icons.Star key={j} size={10} fill="currentColor"/>)}</div>
+                                                            </div>
+                                                            <p className="text-sm text-gray-400">"{r.text}"</p>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+                                        {activeTab === 'specs' && (
+                                            <div className="grid grid-cols-2 gap-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                                                {theme.specs.map((s, i) => (
+                                                    <div key={i} className="p-4 rounded-xl bg-white/5 border border-white/5">
+                                                        <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-1">{s.label}</p>
+                                                        <p className="font-bold text-white font-mono text-sm">{s.val}</p>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // --- DASHBOARD APP SHELL ---
+        function App() {
+            const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+            const [megaMeteorActive, setMegaMeteorActive] = useState(false);
+            const [shake, setShake] = useState(false);
+            const [alienMode, setAlienMode] = useState(false);
+            const [view, setView] = useState('dashboard'); // 'dashboard' or 'product'
+            const [currentProductId, setCurrentProductId] = useState(null);
+
+            const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
+
+            const navigateToProduct = (id) => {
+                setCurrentProductId(id);
+                setShake(true);
+                setTimeout(() => {
+                    setView('product');
+                    setShake(false);
+                }, 400);
+            };
+
+            const navigateBack = () => {
+                setShake(true);
+                setTimeout(() => {
+                    setView('dashboard');
+                    setShake(false);
+                }, 400);
+            }
+
+            useEffect(() => {
+                const triggerEvent = () => {
+                    const nextDelay = Math.random() * 8000 + 12000;
+                    setTimeout(() => {
+                        setMegaMeteorActive(true);
+                        setAlienMode(true);
+                        setTimeout(() => setShake(true), 400);
+                        setTimeout(() => {
+                            setShake(false);
+                            setMegaMeteorActive(false);
+                            setAlienMode(false);
+                            triggerEvent();
+                        }, 2500);
+                    }, nextDelay);
+                };
+                triggerEvent();
+            }, []);
+
+            return (
+                <div className="relative min-h-screen font-sans text-gray-100 bg-neutral-950 selection:bg-orange-500 selection:text-white overflow-hidden">
+                    <style>{`
+                        @keyframes meteor { 0% { transform: rotate(215deg) translateX(0); opacity: 1; } 70% { opacity: 1; } 100% { transform: rotate(215deg) translateX(-150vh); opacity: 0; } }
+                        .animate-meteor { animation: meteor linear infinite; }
+                        @keyframes megaMeteor { 0% { transform: rotate(225deg) translateX(0); opacity: 0; } 5% { opacity: 1; } 100% { transform: rotate(225deg) translateX(-250vh); opacity: 1; } }
+                        .animate-mega-meteor { animation: megaMeteor 1.2s linear forwards; }
+                        @keyframes shake { 0%, 100% { transform: translate(0, 0) rotate(0deg); } 10%, 30%, 50%, 70%, 90% { transform: translate(-2px, -1px) rotate(-0.5deg); } 20%, 40%, 60%, 80% { transform: translate(2px, 1px) rotate(0.5deg); } }
+                        .animate-shake { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; }
+                        .bg-noise { background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E"); }
+                    `}</style>
+
+                    {/* --- GLOBAL BACKGROUNDS --- */}
+                    {view === 'dashboard' && (
+                        <>
+                            <div className="absolute inset-0 z-0 bg-noise opacity-30 pointer-events-none"></div>
+                            <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-orange-900/20 via-neutral-950 to-neutral-950 pointer-events-none"></div>
+                            <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+                                <Meteors number={15} />
+                                {megaMeteorActive && <MegaMeteor />}
+                            </div>
+                        </>
+                    )}
+
+                    {/* --- MAIN APP CONTAINER --- */}
+                    <div className={`relative z-10 h-screen overflow-hidden flex transition-transform duration-300 ${shake ? 'animate-shake' : ''}`}>
+                        
+                        {/* --- SIDEBAR (Persistent) --- */}
+                        <aside className={`fixed inset-y-0 left-0 z-50 w-20 lg:w-64 bg-black/60 backdrop-blur-2xl border-r border-white/5 flex flex-col items-center lg:items-stretch py-8 transition-all duration-300 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
+                            {/* Logo */}
+                            <div className="px-6 mb-12 flex items-center gap-3">
+                                <div className={`p-2.5 rounded-xl shadow-lg transition-colors duration-500 ${alienMode ? 'bg-green-600 shadow-green-500/20' : 'bg-gradient-to-br from-orange-500 to-red-600 shadow-orange-500/20'}`}>
+                                    <Icons.Gamepad size={24} className="text-white" />
+                                </div>
+                                <span className="hidden lg:block text-xl font-bold tracking-wider font-orbitron">
+                                    {alienMode ? <AlienText text="NEXUS" active={true} /> : <React.Fragment>NEX<span className="text-orange-500">US</span></React.Fragment>}
+                                </span>
+                            </div>
+
+                            {/* Nav */}
+                            <nav className="flex-1 w-full px-4 space-y-2">
+                                {[{icon:Icons.Home,label:'Market',active:true},{icon:Icons.CreditCard,label:'Wallet'},{icon:Icons.ShoppingBag,label:'Orders',count:2},{icon:Icons.TrendingUp,label:'Stats'},{icon:Icons.Settings,label:'Settings'}].map((item, i) => (
+                                    <button 
+                                        key={i} 
+                                        onClick={() => item.label === 'Market' && navigateBack()}
+                                        className={`w-full flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all duration-300 group ${item.active && view === 'dashboard' ? (alienMode ? 'bg-green-500/10 text-green-400' : 'bg-white/5 text-orange-500') : 'text-gray-500 hover:text-gray-200 hover:bg-white/5'}`}
+                                    >
+                                        <item.icon size={22} className={`transition-transform duration-300 group-hover:scale-110 ${item.active && alienMode ? 'animate-pulse' : ''}`} />
+                                        <span className="hidden lg:block font-medium text-sm">{alienMode ? <AlienText text={item.label} active={true} /> : item.label}</span>
+                                        {item.count && <span className={`hidden lg:flex ml-auto text-[10px] font-bold px-2 py-0.5 rounded-full ${alienMode ? 'bg-green-500 text-black' : 'bg-orange-500 text-white'}`}>{item.count}</span>}
+                                    </button>
+                                ))}
+                            </nav>
+
+                            {/* System Monitor & User */}
+                            <div className="px-4 w-full">
+                                <SystemMonitor alienMode={alienMode} />
+                                <div className={`flex items-center gap-3 p-3 rounded-2xl border transition-colors ${alienMode ? 'bg-green-900/20 border-green-500/20' : 'bg-white/5 border-white/5'}`}>
+                                    <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-gray-700 to-gray-600 flex items-center justify-center border border-white/10"><Icons.User size={18} className="text-gray-300" /></div>
+                                    <div className="hidden lg:block overflow-hidden"><p className="text-sm font-bold text-gray-200 truncate">Alex Doe</p><p className="text-xs text-gray-500 truncate">Pro Member</p></div>
+                                    <Icons.LogOut size={18} className="hidden lg:block ml-auto text-gray-600 hover:text-red-400 cursor-pointer transition-colors" />
+                                </div>
+                            </div>
+                        </aside>
+
+                        {/* --- CONTENT AREA (Switcher) --- */}
+                        <div className="flex-1 ml-0 lg:ml-64 h-full relative">
+                            
+                            {view === 'product' && currentProductId && (
+                                <ProductPage onBack={navigateBack} productId={currentProductId} />
+                            )}
+
+                            {view === 'dashboard' && (
+                                <main className="h-full overflow-y-auto overflow-x-hidden pt-6 pb-20 px-4 lg:px-10 pr-0 xl:pr-96 scroll-smooth">
+                                    <div className="lg:hidden flex items-center justify-between mb-8">
+                                        <button onClick={toggleSidebar}><Icons.Menu className="text-white" /></button>
+                                        <span className="font-bold">NEXUS</span>
+                                        <div className="w-6" />
+                                    </div>
+                                    
+                                    <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+                                        <div>
+                                            <h1 className="text-4xl lg:text-5xl font-black tracking-tight text-white mb-2 font-orbitron"><AlienText text="DASHBOARD" active={alienMode} /></h1>
+                                            <p className="text-gray-500 font-medium font-mono">:: WELCOME TO THE GRID ::</p>
+                                        </div>
+                                        <div className={`relative group w-full md:w-96 transition-all duration-300 ${alienMode ? 'scale-105' : ''}`}>
+                                            <div className={`absolute inset-0 bg-gradient-to-r rounded-2xl blur opacity-20 transition-opacity duration-300 ${alienMode ? 'from-green-500 to-emerald-500 opacity-40' : 'from-orange-500 to-red-500 group-hover:opacity-40'}`}></div>
+                                            <div className={`relative flex items-center bg-[#121212] border rounded-2xl px-4 py-3 transition-colors ${alienMode ? 'border-green-500/50' : 'border-white/10 focus-within:border-orange-500/50'}`}>
+                                                <Icons.Search size={20} className={alienMode ? 'text-green-500' : 'text-gray-500'} />
+                                                <input type="text" placeholder={alienMode ? "SYSTEM FAILURE..." : "Search products..."} className={`w-full bg-transparent border-none outline-none ml-3 placeholder-gray-600 font-medium ${alienMode ? 'text-green-500 font-mono' : 'text-gray-200'}`} />
+                                            </div>
+                                        </div>
+                                    </header>
+                                    
+                                    {/* Stats */}
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                                        {[{ label: 'Total Balance', val: '$2,450.50', icon: Icons.CreditCard, trend: '+12%', trendColor: 'text-green-400' }, { label: 'Points', val: '8,540', icon: Icons.Zap, trend: '+850', trendColor: 'text-yellow-400' }, { label: 'Active Orders', val: '12', icon: Icons.ShoppingBag, trend: 'Processing', trendColor: 'text-blue-400' }].map((stat, i) => (
+                                            <GlassCard key={i} className="flex flex-col justify-between h-32" alienMode={alienMode}>
+                                                <div className="flex justify-between items-start">
+                                                    <span className="text-gray-400 font-medium text-sm">{stat.label}</span>
+                                                    <div className={`p-2 rounded-lg ${alienMode ? 'bg-green-500/20 text-green-400' : 'bg-white/5 text-orange-500'}`}><stat.icon size={18} /></div>
+                                                </div>
+                                                <div className="flex justify-between items-end">
+                                                    <span className={`text-2xl font-bold ${alienMode ? 'font-mono text-green-400' : 'text-white'}`}>{alienMode ? <AlienText text={stat.val} active={true} /> : stat.val}</span>
+                                                    <span className={`text-xs font-bold ${stat.trendColor}`}>{stat.trend}</span>
+                                                </div>
+                                            </GlassCard>
+                                        ))}
+                                    </div>
+
+                                    {/* Section Title */}
+                                    <div className="flex items-center justify-between mb-6">
+                                        <h2 className="text-xl font-bold flex items-center gap-2 font-orbitron tracking-wide"><Icons.Activity size={20} className={alienMode ? 'text-green-500' : 'text-orange-500'} /><AlienText text="TRENDING CARDS" active={alienMode} /></h2>
+                                        <button className="text-sm text-gray-500 hover:text-white transition-colors">View All</button>
+                                    </div>
+
+                                    {/* PRODUCTS GRID (Main Navigation) */}
+                                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-8">
+                                        {PRODUCTS.map((product) => (
+                                            <div 
+                                                key={product.id} 
+                                                onClick={() => navigateToProduct(product.id)}
+                                                className={`group relative bg-[#121212]/80 backdrop-blur-md border border-white/5 p-5 rounded-[2rem] hover:-translate-y-1 transition-all duration-300 overflow-hidden cursor-pointer ${alienMode ? 'hover:shadow-[0_0_30px_rgba(34,197,94,0.2)] hover:border-green-500/50' : 'hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)] hover:border-white/10'}`}
+                                            >
+                                                <div className={`absolute -top-20 -right-20 w-40 h-40 rounded-full blur-[80px] transition-colors duration-500 ${alienMode ? 'bg-green-500/20' : 'bg-orange-600/10 group-hover:bg-orange-600/20'}`}></div>
+                                                <div className="flex justify-between items-start z-10 relative mb-8">
+                                                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-lg font-bold shadow-inner ${product.bg} ${product.color}`}>
+                                                        {product.icon === 'PS' && "PS"}
+                                                        {product.icon === 'XB' && "XB"}
+                                                        {product.icon === 'ST' && <Icons.Cloud size={24}/>}
+                                                        {product.icon === 'SP' && <Icons.Music size={24}/>}
+                                                        {product.icon === 'NF' && "N"}
+                                                        {product.icon === 'AP' && ""}
+                                                    </div>
+                                                    <div className={`px-3 py-1 rounded-full text-xs font-bold border ${alienMode ? 'border-green-500/30 text-green-400 bg-green-900/20' : 'border-white/10 text-gray-400 bg-black/40'}`}>{product.stock} Left</div>
+                                                </div>
+                                                <h3 className="text-lg font-bold text-gray-100 mb-1">{product.name}</h3>
+                                                <p className="text-sm text-gray-500 mb-6 font-medium tracking-wide">{product.value} Credit</p>
+                                                <div className="flex items-center justify-between relative z-10">
+                                                    <div>
+                                                        <span className="text-xs text-gray-500 block line-through opacity-60">${product.price + 5}</span>
+                                                        <span className={`text-xl font-bold ${alienMode ? 'text-green-400 font-mono' : 'text-white'}`}>${product.price}</span>
+                                                    </div>
+                                                    <button className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 group-hover:w-24 group-hover:rounded-xl overflow-hidden ${alienMode ? 'bg-green-600 hover:bg-green-500 text-black' : 'bg-white text-black hover:bg-orange-500 hover:text-white'}`}>
+                                                        <Icons.ChevronRight size={20} className="group-hover:hidden" />
+                                                        <span className="hidden group-hover:block text-xs font-bold whitespace-nowrap px-2">Buy Now</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </main>
+                            )}
+
+                            {/* Right Sidebar (Activity) - Only on Dashboard */}
+                            {view === 'dashboard' && (
+                                <aside className="hidden xl:flex fixed right-0 inset-y-0 w-96 bg-[#0c0c0c] border-l border-white/5 flex-col p-8 overflow-y-auto z-40">
+                                    <div className="flex items-center justify-between mb-10">
+                                        <div className="p-2 border border-white/10 rounded-xl"><Icons.Bell size={20} className={alienMode ? 'text-green-500 animate-bounce' : 'text-gray-400'} /></div>
+                                        <div className="flex gap-2"><div className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div><span className="text-xs font-bold text-gray-400 tracking-wider">LIVE FEED</span></div>
+                                    </div>
+                                    <div className="mb-10">
+                                        <h3 className="text-sm font-bold text-gray-500 mb-6 uppercase tracking-wider">Recent Transactions</h3>
+                                        <div className="space-y-6 relative">
+                                            <div className={`absolute left-[19px] top-2 bottom-2 w-0.5 ${alienMode ? 'bg-green-900' : 'bg-white/5'}`}></div>
+                                            {TRANSACTIONS.map((tx) => (
+                                                <div key={tx.id} className="relative flex items-center gap-4 group cursor-pointer">
+                                                    <div className={`relative z-10 w-10 h-10 rounded-full flex items-center justify-center border-[3px] bg-[#0c0c0c] transition-colors ${alienMode ? 'border-green-600' : 'border-[#1a1a1a] group-hover:border-orange-500'}`}>
+                                                        {tx.type === 'in' ? <Icons.TrendingUp size={14} className="text-green-500" /> : <Icons.ShoppingBag size={14} className="text-gray-400" />}
+                                                    </div>
+                                                    <div className="flex-1">
+                                                        <div className="flex justify-between mb-0.5"><span className="text-sm font-bold text-gray-200 group-hover:text-orange-400 transition-colors">{tx.item}</span><span className={`text-xs font-bold ${tx.type === 'in' ? 'text-green-500' : 'text-gray-200'}`}>{tx.amount}</span></div>
+                                                        <span className="text-xs text-gray-600">{tx.date}</span>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    <div className="mb-10">
+                                        <h3 className="text-sm font-bold text-gray-500 mb-6 uppercase tracking-wider">System Updates</h3>
+                                        <div className="space-y-4">
+                                            {UPDATES.map((update) => (
+                                                <div key={update.id} className={`p-4 rounded-2xl border transition-all duration-300 hover:scale-[1.02] ${alienMode ? 'bg-green-900/10 border-green-500/30' : 'bg-white/5 border-white/5'}`}>
+                                                    <div className="flex justify-between items-center mb-2"><span className={`text-xs font-bold px-2 py-1 rounded-md ${update.urgent ? 'bg-red-500/20 text-red-400' : 'bg-blue-500/20 text-blue-400'}`}>{update.urgent ? 'URGENT' : 'INFO'}</span><span className="text-[10px] text-gray-500">{update.time}</span></div>
+                                                    <h4 className="font-bold text-sm mb-1">{update.title}</h4>
+                                                    <p className="text-xs text-gray-400 leading-relaxed">{alienMode ? <AlienText text={update.msg} active={true} /> : update.msg}</p>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h3 className="text-sm font-bold text-gray-500 mb-6 uppercase tracking-wider">Top Sellers</h3>
+                                        <div className="space-y-4">
+                                            {SELLERS.map((seller, idx) => (
+                                                <div key={idx} className="flex items-center justify-between p-3 rounded-xl hover:bg-white/5 transition-colors">
+                                                    <div className="flex items-center gap-3"><div className="w-8 h-8 rounded-full bg-gradient-to-br from-gray-700 to-gray-800 border border-white/10"></div><div><p className="text-xs font-bold text-gray-300">{seller.name}</p><p className="text-[10px] text-gray-600">Verified Merchant</p></div></div>
+                                                    <div className={`w-2 h-2 rounded-full ${seller.color} shadow-[0_0_8px_currentColor]`}></div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </aside>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
