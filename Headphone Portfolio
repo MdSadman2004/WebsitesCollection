@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Aether X1 - The Geometry of Sound. Audiophile grade wireless architecture.">
+    <meta name="theme-color" content="#050505">
+    <title>AETHER X1 | The Acoustic Singularity</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* * ==========================================================================
+         * 01. DESIGN TOKENS & VARIABLES
+         * ==========================================================================
+         */
+        :root {
+            /* Colors: Core */
+            --c-bg: #030303;
+            --c-surface-1: #0a0a0a;
+            --c-surface-2: #111111;
+            --c-surface-3: #1a1a1a;
+            
+            /* Colors: Accents */
+            --c-accent-main: #7c3aed; /* Deep Violet */
+            --c-accent-glow: #8b5cf6;
+            --c-accent-cyan: #06b6d4;
+            --c-accent-pink: #db2777;
+
+            /* Colors: Text */
+            --c-text-primary: #ffffff;
+            --c-text-secondary: #a3a3a3;
+            --c-text-muted: #525252;
+
+            /* Typography */
+            --font-sans: 'Inter', sans-serif;
+            --font-display: 'Space Grotesk', sans-serif;
+
+            /* Spacing & Layout */
+            --container-width: 1440px;
+            --section-padding: 120px;
+            
+            /* Animation Curves */
+            --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+            --ease-in-out-circ: cubic-bezier(0.785, 0.135, 0.15, 0.86);
+        }
+
+        /* * ==========================================================================
+         * 02. RESET & BASE
+         * ==========================================================================
+         */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            background-color: var(--c-bg);
+            color: var(--c-text-primary);
+            font-family: var(--font-sans);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            line-height: 1.6;
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--c-bg); }
+        ::-webkit-scrollbar-thumb { background: var(--c-surface-3); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--c-accent-main); }
+
+        /* * ==========================================================================
+         * 03. UTILITIES & TYPOGRAPHY
+         * ==========================================================================
+         */
+        .container {
+            max-width: var(--container-width);
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: var(--font-display);
+            font-weight: 700;
+            color: var(--c-text-primary);
+            line-height: 1.1;
+        }
+
+        .heading-xl {
+            font-size: clamp(3.5rem, 8vw, 7rem);
+            letter-spacing: -0.04em;
+            text-transform: uppercase;
+        }
+
+        .heading-lg {
+            font-size: clamp(2rem, 5vw, 4rem);
+            letter-spacing: -0.02em;
+        }
+
+        .heading-md {
+            font-size: 1.5rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--c-accent-cyan);
+        }
+
+        .text-lead {
+            font-size: 1.25rem;
+            color: var(--c-text-secondary);
+            max-width: 60ch;
+        }
+
+        /* Glitch Effect Utility */
+        .glitch {
+            position: relative;
+            color: var(--c-text-primary);
+        }
+        .glitch::before, .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: var(--c-bg);
+        }
+        .glitch::before {
+            left: 2px;
+            text-shadow: -1px 0 #ff00c1;
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+            animation: glitch-anim-1 2s infinite linear alternate-reverse;
+        }
+        .glitch::after {
+            left: -2px;
+            text-shadow: -1px 0 #00fff9;
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+            animation: glitch-anim-2 3s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitch-anim-1 {
+            0% { clip-path: inset(20% 0 80% 0); }
+            20% { clip-path: inset(60% 0 10% 0); }
+            40% { clip-path: inset(40% 0 50% 0); }
+            60% { clip-path: inset(80% 0 5% 0); }
+            80% { clip-path: inset(10% 0 70% 0); }
+            100% { clip-path: inset(30% 0 20% 0); }
+        }
+        @keyframes glitch-anim-2 {
+            0% { clip-path: inset(10% 0 60% 0); }
+            20% { clip-path: inset(30% 0 10% 0); }
+            40% { clip-path: inset(80% 0 5% 0); }
+            60% { clip-path: inset(15% 0 80% 0); }
+            80% { clip-path: inset(60% 0 10% 0); }
+            100% { clip-path: inset(40% 0 50% 0); }
+        }
+
+        /* * ==========================================================================
+         * 04. BACKGROUND LAYERS
+         * ==========================================================================
+         */
+        #bg-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .noise-layer {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.07'/%3E%3C/svg%3E");
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .vignette {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: radial-gradient(circle at center, transparent 0%, var(--c-bg) 90%);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* * ==========================================================================
+         * 05. COMPONENT: THE CSS HEADPHONE RIG
+         * ==========================================================================
+         */
+        #rig-anchor {
+            position: fixed;
+            top: 50%; left: 50%;
+            width: 0; height: 0;
+            z-index: 50;
+            pointer-events: none;
+            transition: transform 0.1s linear; /* JS drives position, this smooths jank */
+        }
+
+        .hp-chassis {
+            position: relative;
+            width: 340px; height: 400px;
+            transform: translate(-50%, -50%);
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .hp-band {
+            position: absolute;
+            top: 0; left: 50%;
+            transform: translateX(-50%);
+            width: 320px; height: 300px;
+            border-radius: 160px 160px 0 0;
+            border: 28px solid #1f1f1f;
+            border-bottom: 0;
+            background: transparent;
+            box-shadow: 
+                inset 0 10px 20px rgba(0,0,0,0.9),
+                inset 0 2px 5px rgba(255,255,255,0.1),
+                0 15px 30px rgba(0,0,0,0.5);
+            z-index: 2;
+        }
+
+        .hp-earcup {
+            position: absolute;
+            bottom: 30px;
+            width: 110px; height: 150px;
+            background: linear-gradient(145deg, #2a2a2a, #111);
+            border-radius: 40px;
+            display: flex;
+            align-items: center; justify-content: center;
+            box-shadow: 
+                0 25px 60px rgba(0,0,0,0.8),
+                inset 0 1px 1px rgba(255,255,255,0.1);
+            transition: transform 0.8s var(--ease-out-expo);
+        }
+
+        .hp-earcup.left { left: -15px; transform: rotate(12deg); transform-origin: top center; }
+        .hp-earcup.right { right: -15px; transform: rotate(-12deg); transform-origin: top center; }
+
+        /* Detail Elements */
+        .hp-pad {
+            width: 120%; height: 110%;
+            position: absolute;
+            border-radius: 45px;
+            border: 8px solid #0f0f0f;
+            z-index: -1;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.6);
+        }
+
+        .hp-light-strip {
+            width: 6px; height: 60px;
+            background: #333;
+            border-radius: 10px;
+            position: absolute;
+            box-shadow: 0 0 0 rgba(124, 58, 237, 0);
+            transition: all 0.5s ease;
+        }
+
+        /* Active State (When worn) */
+        .mode-active .hp-earcup.left { transform: rotate(0deg) translateX(30px) translateY(-20px); }
+        .mode-active .hp-earcup.right { transform: rotate(0deg) translateX(-30px) translateY(-20px); }
+        
+        .mode-active .hp-light-strip {
+            background: var(--c-accent-main);
+            box-shadow: 0 0 20px var(--c-accent-main), 0 0 40px var(--c-accent-main);
+        }
+
+        /* * ==========================================================================
+         * 06. SECTIONS
+         * ==========================================================================
+         */
+        section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        /* HERO SECTION */
+        .hero { justify-content: flex-start; }
+        
+        .hero-text-wrapper {
+            position: relative;
+            z-index: 20;
+            padding-top: 10vh;
+        }
+
+        .sub-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            font-family: var(--font-display);
+            font-size: 0.9rem;
+            letter-spacing: 0.2em;
+            color: var(--c-accent-cyan);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            backdrop-filter: blur(5px);
+        }
+
+        .btn-primary {
+            margin-top: 3rem;
+            display: inline-block;
+            padding: 1.2rem 3.5rem;
+            background: linear-gradient(90deg, var(--c-surface-3), var(--c-surface-1));
+            border: 1px solid var(--c-text-muted);
+            color: var(--c-text-primary);
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-size: 0.85rem;
+            position: relative;
+            overflow: hidden;
+            transition: 0.4s var(--ease-out-expo);
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: var(--c-accent-main);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s var(--ease-out-expo);
+            z-index: -1;
+        }
+
+        .btn-primary:hover { border-color: transparent; }
+        .btn-primary:hover::before { transform: scaleX(1); transform-origin: left; }
+
+        /* EXPERIENCE SECTION */
+        .experience {
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .viz-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        /* SPECS GRID */
+        .specs {
+            background: var(--c-surface-1);
+            padding: 100px 0;
+            min-height: auto;
+            border-top: 1px solid var(--c-surface-3);
+            border-bottom: 1px solid var(--c-surface-3);
+        }
+
+        .grid-layout {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2px;
+            background: var(--c-surface-3); /* Borders between cells */
+            border: 1px solid var(--c-surface-3);
+        }
+
+        .spec-card {
+            background: var(--c-bg);
+            padding: 3rem;
+            transition: background 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .spec-card:hover { background: var(--c-surface-1); }
+        
+        .spec-card::after {
+            content: ''; position: absolute; top: 0; right: 0;
+            width: 100px; height: 100px;
+            background: radial-gradient(circle at top right, rgba(124, 58, 237, 0.1), transparent 70%);
+            opacity: 0; transition: opacity 0.5s;
+        }
+        .spec-card:hover::after { opacity: 1; }
+
+        .spec-icon {
+            font-size: 2rem; color: var(--c-accent-cyan);
+            margin-bottom: 1.5rem; display: block;
+        }
+
+        /* RESERVATION */
+        .reservation {
+            justify-content: center;
+            background: linear-gradient(to bottom, var(--c-bg), #080808);
+        }
+
+        .form-box {
+            width: 100%;
+            max-width: 500px;
+            background: rgba(20, 20, 20, 0.5);
+            border: 1px solid var(--c-surface-3);
+            padding: 3rem;
+            backdrop-filter: blur(10px);
+            border-radius: 4px;
+        }
+
+        .input-group { margin-bottom: 1.5rem; position: relative; }
+        
+        .input-field {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid var(--c-text-muted);
+            padding: 1rem 0;
+            color: white;
+            font-family: var(--font-sans);
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .input-field:focus { border-bottom-color: var(--c-accent-main); }
+        .input-field:focus + label, .input-field:not(:placeholder-shown) + label {
+            top: -10px; font-size: 0.75rem; color: var(--c-accent-main);
+        }
+
+        .input-label {
+            position: absolute; left: 0; top: 1rem;
+            color: var(--c-text-muted);
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        /* FOOTER */
+        footer {
+            padding: 4rem 0;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--c-text-muted);
+            border-top: 1px solid var(--c-surface-3);
+        }
+
+        /* * ==========================================================================
+         * 07. RESPONSIVE
+         * ==========================================================================
+         */
+        @media (max-width: 1024px) {
+            .hero { align-items: flex-end; padding-bottom: 10vh; }
+            .hero-text-wrapper { padding-top: 0; }
+        }
+
+        @media (max-width: 768px) {
+            .heading-xl { font-size: 3.5rem; }
+            .hp-chassis { transform: translate(-50%, -50%) scale(0.65); }
+            .form-box { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="noise-layer"></div>
+    <div class="vignette"></div>
+    <canvas id="bg-canvas"></canvas>
+
+    <div id="rig-anchor">
+        <div class="hp-chassis">
+            <div class="hp-band"></div>
+            <div class="hp-earcup left">
+                <div class="hp-pad"></div>
+                <div class="hp-light-strip"></div>
+            </div>
+            <div class="hp-earcup right">
+                <div class="hp-pad"></div>
+                <div class="hp-light-strip"></div>
+            </div>
+        </div>
+    </div>
+
+    <main>
+        
+        <section class="hero" id="sec-hero">
+            <div class="container">
+                <div class="hero-text-wrapper fade-in-up">
+                    <div class="sub-tag"><span>///</span> 2025 CONCEPT</div>
+                    <h1 class="heading-xl glitch" data-text="AETHER X1">AETHER X1</h1>
+                    <p class="text-lead" style="margin-top: 2rem;">
+                        The barrier between thought and sound has dissolved. 
+                        Experience the world's first neural-calibrated audio architecture.
+                    </p>
+                    <a href="#sec-reservation" class="btn-primary">Initialize Sequence</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="experience" id="sec-experience">
+            <div class="container" style="position: relative; z-index: 60;">
+                <canvas id="viz-canvas" class="viz-overlay"></canvas>
+                <div style="margin-top: 400px;"> <h2 class="heading-lg">ZERO LATENCY<br><span style="color: var(--c-accent-main);">PRESENCE</span></h2>
+                    <p class="text-lead" style="margin: 1.5rem auto 0;">
+                        Active environmental mapping adjusts noise cancellation 
+                        4,000 times per second to create a perfect void.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="specs" id="sec-specs">
+            <div class="container">
+                <div style="margin-bottom: 4rem;">
+                    <h3 class="heading-md">System Architecture</h3>
+                </div>
+                
+                <div class="grid-layout">
+                    <div class="spec-card">
+                        <span class="spec-icon">◆</span>
+                        <h4>Graphene Drivers</h4>
+                        <p style="color: #666; margin-top: 1rem; font-size: 0.9rem;">
+                            40mm pure graphene diagrams deliver transient response speeds previously impossible in wireless formats.
+                        </p>
+                    </div>
+                    <div class="spec-card">
+                        <span class="spec-icon">◈</span>
+                        <h4>Spatial Geometry</h4>
+                        <p style="color: #666; margin-top: 1rem; font-size: 0.9rem;">
+                            Head-tracking within 0.2 degrees of accuracy creates a soundstage that remains fixed in physical space.
+                        </p>
+                    </div>
+                    <div class="spec-card">
+                        <span class="spec-icon">◉</span>
+                        <h4>90Hr Battery</h4>
+                        <p style="color: #666; margin-top: 1rem; font-size: 0.9rem;">
+                            High-density solid state cells provide over a week of immersion on a single 45-minute charge.
+                        </p>
+                    </div>
+                    <div class="spec-card">
+                        <span class="spec-icon">❖</span>
+                        <h4>Haptic Bass</h4>
+                        <p style="color: #666; margin-top: 1rem; font-size: 0.9rem;">
+                            Bone conduction integration allows you to feel frequencies below 20Hz without muddying the mix.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="reservation" id="sec-reservation">
+            <div class="container" style="display: flex; flex-direction: column; align-items: center;">
+                <h2 class="heading-lg" style="margin-bottom: 3rem; text-align: center;">Secure Allocation</h2>
+                
+                <div class="form-box">
+                    <form onsubmit="event.preventDefault(); alert('Request logged to console.');">
+                        <div class="input-group">
+                            <input type="text" class="input-field" placeholder=" " required>
+                            <label class="input-label">Callsign / Name</label>
+                        </div>
+                        <div class="input-group">
+                            <input type="email" class="input-field" placeholder=" " required>
+                            <label class="input-label">Neural Link (Email)</label>
+                        </div>
+                        <button type="submit" class="btn-primary" style="width: 100%; text-align: center;"> transmit </button>
+                    </form>
+                    <p style="font-size: 0.75rem; color: #444; margin-top: 1.5rem; text-align: center;">
+                        *Estimated delivery Q4 2025. Limited to first 5,000 units.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <div class="container">
+                <p>AETHER AUDIO LABS © 2025 // TOKYO - SAN FRANCISCO - BERLIN</p>
+            </div>
+        </footer>
+
+    </main>
+
+    <script>
+        /**
+         * MATH UTILS
+         */
+        const lerp = (start, end, t) => start * (1 - t) + end * t;
+        const clamp = (val, min, max) => Math.min(Math.max(val, min), max);
+        const random = (min, max) => Math.random() * (max - min) + min;
+
+        /**
+         * SYSTEM 1: BACKGROUND BUBBLES (Canvas)
+         * Renders floating "Aether" bubbles that slowly drift.
+         */
+        class BackgroundSystem {
+            constructor() {
+                this.canvas = document.getElementById('bg-canvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.orbs = [];
+                this.width = 0; 
+                this.height = 0;
+                
+                this.resize();
+                this.initOrbs();
+                window.addEventListener('resize', () => this.resize());
+                
+                // Start Loop
+                this.animate();
+            }
+
+            resize() {
+                this.width = window.innerWidth;
+                this.height = window.innerHeight;
+                this.canvas.width = this.width;
+                this.canvas.height = this.height;
+            }
+
+            initOrbs() {
+                this.orbs = [];
+                // Create 15 floating orbs
+                for(let i = 0; i < 15; i++) {
+                    this.orbs.push({
+                        x: random(0, this.width),
+                        y: random(0, this.height),
+                        radius: random(20, 100),
+                        vx: random(-0.2, 0.2),
+                        vy: random(-0.2, 0.2),
+                        color: Math.random() > 0.6 ? 
+                            'rgba(124, 58, 237, 0.15)' :  // Violet
+                            'rgba(6, 182, 212, 0.1)'      // Cyan
+                    });
+                }
+            }
+
+            animate() {
+                this.ctx.clearRect(0, 0, this.width, this.height);
+                
+                this.orbs.forEach(orb => {
+                    // Move
+                    orb.x += orb.vx;
+                    orb.y += orb.vy;
+
+                    // Wrap around screen
+                    if(orb.x < -100) orb.x = this.width + 100;
+                    if(orb.x > this.width + 100) orb.x = -100;
+                    if(orb.y < -100) orb.y = this.height + 100;
+                    if(orb.y > this.height + 100) orb.y = -100;
+
+                    // Draw (Soft blurred circle)
+                    this.ctx.beginPath();
+                    this.ctx.arc(orb.x, orb.y, orb.radius, 0, Math.PI * 2);
+                    this.ctx.fillStyle = orb.color;
+                    this.ctx.filter = 'blur(30px)'; // Heavy CSS filter for atmosphere
+                    this.ctx.fill();
+                    this.ctx.filter = 'none'; // Reset
+                });
+
+                requestAnimationFrame(() => this.animate());
+            }
+        }
+
+        /**
+         * SYSTEM 2: VISUALIZER (The Halo)
+         * Draws the ring around the headphones in section 2.
+         */
+        class AudioVisualizer {
+            constructor() {
+                this.canvas = document.getElementById('viz-canvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.active = false;
+                this.time = 0;
+                
+                this.resize();
+                window.addEventListener('resize', () => this.resize());
+            }
+
+            resize() {
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+            }
+
+            render() {
+                if(!this.active) {
+                    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                    return;
+                }
+
+                this.time += 0.05;
+                const w = this.canvas.width;
+                const h = this.canvas.height;
+                const cx = w / 2;
+                const cy = h / 2 - 50; // Offset slightly up to match headphone center
+
+                this.ctx.clearRect(0, 0, w, h);
+                
+                // Draw multiple rings
+                for(let r = 0; r < 3; r++) {
+                    this.ctx.beginPath();
+                    for(let i = 0; i <= 100; i++) {
+                        const angle = (Math.PI * 2 * i) / 100;
+                        // Noise function simulation using sine waves
+                        const noise = Math.sin(angle * 10 + this.time + r) * Math.cos(angle * 5 - this.time) * 15;
+                        const rad = 180 + (r * 20) + noise;
+                        
+                        const x = cx + Math.cos(angle) * rad;
+                        const y = cy + Math.sin(angle) * rad;
+                        
+                        if(i===0) this.ctx.moveTo(x, y);
+                        else this.ctx.lineTo(x, y);
+                    }
+                    this.ctx.closePath();
+                    this.ctx.strokeStyle = r === 1 ? 'rgba(6, 182, 212, 0.5)' : 'rgba(124, 58, 237, 0.3)';
+                    this.ctx.lineWidth = 2;
+                    this.ctx.stroke();
+                }
+            }
+        }
+
+        /**
+         * SYSTEM 3: PRODUCT PHYSICS
+         * Controls the 3D CSS Headphone position and transition logic.
+         */
+        class ProductRig {
+            constructor() {
+                this.el = document.getElementById('rig-anchor');
+                this.chassis = this.el.querySelector('.hp-chassis');
+                
+                // Position State
+                this.state = {
+                    x: 25, y: -50, scale: 1.1, rotate: -25, opacity: 1
+                };
+                
+                this.target = { ...this.state };
+            }
+
+            setHero() {
+                // Right side, angled
+                this.target = { x: 25, y: -50, scale: 1.1, rotate: -25, opacity: 1 };
+                this.chassis.classList.remove('mode-active');
+            }
+
+            setImmersion() {
+                // Center, looking straight
+                this.target = { x: -50, y: -60, scale: 0.85, rotate: 0, opacity: 1 };
+                this.chassis.classList.add('mode-active');
+            }
+
+            setHidden() {
+                // Fade out/scale down for bottom sections
+                this.target = { x: -50, y: -80, scale: 0.5, rotate: 10, opacity: 0 };
+            }
+
+            update() {
+                // Physics Lerp
+                this.state.x = lerp(this.state.x, this.target.x, 0.05);
+                this.state.y = lerp(this.state.y, this.target.y, 0.05);
+                this.state.scale = lerp(this.state.scale, this.target.scale, 0.05);
+                this.state.rotate = lerp(this.state.rotate, this.target.rotate, 0.05);
+                this.state.opacity = lerp(this.state.opacity, this.target.opacity, 0.05);
+
+                // Apply
+                this.el.style.transform = `
+                    translate3d(${this.state.x}vw, ${this.state.y}%, 0)
+                    scale(${this.state.scale})
+                `;
+                this.el.style.opacity = this.state.opacity;
+                this.chassis.style.transform = `translate(-50%, -50%) rotate(${this.state.rotate}deg)`;
+            }
+        }
+
+        /**
+         * SYSTEM 4: MASTER DIRECTOR
+         * Orchestrates scrolling, sections, and loop.
+         */
+        class Director {
+            constructor() {
+                this.bg = new BackgroundSystem();
+                this.viz = new AudioVisualizer();
+                this.rig = new ProductRig();
+                
+                this.sections = {
+                    hero: document.getElementById('sec-hero'),
+                    exp: document.getElementById('sec-experience'),
+                    specs: document.getElementById('sec-specs'),
+                    form: document.getElementById('sec-reservation')
+                };
+
+                this.initScrollListener();
+                this.loop();
+            }
+
+            initScrollListener() {
+                window.addEventListener('scroll', () => {
+                    const scrollY = window.scrollY;
+                    const h = window.innerHeight;
+                    
+                    // Simple zone detection
+                    if (scrollY < h * 0.5) {
+                        this.rig.setHero();
+                        this.viz.active = false;
+                    } else if (scrollY >= h * 0.5 && scrollY < h * 1.5) {
+                        this.rig.setImmersion();
+                        this.viz.active = true;
+                    } else {
+                        this.rig.setHidden();
+                        this.viz.active = false;
+                    }
+                });
+            }
+
+            loop() {
+                this.rig.update();
+                this.viz.render();
+                requestAnimationFrame(() => this.loop());
+            }
+        }
+
+        // --- BOOT ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const app = new Director();
+            console.log("AETHER SYSTEM ONLINE ///");
+        });
+
+    </script>
+</body>
+</html>
